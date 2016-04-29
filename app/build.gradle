@@ -27,3 +27,7 @@ android {
         compile 'com.parse:parse-android:1.13.0'
     }
 }
+dependencies {
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+}
+
