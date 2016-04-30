@@ -10,23 +10,39 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.util.Date.*;
+
+
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.SimpleFormatter;
 
-public class AddActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener{
+public class AddActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
+    // XML
     private TextView date;
     private TextView fromTime;
     private TextView toTime;
+    private Button submit;
+    private TextView details;
+    private Spinner selectUsers;
 
+    private User user;
+    private User staffForShift;
+    private ArrayList<User> allUsers;
 
     private TimePickerDialog.OnTimeSetListener fromListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
@@ -60,13 +76,46 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        user = getIntent().getParcelableExtra("User");
+        allUsers = Home.getAllUsers();
+
         date = (TextView) findViewById(R.id.dateChooser);
         fromTime = (TextView) findViewById(R.id.pickStartTime);
         toTime = (TextView) findViewById(R.id.pickEndTime);
+        selectUsers = (Spinner) findViewById(R.id.addStaffSelector);
+        submit = (Button) findViewById(R.id.addNewShiftSubmitButton);
+        details = (TextView) findViewById(R.id.addShiftDetails);
 
+        submit.setOnClickListener(this);
         date.setOnClickListener(this);
         fromTime.setOnClickListener(this);
         toTime.setOnClickListener(this);
+
+        // create the the spinner
+
+        final List<User> spinnerArray = new ArrayList<User>();
+        List<String> spinnerArrayNames = new ArrayList<String>();
+
+        for (User u : allUsers) {
+            spinnerArray.add(u);
+            spinnerArrayNames.add(u.getName());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArrayNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectUsers.setAdapter(adapter);
+        selectUsers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                staffForShift = spinnerArray.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO
+            }
+        });
     }
 
     @Override
@@ -86,6 +135,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 TimePickerDialog timePicker2 = new TimePickerDialog(this, toListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
                 timePicker2.show();
                 break;
+            case R.id.addNewShiftSubmitButton:
+                createShift();
         }
 
     }
@@ -97,6 +148,46 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String text = formatter.format(cal.getTime());
         this.date.setText(text);
+    }
+
+    public void createShift() {
+        if (staffForShift == null)
+            return;
+
+        if (staffForShift == null) {
+            //TODO no user has been selected
+        }
+
+        DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
+
+
+        try {
+            // date to long
+            String formatText = date.getText().toString();
+            Date selectedDate = dateFormatter.parse(formatText);
+            long dateInLong = selectedDate.getTime();
+
+            // start time to long
+            formatText = fromTime.getText().toString();
+            selectedDate = timeFormatter.parse(formatText);
+            long startTimeLong = selectedDate.getTime();
+
+            // end time to long
+            formatText = fromTime.getText().toString();
+            selectedDate = timeFormatter.parse(formatText);
+            long endTimeLong = selectedDate.getTime();
+
+            String shiftDetails = details.getText().toString();
+
+            // add the new shift to the user
+            staffForShift.addShift(dateInLong, startTimeLong, endTimeLong, shiftDetails);
+        } catch (ParseException e) {
+            // TODO
+            e.printStackTrace();
+        }
+        //staffForShift.addShift();
+
     }
 
 }

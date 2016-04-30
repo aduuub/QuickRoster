@@ -66,6 +66,11 @@ public class User implements Parcelable{
 
     }
 
+    public void addShift(long date, long startTime, long endTime, String details){
+        Shift newShift = new Shift(date, startTime, endTime, details);
+        shifts.add(newShift);
+    }
+
 
     @Override
     public int describeContents() {
@@ -84,5 +89,8 @@ public class User implements Parcelable{
 
     public boolean isManager(){
         return this.isManager;
+    }
+    public String getName(){
+        return this.name;
     }
 }

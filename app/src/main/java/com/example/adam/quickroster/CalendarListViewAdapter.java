@@ -46,7 +46,7 @@ public class CalendarListViewAdapter extends BaseAdapter {
 
         View v = inflater.inflate(R.layout.row_shift, parent, false);
         Shift shift = mItems.get(position);
-        SimpleDateFormat formattedTime = new SimpleDateFormat("mm:HH");
+        SimpleDateFormat formattedTime = new SimpleDateFormat("HH:mm");
 
         TextView startView = (TextView) v.findViewById(R.id.startTime);
         long time = shift.getStartTime();
@@ -54,9 +54,9 @@ public class CalendarListViewAdapter extends BaseAdapter {
         startView.setText(formattedTime.format(d));
 
         TextView endView = (TextView) v.findViewById(R.id.endTime);
-        time = shift.getEndTime();
-        d = new Date(time);
-        endView.setText(formattedTime.format(d));
+        long time2 = shift.getEndTime();
+        Date date2 = new Date(time2);
+        endView.setText(formattedTime.format(date2));
 
         TextView dateView = (TextView) v.findViewById(R.id.Details);
         dateView.setText(String.valueOf(shift.getDetails()));

@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.lang.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -41,7 +42,7 @@ public class Home extends AppCompatActivity
     private TextView passWord;
     private TextView invalid;
 
-    private ArrayList<User> users;
+    private static ArrayList<User> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +69,8 @@ public class Home extends AppCompatActivity
         passWord = getPassword();
         invalid = getInvalid();
 
-        Shift exampleShift1 = new Shift(1461931200000l, 1461993180000l, 1461993180000l, "Work details");
-        Shift exampleShift2 = new Shift(1461931200000l, 1461993180000l, 1461993180000l, "Work details2");
+        Shift exampleShift1 = new Shift(1461931200000l, 1461960000000l, 1461992400000l, "Work details");
+        Shift exampleShift2 = new Shift(1461931200000l, 1461960000000l, 1461960000000l, "Work details2");
 
         ArrayList<Shift> shifts = new ArrayList<Shift>();
         shifts.add(exampleShift1);
@@ -77,9 +78,9 @@ public class Home extends AppCompatActivity
 
         // generate user
         this.users = new ArrayList<User>();
-        User manager1 = new User("haydn01", "haydn01", "Haydn_Banister", true, shifts);
-        User manager2 = new User("a", "a", "Adam_Wareing", true, shifts);
-        User staff = new User("haydn", "haydn", "Haydn Bannister", false, shifts);
+        User manager1 = new User("haydn", "haydn", "Haydn Banister: Manager", true, shifts);
+        User manager2 = new User("a", "a", "Adam_Wareing: Manager", true, shifts);
+        User staff = new User("elf", "elf", "Elf: Staff", false, shifts);
         this.users.add(manager1);
         this.users.add(manager2);
         this.users.add(staff);
@@ -108,6 +109,8 @@ public class Home extends AppCompatActivity
                                              if (loggedInUser.isManager()) {
                                                  Intent intent = new Intent(Home.this, ManagerView.class);
                                                  intent.putExtra("User", loggedInUser);
+                                                 intent.putParcelableArrayListExtra("allUsers", users);
+
                                                  startActivity(intent);
 
                                              } else {
@@ -220,4 +223,7 @@ public class Home extends AppCompatActivity
     public TextView getInvalid() {
         return (TextView) findViewById(R.id.invalid);
     }
+
+    public static ArrayList<User> getAllUsers(){return users;}
+
 }

@@ -12,37 +12,60 @@
         android:id="@+id/dateChooser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Choose a Date"
+        android:paddingBottom="30dp"
         android:paddingLeft="16dp"
         android:paddingTop="16dp"
-        android:hint="Choose a Date"
-        android:textSize="30sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-      android:paddingBottom="40dp"
-        />
+        android:textSize="20sp" />
 
 
     <TextView
         android:id="@+id/pickStartTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingBottom="40dp"
         android:hint="Choose a Start Time"
-        android:textSize="30sp"
+        android:paddingBottom="30dp"
+        android:paddingLeft="16dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        />
+        android:textSize="20sp" />
 
 
     <TextView
         android:id="@+id/pickEndTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Choose an End Time"
+        android:paddingBottom="30dp"
+        android:paddingLeft="16dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="20sp" />
+
+    <Spinner
+        android:id="@+id/addStaffSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:paddingBottom="30dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"
+        />
+
+    <EditText
+        android:id="@+id/addShiftDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingBottom="40dp"
-        android:hint="Choose an End Time"
-        android:textSize="30sp"
-
+        android:hint="Enter details of the shift"
         android:textAppearance="?android:attr/textAppearanceMedium"
         />
+
+    <Button
+        android:id="@+id/addNewShiftSubmitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Create Shift" />
 
 </LinearLayout>
