@@ -79,7 +79,7 @@ public class Home extends AppCompatActivity
         this.users = new ArrayList<User>();
         User manager1 = new User("haydn01", "haydn01", "Haydn_Banister", true, shifts);
         User manager2 = new User("a", "a", "Adam_Wareing", true, shifts);
-        User staff = new User("elf01", "elf01", "Elf_Eldridge", false, shifts);
+        User staff = new User("haydn", "haydn", "Haydn Bannister", false, shifts);
         this.users.add(manager1);
         this.users.add(manager2);
         this.users.add(staff);
