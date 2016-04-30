@@ -1,5 +1,6 @@
 package com.example.adam.quickroster;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import java.lang.*;
@@ -33,18 +35,13 @@ public class Home extends AppCompatActivity
 
     private ArrayList<User> users;
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         toolbar.setTitle("Quick Roster");
 
@@ -56,21 +53,21 @@ public class Home extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
 
         login = getLoginButton();
         userName = getUserName();
         passWord = getPassword();
         invalid = getInvalid();
 
-
+        Shift exampleShift1 = new Shift(61420071600000l,1461931204500l, 1461931200000l, "I'm an event" );
+        ArrayList<Shift> shifts = new ArrayList<Shift>();
+        shifts.add(exampleShift1);
         // generate user
         this.users = new ArrayList<User>();
-        User manager1 = new User("haydn01", "haydn01", "Haydn_Banister", true);
-        User manager2 = new User("adam01", "adam01", "Adam_Wareing", true);
-        User staff = new User("elf01", "elf01", "Elf_Eldridge", false);
+        User manager1 = new User("haydn01", "haydn01", "Haydn_Banister", true, shifts);
+        User manager2 = new User("a", "a", "Adam_Wareing", true, shifts);
+        User staff = new User("elf01", "elf01", "Elf_Eldridge", false, shifts);
         this.users.add(manager1);
         this.users.add(manager2);
         this.users.add(staff);
@@ -80,16 +77,24 @@ public class Home extends AppCompatActivity
                                      public void onClick(View view) {
                                          String userName = getUserName().getText().toString();
                                          String passWord = getPassword().getText().toString();
-                                         boolean foundUser = false;
+
+                                         User loggedInUser = null;
                                           // check valid users
                                          for(User u : users){
                                              if(u.validLogin(userName, passWord)) {
                                                  // we are now logged in?
-                                                 foundUser = true;
+                                                 loggedInUser = u;
+                                                 break;
                                              }
                                          }
-                                         if(!foundUser){
-                                                invalid.setText("Invalid user cunt!");
+                                         if(loggedInUser != null){
+                                             // transition to new view
+                                             Intent intent = new Intent(Home.this, calendarView.class);
+                                             intent.putExtra("User", loggedInUser);
+                                             startActivity(intent);
+
+                                         }else{
+                                             invalid.setText("Invalid Username or Password");
                                          }
                                      }
                                  }
@@ -156,45 +161,6 @@ public class Home extends AppCompatActivity
     }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Home Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.example.adam.quickroster/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Home Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.example.adam.quickroster/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
-    }
 
 
     public Button getLoginButton() {
