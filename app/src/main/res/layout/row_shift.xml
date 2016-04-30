@@ -10,13 +10,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="15dp"
+        android:paddingTop="25dp"
         android:text="End Time"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/startTime"
         android:layout_width="wrap_content"
+        android:paddingTop="10dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Start Time"
@@ -26,6 +27,8 @@
         android:id="@+id/Details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="25dp"
         android:layout_gravity="center_horizontal"
         android:text="Details"
         android:textAppearance="?android:attr/textAppearanceMedium" />

@@ -1,11 +1,15 @@
 package com.example.adam.quickroster;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +29,8 @@ import java.util.ArrayList;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,12 +67,13 @@ public class Home extends AppCompatActivity
         passWord = getPassword();
         invalid = getInvalid();
 
-        Shift exampleShift1 = new Shift(1461931200000l,1461931200320l, 1461931200300l, "Work details" );
-        Shift exampleShift2 = new Shift(1461931200000l,1461931200320l, 1461931200320l, "Work details2" );
+        Shift exampleShift1 = new Shift(1461931200000l,1461993180000l, 1461993180000l, "Work details" );
+        Shift exampleShift2 = new Shift(1461931200000l,1461993180000l, 1461993180000l, "Work details2" );
 
         ArrayList<Shift> shifts = new ArrayList<Shift>();
         shifts.add(exampleShift1);
         shifts.add(exampleShift2);
+
         // generate user
         this.users = new ArrayList<User>();
         User manager1 = new User("haydn01", "haydn01", "Haydn_Banister", true, shifts);
@@ -75,6 +82,8 @@ public class Home extends AppCompatActivity
         this.users.add(manager1);
         this.users.add(manager2);
         this.users.add(staff);
+
+        saveToFile();
 
         login.setOnClickListener(new View.OnClickListener() {
                                      @Override
@@ -164,7 +173,27 @@ public class Home extends AppCompatActivity
         return true;
     }
 
+    public void saveToFile(){
 
+        Gson gson = new Gson();
+        String text = gson.toJson(users);
+
+        ArrayList<User> o = gson.fromJson(text, new TypeToken<ArrayList<User>>() {
+        }.getType());
+
+       Log.d("Home" , o.get(0).toString());
+
+    }
+
+    public void loadFile(){
+
+        Gson gson = new Gson();
+        String text = gson.toJson(users);
+        Log.d("Home", text);
+
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        defaultSharedPreferences.edit().putString("Users", text).apply();
+    }
 
 
     public Button getLoginButton() {
