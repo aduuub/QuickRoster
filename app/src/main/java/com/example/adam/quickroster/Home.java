@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.format.Time;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -60,9 +61,12 @@ public class Home extends AppCompatActivity
         passWord = getPassword();
         invalid = getInvalid();
 
-        Shift exampleShift1 = new Shift(61420071600000l,1461931204500l, 1461931200000l, "I'm an event" );
+        Shift exampleShift1 = new Shift(1461931200000l,1461931200320l, 1461931200300l, "Work details" );
+        Shift exampleShift2 = new Shift(1461931200000l,1461931200320l, 1461931200320l, "Work details2" );
+
         ArrayList<Shift> shifts = new ArrayList<Shift>();
         shifts.add(exampleShift1);
+        shifts.add(exampleShift2);
         // generate user
         this.users = new ArrayList<User>();
         User manager1 = new User("haydn01", "haydn01", "Haydn_Banister", true, shifts);

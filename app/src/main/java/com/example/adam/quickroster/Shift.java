@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.sql.Time;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -42,8 +43,15 @@ public class Shift implements Parcelable{
         }
     };
 
-    public boolean onDay(long t){
-        return t == date;
+    public boolean onDay(int day, int month, int year){
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(new Date(date));
+
+        return (calendar.get(Calendar.DAY_OF_MONTH) == day)
+                && (calendar.get(Calendar.MONTH) == month)
+                && (calendar.get(Calendar.YEAR) == year);
+
     }
     public long getStartTime(){return this.startTime;}
 

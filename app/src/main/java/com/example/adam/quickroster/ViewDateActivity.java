@@ -15,12 +15,14 @@ public class ViewDateActivity extends AppCompatActivity {
 
         ListView list = (ListView) findViewById(R.id.listView);
         User user = getIntent().getParcelableExtra("User");
-        long time = getIntent().getLongExtra("Time", 0);
+        int day = getIntent().getIntExtra("Day", 0);
+        int month = getIntent().getIntExtra("Month", 0);
+        int year = getIntent().getIntExtra("Year", 0);
 
-        if(user == null || user.getShiftsOnDay(time).isEmpty())
+        if(user == null || user.getShiftsOnDay(day, month, year).isEmpty())
             return;
 
-        ArrayList<Shift> shifts = user.getShiftsOnDay(time);
+        ArrayList<Shift> shifts = user.getShiftsOnDay(day, month, year);
         list.setAdapter(new CalendarListViewAdapter(this, shifts));
 
 

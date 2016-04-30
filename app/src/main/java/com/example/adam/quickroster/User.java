@@ -52,12 +52,12 @@ public class User implements Parcelable{
         return un.equals(userName) && pw.equals(password);
     }
 
-    public ArrayList<Shift> getShiftsOnDay(long time){
+    public ArrayList<Shift> getShiftsOnDay(int day, int month, int year){
 
         ArrayList<Shift> shiftsOnDay = new ArrayList<Shift>();
 
         for(Shift s : shifts){
-            if(s.onDay(time)){
+            if(s.onDay(day, month, year)){
                 shiftsOnDay.add(s);
             }
         }

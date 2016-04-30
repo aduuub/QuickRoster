@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CalendarView;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class calendarView extends AppCompatActivity implements CalendarView.OnDateChangeListener {
@@ -31,13 +32,12 @@ public class calendarView extends AppCompatActivity implements CalendarView.OnDa
 
     @Override
     public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-        Date d = new Date(year, month, dayOfMonth);
-        long time = d.getTime();
-
         Intent intent = new Intent(calendarView.this, ViewDateActivity.class);
         User user = getIntent().getParcelableExtra("User");
 
-        intent.putExtra("Time", time);
+        intent.putExtra("Day", dayOfMonth);
+        intent.putExtra("Month", month);
+        intent.putExtra("Year", year);
         intent.putExtra("User", user);
 
         startActivity(intent);

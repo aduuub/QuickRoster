@@ -9,7 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.SimpleFormatter;
 
 /**
  * Created by Adam on 30/04/16.
@@ -43,14 +46,20 @@ public class CalendarListViewAdapter extends BaseAdapter {
 
         View v = inflater.inflate(R.layout.row_shift, parent, false);
         Shift shift = mItems.get(position);
+        SimpleDateFormat formattedTime = new SimpleDateFormat("mm:HH dd/MM/yyyy");
+
         TextView startView = (TextView) v.findViewById(R.id.startTime);
-        startView.setText(String.valueOf(shift.getStartTime()));
+        long time = shift.getStartTime();
+        Date d = new Date(time);
+        startView.setText(formattedTime.format(d));
 
         TextView endView = (TextView) v.findViewById(R.id.endTime);
-        endView.setText(String.valueOf(shift.getEndTime()));
+        time = shift.getEndTime();
+        d = new Date(time);
+        endView.setText(formattedTime.format(d));
 
         TextView dateView = (TextView) v.findViewById(R.id.Details);
-        startView.setText(String.valueOf(shift.getDetails()));
+        dateView.setText(String.valueOf(shift.getDetails()));
 
         return v;
     }
