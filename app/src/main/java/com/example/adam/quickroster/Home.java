@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
 import java.lang.*;
 import java.util.ArrayList;
 
@@ -67,8 +68,8 @@ public class Home extends AppCompatActivity
         passWord = getPassword();
         invalid = getInvalid();
 
-        Shift exampleShift1 = new Shift(1461931200000l,1461993180000l, 1461993180000l, "Work details" );
-        Shift exampleShift2 = new Shift(1461931200000l,1461993180000l, 1461993180000l, "Work details2" );
+        Shift exampleShift1 = new Shift(1461931200000l, 1461993180000l, 1461993180000l, "Work details");
+        Shift exampleShift2 = new Shift(1461931200000l, 1461993180000l, 1461993180000l, "Work details2");
 
         ArrayList<Shift> shifts = new ArrayList<Shift>();
         shifts.add(exampleShift1);
@@ -88,25 +89,33 @@ public class Home extends AppCompatActivity
         login.setOnClickListener(new View.OnClickListener() {
                                      @Override
                                      public void onClick(View view) {
+
                                          String userName = getUserName().getText().toString();
                                          String passWord = getPassword().getText().toString();
 
                                          User loggedInUser = null;
-                                          // check valid users
-                                         for(User u : users){
-                                             if(u.validLogin(userName, passWord)) {
+                                         // check valid users
+                                         for (User u : users) {
+                                             if (u.validLogin(userName, passWord)) {
                                                  // we are now logged in?
                                                  loggedInUser = u;
                                                  break;
                                              }
                                          }
-                                         if(loggedInUser != null){
+                                         if (loggedInUser != null) {
                                              // transition to new view
-                                             Intent intent = new Intent(Home.this, calendarView.class);
-                                             intent.putExtra("User", loggedInUser);
-                                             startActivity(intent);
 
-                                         }else{
+                                             if (loggedInUser.isManager()) {
+                                                 Intent intent = new Intent(Home.this, ManagerView.class);
+                                                 intent.putExtra("User", loggedInUser);
+                                                 startActivity(intent);
+
+                                             } else {
+                                                 Intent intent = new Intent(Home.this, calendarView.class);
+                                                 intent.putExtra("User", loggedInUser);
+                                                 startActivity(intent);
+                                             }
+                                         } else {
                                              invalid.setText("Invalid Username or Password");
                                          }
                                      }
@@ -173,7 +182,7 @@ public class Home extends AppCompatActivity
         return true;
     }
 
-    public void saveToFile(){
+    public void saveToFile() {
 
         Gson gson = new Gson();
         String text = gson.toJson(users);
@@ -181,11 +190,11 @@ public class Home extends AppCompatActivity
         ArrayList<User> o = gson.fromJson(text, new TypeToken<ArrayList<User>>() {
         }.getType());
 
-       Log.d("Home" , o.get(0).toString());
+        Log.d("Home", o.get(0).toString());
 
     }
 
-    public void loadFile(){
+    public void loadFile() {
 
         Gson gson = new Gson();
         String text = gson.toJson(users);

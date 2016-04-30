@@ -81,4 +81,8 @@ public class User implements Parcelable{
         dest.writeTypedList(shifts);
 
     }
+
+    public boolean isManager(){
+        return this.isManager;
+    }
 }
