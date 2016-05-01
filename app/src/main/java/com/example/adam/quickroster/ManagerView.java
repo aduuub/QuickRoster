@@ -24,7 +24,7 @@ public class ManagerView extends AppCompatActivity implements View.OnClickListen
         add = (Button) findViewById(R.id.add);
         remove = (Button) findViewById(R.id.remove);
         showCal = (Button) findViewById(R.id.view);
-        User user = getIntent().getParcelableExtra("User");
+        this.user = getIntent().getParcelableExtra("User");
         add.setOnClickListener(this);
         remove.setOnClickListener(this);
         showCal.setOnClickListener(this);
@@ -46,11 +46,9 @@ public class ManagerView extends AppCompatActivity implements View.OnClickListen
                 break;
 
             case R.id.view:
-                Intent intentView = new Intent(this, AddActivity.class); // TODO
+                Intent intentView = new Intent(this, calendarView.class); // TODO
                 intentView.putExtra("User", user);
                 startActivity(intentView);
-
-
                 break;
         }
 

@@ -46,6 +46,7 @@ public class CalendarListViewAdapter extends BaseAdapter {
 
         View v = inflater.inflate(R.layout.row_shift, parent, false);
         Shift shift = mItems.get(position);
+
         SimpleDateFormat formattedTime = new SimpleDateFormat("HH:mm");
 
         TextView startView = (TextView) v.findViewById(R.id.startTime);

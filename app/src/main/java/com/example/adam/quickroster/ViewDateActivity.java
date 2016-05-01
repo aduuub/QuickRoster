@@ -19,10 +19,18 @@ public class ViewDateActivity extends AppCompatActivity {
         int month = getIntent().getIntExtra("Month", 0);
         int year = getIntent().getIntExtra("Year", 0);
 
-        if(user == null || user.getShiftsOnDay(day, month, year).isEmpty())
+        if(user == null)
             return;
 
         ArrayList<Shift> shifts = user.getShiftsOnDay(day, month, year);
+
+        if(user.isManager()){
+            for(User u : Home.getAllUsers()){
+                for(Shift s : u.getShiftsOnDay(day, month, year))
+                    shifts.add(s);
+            }
+        }
+
         list.setAdapter(new CalendarListViewAdapter(this, shifts));
 
 

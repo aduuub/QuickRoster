@@ -34,8 +34,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class Home extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Home extends AppCompatActivity {
 
     private Button login;
     private TextView userName;
@@ -51,26 +50,20 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        loadFile();
 
         toolbar.setTitle("Quick Roster");
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
 
         login = getLoginButton();
         userName = getUserName();
         passWord = getPassword();
         invalid = getInvalid();
 
-        Shift exampleShift1 = new Shift(1461931200000l, 1461960000000l, 1461992400000l, "Work details");
-        Shift exampleShift2 = new Shift(1461931200000l, 1461960000000l, 1461960000000l, "Work details2");
+        Shift exampleShift1 = new Shift(1461931200000l, 1461960000000l, 1461992400000l, "Adam Wareing's Shift");
+        Shift exampleShift2 = new Shift(1461931200000l, 1461960000000l, 1461992400000l, "Adam Wareing's Shift");
+
+        Shift exampleShift3 = new Shift(1461931200000l, 1461960000000l, 1461992400000l, "Elf's Shift");
+        Shift exampleShift4 = new Shift(1461931200000l, 1461960000000l, 1461992400000l, "Elf's Shift");
 
         ArrayList<Shift> shifts = new ArrayList<Shift>();
         shifts.add(exampleShift1);
@@ -78,8 +71,8 @@ public class Home extends AppCompatActivity
 
 
         ArrayList<Shift> shifts2 = new ArrayList<Shift>();
-        shifts2.add(exampleShift1);
-        shifts2.add(exampleShift2);
+        shifts2.add(exampleShift3);
+        shifts2.add(exampleShift4);
 
 
         // generate user
@@ -134,15 +127,6 @@ public class Home extends AppCompatActivity
 
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -166,51 +150,23 @@ public class Home extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
     public void saveToFile() {
-
         Gson gson = new Gson();
         String text = gson.toJson(users);
 
-        ArrayList<User> o = gson.fromJson(text, new TypeToken<ArrayList<User>>() {
-        }.getType());
-
-        Log.d("Home", o.get(0).toString());
-
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        defaultSharedPreferences.edit().putString("Users", text).apply();
     }
 
     public void loadFile() {
 
         Gson gson = new Gson();
-        String text = gson.toJson(users);
-        Log.d("Home", text);
-
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        defaultSharedPreferences.edit().putString("Users", text).apply();
+        String read = defaultSharedPreferences.getString("Users", null);
+
+        this.users = gson.fromJson(read, new TypeToken<ArrayList<User>>() {
+        }.getType());
     }
 
 
@@ -230,6 +186,8 @@ public class Home extends AppCompatActivity
         return (TextView) findViewById(R.id.invalid);
     }
 
-    public static ArrayList<User> getAllUsers(){return users;}
+    public static ArrayList<User> getAllUsers() {
+        return users;
+    }
 
 }

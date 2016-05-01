@@ -186,7 +186,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             long startTimeLong = selectedDate.getTime();
 
             // end time to long
-            formatText = fromTime.getText().toString();
+            formatText = toTime.getText().toString();
             if(formatText.equals("")){
                 acceptedText.setText("Please Fill All Fields");
                 return;

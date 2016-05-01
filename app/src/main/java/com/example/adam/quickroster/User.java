@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by Adam on 30/04/16.
  */
-public class User implements Parcelable{
+public class User implements Parcelable {
     private String userName;
     private String password;
     private String name;
@@ -18,12 +18,15 @@ public class User implements Parcelable{
     /**
      *
      */
-    public User(String un, String pw, String name, boolean manager, ArrayList<Shift> shifts){
+    public User(String un, String pw, String name, boolean manager, ArrayList<Shift> shifts) {
         this.userName = un;
         this.password = pw;
         this.name = name;
         this.isManager = manager;
-        this.shifts = shifts;
+        if (shifts != null)
+            this.shifts = shifts;
+        else
+            this.shifts = new ArrayList<Shift>();
     }
 
 
@@ -48,16 +51,16 @@ public class User implements Parcelable{
         }
     };
 
-    public boolean validLogin(String un, String pw){
+    public boolean validLogin(String un, String pw) {
         return un.equals(userName) && pw.equals(password);
     }
 
-    public ArrayList<Shift> getShiftsOnDay(int day, int month, int year){
+    public ArrayList<Shift> getShiftsOnDay(int day, int month, int year) {
 
         ArrayList<Shift> shiftsOnDay = new ArrayList<Shift>();
 
-        for(Shift s : shifts){
-            if(s.onDay(day, month, year)){
+        for (Shift s : shifts) {
+            if (s.onDay(day, month, year)) {
                 shiftsOnDay.add(s);
             }
         }
@@ -66,7 +69,7 @@ public class User implements Parcelable{
 
     }
 
-    public void addShift(long date, long startTime, long endTime, String details){
+    public void addShift(long date, long startTime, long endTime, String details) {
         Shift newShift = new Shift(date, startTime, endTime, details);
         shifts.add(newShift);
     }
@@ -87,19 +90,20 @@ public class User implements Parcelable{
 
     }
 
-    public boolean isManager(){
+    public boolean isManager() {
         return this.isManager;
     }
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
 
-    public ArrayList<Shift> getShifts(){
+    public ArrayList<Shift> getShifts() {
         return shifts;
     }
 
-    public void removeShift(Shift s){
-        if(shifts.contains(s))
+    public void removeShift(Shift s) {
+        if (shifts.contains(s))
             shifts.remove(s);
     }
 }
