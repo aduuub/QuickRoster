@@ -40,7 +40,7 @@ public class ManagerView extends AppCompatActivity implements View.OnClickListen
                 startActivity(intentAdd);
                 break;
             case R.id.remove:
-                Intent intentRemove = new Intent(this, AddActivity.class); //TODO
+                Intent intentRemove = new Intent(this, RemoveActivity.class);
                 intentRemove.putExtra("User", user);
                 startActivity(intentRemove);
                 break;

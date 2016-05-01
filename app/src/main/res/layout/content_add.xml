@@ -45,21 +45,19 @@
         android:id="@+id/addStaffSelector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="12dp"
-        android:paddingBottom="30dp"
         android:layout_gravity="center_horizontal"
-        android:textSize="20sp"
-        />
+        android:paddingBottom="30dp"
+        android:paddingLeft="12dp"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/addShiftDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingBottom="40dp"
         android:hint="Enter details of the shift"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        />
+        android:paddingBottom="40dp"
+        android:paddingLeft="16dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:id="@+id/addNewShiftSubmitButton"
@@ -67,5 +65,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Create Shift" />
+
+    <TextView
+        android:id="@+id/accepted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#F00" />
 
 </LinearLayout>

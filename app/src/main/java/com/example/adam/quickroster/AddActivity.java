@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
 
 import java.util.Date.*;
 
@@ -36,9 +38,11 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private TextView date;
     private TextView fromTime;
     private TextView toTime;
+    private TextView acceptedText;
     private Button submit;
     private TextView details;
     private Spinner selectUsers;
+
 
     private User user;
     private User staffForShift;
@@ -85,6 +89,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         selectUsers = (Spinner) findViewById(R.id.addStaffSelector);
         submit = (Button) findViewById(R.id.addNewShiftSubmitButton);
         details = (TextView) findViewById(R.id.addShiftDetails);
+        acceptedText = (TextView) findViewById(R.id.accepted);
+
 
         submit.setOnClickListener(this);
         date.setOnClickListener(this);
@@ -151,11 +157,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     public void createShift() {
-        if (staffForShift == null)
-            return;
-
         if (staffForShift == null) {
-            //TODO no user has been selected
+            acceptedText.setText("Please Choose a Staff Memeber First");
+            return;
         }
 
         DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -165,16 +169,28 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         try {
             // date to long
             String formatText = date.getText().toString();
+            if(formatText.equals("")) {
+                acceptedText.setText("Please Fill All Fields");
+                return;
+            }
             Date selectedDate = dateFormatter.parse(formatText);
             long dateInLong = selectedDate.getTime();
 
             // start time to long
             formatText = fromTime.getText().toString();
+            if(formatText.equals("")){
+                acceptedText.setText("Please Fill All Fields");
+                return;
+            }
             selectedDate = timeFormatter.parse(formatText);
             long startTimeLong = selectedDate.getTime();
 
             // end time to long
             formatText = fromTime.getText().toString();
+            if(formatText.equals("")){
+                acceptedText.setText("Please Fill All Fields");
+                return;
+            }
             selectedDate = timeFormatter.parse(formatText);
             long endTimeLong = selectedDate.getTime();
 
@@ -182,12 +198,13 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
             // add the new shift to the user
             staffForShift.addShift(dateInLong, startTimeLong, endTimeLong, shiftDetails);
+
+            acceptedText.setText("Shift Added");
+
         } catch (ParseException e) {
-            // TODO
+            acceptedText.setText("Please Fill All Fields");
             e.printStackTrace();
         }
-        //staffForShift.addShift();
-
     }
 
 }

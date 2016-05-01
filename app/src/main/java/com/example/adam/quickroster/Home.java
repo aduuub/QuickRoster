@@ -76,11 +76,17 @@ public class Home extends AppCompatActivity
         shifts.add(exampleShift1);
         shifts.add(exampleShift2);
 
+
+        ArrayList<Shift> shifts2 = new ArrayList<Shift>();
+        shifts2.add(exampleShift1);
+        shifts2.add(exampleShift2);
+
+
         // generate user
         this.users = new ArrayList<User>();
-        User manager1 = new User("haydn", "haydn", "Haydn Banister: Manager", true, shifts);
+        User manager1 = new User("haydn", "haydn", "Haydn Banister: Manager", true, null);
         User manager2 = new User("a", "a", "Adam_Wareing: Manager", true, shifts);
-        User staff = new User("elf", "elf", "Elf: Staff", false, shifts);
+        User staff = new User("elf", "elf", "Elf: Staff", false, shifts2);
         this.users.add(manager1);
         this.users.add(manager2);
         this.users.add(staff);

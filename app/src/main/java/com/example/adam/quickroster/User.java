@@ -93,4 +93,13 @@ public class User implements Parcelable{
     public String getName(){
         return this.name;
     }
+
+    public ArrayList<Shift> getShifts(){
+        return shifts;
+    }
+
+    public void removeShift(Shift s){
+        if(shifts.contains(s))
+            shifts.remove(s);
+    }
 }
