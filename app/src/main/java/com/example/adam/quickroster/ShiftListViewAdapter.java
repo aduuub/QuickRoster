@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.parse.ParseObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -17,10 +19,10 @@ import java.util.logging.SimpleFormatter;
 /**
  * Created by Adam on 30/04/16.
  */
-public class CalendarListViewAdapter extends BaseAdapter {
+public class ShiftListViewAdapter extends BaseAdapter {
     private Context mContext;
-    private List<Shift> mItems;
-    public CalendarListViewAdapter (Context ctx,List<Shift> items){
+    private List<ParseShift> mItems;
+    public ShiftListViewAdapter(Context ctx, List<ParseShift> items){
         mContext = ctx;
         mItems = items;
     }
@@ -37,32 +39,29 @@ public class CalendarListViewAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return mItems.get(position).getStartTime();
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View v = inflater.inflate(R.layout.row_shift, parent, false);
-        Shift shift = mItems.get(position);
+        View view = inflater.inflate(R.layout.row_shift, parent, false);
+        ParseShift shift = mItems.get(position);
 
         SimpleDateFormat formattedTime = new SimpleDateFormat("HH:mm");
 
-        TextView startView = (TextView) v.findViewById(R.id.startTime);
-        long time = shift.getStartTime();
-        Date d = new Date(time);
-        startView.setText(formattedTime.format(d));
+        TextView startView = (TextView) view.findViewById(R.id.startTime);
+        Date startDate = shift.getStartDate();
+        startView.setText(formattedTime.format(startDate));
 
-        TextView endView = (TextView) v.findViewById(R.id.endTime);
-        long time2 = shift.getEndTime();
-        Date date2 = new Date(time2);
-        endView.setText(formattedTime.format(date2));
+        TextView endView = (TextView) view.findViewById(R.id.endTime);
+        Date endDate = shift.getEndDate();
+        endView.setText(formattedTime.format(endDate));
 
-        TextView dateView = (TextView) v.findViewById(R.id.Details);
+        TextView dateView = (TextView) view.findViewById(R.id.Details);
         dateView.setText(String.valueOf(shift.getDetails()));
 
-        return v;
+        return view;
     }
-
 }

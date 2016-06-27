@@ -1,6 +1,6 @@
+
 apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
-
 
 android {
     compileSdkVersion 23
@@ -34,5 +34,9 @@ android {
 
 dependencies {
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.parse.bolts:bolts-android:1.+'
+    compile 'com.parse:parse-android:1.+'
+    compile files('libs/parse.jar')
 }
+
 

@@ -2,14 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.adam.quickroster">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Home"
+            android:name=".Welcome"
             android:label="QuickRoster"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -27,25 +36,46 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".calendarView"
+            android:name=".CalendarView"
             android:label="Calendar"
-            android:parentActivityName=".Home"
+            android:parentActivityName=".LoginAsUser"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.adam.quickroster.Home" />
+                android:value=".LoginAsUser" />
         </activity>
-        <activity android:name=".ViewDateActivity"
-            android:label="Shifts"/>
-        <activity android:name=".ManagerView"
-            android:label="Manager View"/>
         <activity
-            android:name=".AddActivity"
+            android:name=".ShiftListView"
+            android:label="Shifts" />
+        <activity
+            android:name=".DisplayManagerOptions"
+            android:label="Manager View" />
+        <activity
+            android:name=".ManagerAddActivity"
             android:label="Add Shift"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RemoveActivity"
+            android:name=".ManagerRemoveActivity"
             android:label="Remove Shift"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RegisterBuisness"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".LoginAsUser"
+            android:label="@string/title_activity_welcome"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LoginSuccessful"
+            android:label="@string/title_activity_welcome"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".StaffHomeActivity"
+            android:label="@string/title_activity_staff_home"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddStaffMemeberActivity"
+            android:label="@string/title_activity_add_staff_memeber"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

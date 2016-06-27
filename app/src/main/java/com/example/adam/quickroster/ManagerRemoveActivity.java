@@ -12,13 +12,13 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RemoveActivity extends AppCompatActivity implements View.OnClickListener {
+public class ManagerRemoveActivity extends AppCompatActivity implements View.OnClickListener {
 
     // XML
     private Spinner selectStaffSpinner;
     private Spinner selectShiftSpinner;
     private Button submit;
-    private ArrayList<User> allUsers = Home.getAllUsers();
+    private ArrayList<User> allUsers = LoginAsUser.getAllUsers();
 
     private User selectedUser;
     private Shift selectedShift;
