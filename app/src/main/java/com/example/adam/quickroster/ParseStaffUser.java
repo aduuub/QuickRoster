@@ -11,18 +11,30 @@ import java.util.UUID;
  * Created by Adam on 19/05/16.
  */
 @ParseClassName("User")
-public class ParseStaffUser extends ParseObject {
+public class ParseStaffUser extends ParseUser {
 
     public String getObjectID() {
         return getString("objectID");
     }
 
-    public String getName() {
+    public String getFirstName() {
         return getString("firstName");
     }
 
-    public void setName(String name) {
+    public void setFirstName(String name) {
         put("firstName", name);
+    }
+
+    public void setBusinessID(String name) {
+        put("Business", name);
+    }
+
+    public String getLastName() {
+        return getString("lastName");
+    }
+
+    public void setLastName(String name) {
+        put("lastName", name);
     }
 
     public String getUserName() {
@@ -52,12 +64,6 @@ public class ParseStaffUser extends ParseObject {
 
     public String getUuidString() {
         return getString("uuid");
-    }
-
-    // TODO get / set shifts
-
-    public static ParseQuery<ParseStaffUser> getQuery() {
-        return ParseQuery.getQuery(ParseStaffUser.class);
     }
 }
 

@@ -26,7 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Thank you for choosing QuickRoster. We know you are going to love it. Please continue to get started. \n \n User Type: "
         android:textSize="18sp"
         android:textAlignment="center"
         android:id="@+id/loggedInText2"

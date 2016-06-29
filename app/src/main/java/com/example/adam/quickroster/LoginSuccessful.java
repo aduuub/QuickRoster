@@ -24,8 +24,8 @@ public class LoginSuccessful extends AppCompatActivity {
     Button logoutButton;
     TextView displayWelcomeText;
     boolean isManager = false;
-    String name;
-
+    String name = "default";
+    private ParseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,54 +39,26 @@ public class LoginSuccessful extends AppCompatActivity {
         logoutButton = (Button) findViewById(R.id.logOut);
         displayWelcomeText = (TextView) findViewById(R.id.loggedInText2);
 
-        final ParseUser user = ParseUser.getCurrentUser();
+        user = ParseUser.getCurrentUser();
         if (user != null) {
             if (user.containsKey("isManager")) {
                 user.fetchInBackground(new GetCallback<ParseObject>() {
                     public void done(ParseObject object, ParseException e) {
                         if (e == null) {
                             // Success!
-                            boolean isManager = user.getBoolean("isManager");
-                            if (name == null)
-                                name = user.getString("lastName");
+                            setManager(user.getBoolean("isManager"));
+                            setName(user.getString("firstName"));
+                            setWelcomeText();
 
-                            setManager(isManager);
-                            setName(name);
                         } else {
                             // Failure!
+                            Toast.makeText(getApplicationContext(), "Error loading" + e, Toast.LENGTH_LONG).show();
                         }
                     }
                 });
             }
         }
 
-        String name = user.getString("firstName");
-        String lastName = user.getString("lastName");
-        String userType = this.isManager ? "Manager" : "Staff Member";
-
-
-        ParseUser parseUser = ParseUser.getCurrentUser();
-        String userObj = parseUser.getObjectId();
-        ParseQuery<ParseStaffUser> query = new ParseQuery<ParseStaffUser>("User");
-        //query.whereEqualTo("details", "a");
-
-        query.findInBackground(new FindCallback<ParseStaffUser>() {
-                                   @Override
-                                   public void done(List<ParseStaffUser> objects, ParseException e) {
-                                       if (e != null) {
-                                           Toast.makeText(getApplicationContext(), "Error loading shifts " + e, Toast.LENGTH_LONG).show();
-                                       }
-                                   }
-                               }
-        );
-
-        displayWelcomeText.append(userType);
-        if (name != null) {
-            String welcomeUser = "\n Current user: " + name != null ? name : ""
-                    + " " + lastName != null ? lastName : "";
-            displayWelcomeText.append(welcomeUser);
-        }
-        // TODO Fix welcome text
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,6 +80,21 @@ public class LoginSuccessful extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+    /**
+     * Sets the welcome text. Takes the default message and adds the users name and staff type
+     */
+    public void setWelcomeText(){
+        String userType = this.isManager ? "Manager" : "Staff Member";
+        StringBuilder welcomeText = new StringBuilder();
+        if (name != null)
+            welcomeText.append("Welcome: " + name + ". \n \n");
+
+        welcomeText.append("Thank you for choosing QuickRoster. We know you are going to love it. Please continue to get started. \n \n");
+        welcomeText.append("You are logged in as: " + userType + ". \n");
+        displayWelcomeText.append(welcomeText.toString());
     }
 
     public void setManager(boolean b) {

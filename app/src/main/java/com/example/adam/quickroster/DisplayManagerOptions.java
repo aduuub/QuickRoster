@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.parse.ParseUser;
+
 public class DisplayManagerOptions extends AppCompatActivity implements View.OnClickListener {
 
     Button showCal;
@@ -61,8 +63,20 @@ public class DisplayManagerOptions extends AppCompatActivity implements View.OnC
                 Intent intentAddStaff = new Intent(this, AddStaffMemeberActivity.class);
                 startActivity(intentAddStaff);
                 break;
+
+            case R.id.logOutManagerButton:
+                logout();
         }
 
+    }
+
+    /**
+     * Logs out the current Parse User
+     */
+    public void logout() {
+        ParseUser.logOut();
+        Intent intent = new Intent(DisplayManagerOptions.this, Welcome.class);
+        startActivity(intent);
     }
 
 

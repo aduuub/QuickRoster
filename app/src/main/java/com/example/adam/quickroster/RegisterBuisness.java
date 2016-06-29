@@ -33,7 +33,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
@@ -51,16 +53,10 @@ public class RegisterBuisness extends AppCompatActivity implements LoaderCallbac
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
-
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText buisnessName;
-    private EditText mPasswordView;
-    private EditText mPasswordView2;
+    private EditText numEmployeesView;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -71,20 +67,8 @@ public class RegisterBuisness extends AppCompatActivity implements LoaderCallbac
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView2 = (EditText) findViewById(R.id.password2);
         buisnessName = (EditText) findViewById(R.id.buisnessName);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
+        numEmployeesView = (EditText) findViewById(R.id.numOfStaff);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -93,49 +77,23 @@ public class RegisterBuisness extends AppCompatActivity implements LoaderCallbac
                 attemptLogin();
             }
         });
-
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
-
-        boolean validationError = false;
-        StringBuilder errorMsg = new StringBuilder("Please ");
-        if (isEmpty(mEmailView)) {
-            validationError = true;
-            errorMsg.append("enter an email");
-        }
-        if (isEmpty(mPasswordView)) {
-            if (validationError) {
-                errorMsg.append(", and ");
-            }
-            validationError = true;
-            errorMsg.append("enter a password");
-        }
-
-        if (!isMatching(mPasswordView, mPasswordView2)) {
-            if (validationError) {
-                errorMsg.append(", and");
-            }
-            validationError = true;
-            errorMsg.append("ensure both passwords match");
-        }
-        if (validationError) {
-            errorMsg.append(".");
-            Toast.makeText(RegisterBuisness.this, errorMsg.toString(), Toast.LENGTH_LONG).show();
-        } else {
-            attemptLogin();
-        }
-
     }
 
+    /**
+     * Autocomplete
+     */
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
         }
-
         getLoaderManager().initLoader(0, null, this);
     }
 
+    /**
+     * @return If we can request contacts
+     */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -178,47 +136,35 @@ public class RegisterBuisness extends AppCompatActivity implements LoaderCallbac
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
-        // Reset errors.
+        // Reset error.
         mEmailView.setError(null);
-        mPasswordView.setError(null);
-        mPasswordView2.setError(null);
+
+//        // TODO Remove this after testing
+//        String businessObjectID = "Maou9gwihL";
+//        Intent intent = new Intent(RegisterBuisness.this, AddStaffMemeberActivity.class);
+//        intent.putExtra("BusinessID", businessObjectID);
+//        startActivity(intent);
+//        finish();
 
 
         // Store values at the time of the login attempt.
         String bisName = buisnessName.getText().toString();
         String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
-        String password2 = mPasswordView2.getText().toString();
+        String numEmployees = numEmployeesView.getText().toString();
 
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
+
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        // both passwords dont match
-        if (!isMatching(mPasswordView, mPasswordView2)) {
-            mPasswordView2.setError("Please ensure both passwords match");
             focusView = mEmailView;
             cancel = true;
         }
@@ -230,31 +176,27 @@ public class RegisterBuisness extends AppCompatActivity implements LoaderCallbac
             // perform the user login attempt.
             showProgress(true);
 
-            ParseUser user = new ParseUser();
-            user.setUsername(bisName);
-            user.setPassword(password);
-            user.put("isManager", true);
-            user.signUpInBackground(new SignUpCallback() {
+            // register business
+            final ParseObject newBusiness = ParseBusiness.create("Business");
+            newBusiness.put("Name", bisName);
+            newBusiness.put("Email", email);
+            newBusiness.put("MaxEmployees", numEmployees);
 
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        Toast.makeText(getApplicationContext(),
-                                "Successfully Signed up!",
-                                Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(RegisterBuisness.this, DisplayManagerOptions.class);
-                        startActivity(intent);
-                        finish();
+            try {
+                newBusiness.save();
+            } catch (ParseException e) {
+                Toast.makeText(getApplicationContext(), e.toString() , Toast.LENGTH_LONG).show();
+                return;
+            }
 
-                    } else {
-                        Toast.makeText(getApplicationContext(),
-                                "Sign up error", Toast.LENGTH_SHORT)
-                                .show();
-
-                    }
-                }
-            });
+            String businessObjectID = newBusiness.getObjectId();
+            Intent intent = new Intent(RegisterBuisness.this, AddStaffMemeberActivity.class);
+            intent.putExtra("BusinessID", businessObjectID);
+            startActivity(intent);
+            finish();
         }
+
+
     }
 
     private boolean isEmailValid(String email) {
@@ -264,6 +206,7 @@ public class RegisterBuisness extends AppCompatActivity implements LoaderCallbac
     private boolean isPasswordValid(String password) {
         return password.length() > 6;
     }
+
 
     /**
      * Shows the progress UI and hides the login form.
@@ -345,111 +288,76 @@ public class RegisterBuisness extends AppCompatActivity implements LoaderCallbac
     }
 
 
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
+private interface ProfileQuery {
+    String[] PROJECTION = {
+            ContactsContract.CommonDataKinds.Email.ADDRESS,
+            ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+    };
 
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
+    int ADDRESS = 0;
+    int IS_PRIMARY = 1;
+}
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mBuisnessName;
-        private final String mEmail;
-        //        private final int mManagers;
-//        private final int mStaff;
-        private final String mPassword;
-
-
-        UserLoginTask(String buisnessName, String email, String password) {
-            mBuisnessName = buisnessName;
-            mEmail = email;
-//            mManagers = managers;
-//            mStaff = staff;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            final ProgressDialog dlg = new ProgressDialog(RegisterBuisness.this);
-            dlg.setTitle("Please wait.");
-            dlg.setMessage("Creating your account");
-            dlg.show();
-
-
-            // Set up a new Parse user
-            ParseUser user = new ParseUser();
-            user.setUsername(mBuisnessName);
-            user.setPassword(mPassword);
-            // Call the Parse signup method
-            user.signUpInBackground(new SignUpCallback() {
-
-                @Override
-                public void done(ParseException e) {
-                    dlg.dismiss();
-                    if (e != null) {
-                        // Show the error message
-                        Toast.makeText(RegisterBuisness.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                    } else {
-                        // Start an intent for the dispatch activity
-                        Intent intent = new Intent(RegisterBuisness.this, DisplayManagerOptions.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
-                }
-            });
-
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
-
-    /**
-     * Determins if an Edit text is empty or not
-     *
-     * @param etText
-     * @return true if empty, false if not.
-     */
-    private boolean isEmpty(EditText etText) {
-        return (etText.getText().toString().trim().length() == 0);
-    }
-
-    /**
-     * @param text1
-     * @param text2
-     * @return
-     */
-    private boolean isMatching(EditText text1, EditText text2) {
-        return (text1.getText().toString().equals(text1.getText().toString()));
-    }
+/**
+ * Represents an asynchronous login/registration task used to authenticate
+ * the user.
+ * <p/>
+ * public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+ * <p/>
+ * private final String mBuisnessName;
+ * private final String mEmail;
+ * private final int mStaff;
+ * <p/>
+ * <p/>
+ * UserLoginTask(String buisnessName, String email, int staff) {
+ * mBuisnessName = buisnessName;
+ * mEmail = email;
+ * mStaff = staff;
+ * }
+ *
+ * @Override protected Boolean doInBackground(Void... params) {
+ * <p/>
+ * final ProgressDialog dlg = new ProgressDialog(RegisterBuisness.this);
+ * dlg.setTitle("Please wait.");
+ * dlg.setMessage("Creating your account");
+ * dlg.show();
+ * <p/>
+ * // Set up a new Parse user
+ * ParseUser user = new ParseUser();
+ * user.setUsername(mBuisnessName);
+ * user.setStaff(staff);
+ * user.setEmail(mEmail);
+ * <p/>
+ * // Call the Parse sign up method
+ * user.signUpInBackground(new SignUpCallback() {
+ * @Override public void done(ParseException e) {
+ * dlg.dismiss();
+ * if (e != null) {
+ * // Show the error message
+ * Toast.makeText(RegisterBuisness.this, e.getMessage(), Toast.LENGTH_LONG).show();
+ * } else {
+ * // Start an intent for the dispatch activity
+ * Intent intent = new Intent(RegisterBuisness.this, DisplayManagerOptions.class);
+ * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+ * startActivity(intent);
+ * }
+ * }
+ * });
+ * return true;
+ * }
+ * @Override protected void onPostExecute(final Boolean success) {
+ * mAuthTask = null;
+ * showProgress(false);
+ * if (success) {
+ * finish();
+ * }
+ * }
+ * @Override protected void onCancelled() {
+ * mAuthTask = null;
+ * showProgress(false);
+ * }
+ * }
+ */
 
 }
 

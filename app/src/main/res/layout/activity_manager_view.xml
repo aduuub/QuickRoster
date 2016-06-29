@@ -73,5 +73,13 @@
         android:layout_alignLeft="@+id/managerRemoveShiftsButton"
         android:layout_alignStart="@+id/managerRemoveShiftsButton" />
 
+    <Button
+        android:id="@+id/logOutManagerButton"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:text="Log Out"
+        android:layout_below="@+id/managerViewBuisnessDetailsButton"
+        android:layout_alignLeft="@+id/managerRemoveShiftsButton"
+        android:layout_alignStart="@+id/managerRemoveShiftsButton" />
 
 </RelativeLayout>
