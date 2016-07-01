@@ -38,11 +38,11 @@
         <activity
             android:name=".CalendarView"
             android:label="Calendar"
-            android:parentActivityName=".LoginAsUser"
+            android:parentActivityName=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginAsUser" />
+                android:value=".LoginActivity" />
         </activity>
         <activity
             android:name=".ShiftListView"
@@ -62,7 +62,7 @@
             android:name=".RegisterBuisness"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".LoginAsUser"
+            android:name=".LoginActivity"
             android:label="@string/title_activity_welcome"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

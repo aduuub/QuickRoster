@@ -15,7 +15,7 @@
     tools:showIn="@layout/activity_add_staff_memeber">
 
 
-    <!-- Login progress -->
+    <!-- LoginActivity progress -->
     <ProgressBar
         android:id="@+id/login_progress"
         style="?android:attr/progressBarStyleLarge"
@@ -25,7 +25,7 @@
         android:visibility="gone" />
 
     <ScrollView
-        android:id="@+id/login_form"
+        android:id="@+id/add_staff_member"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

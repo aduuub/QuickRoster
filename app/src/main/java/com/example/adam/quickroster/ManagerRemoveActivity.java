@@ -18,7 +18,7 @@ public class ManagerRemoveActivity extends AppCompatActivity implements View.OnC
     private Spinner selectStaffSpinner;
     private Spinner selectShiftSpinner;
     private Button submit;
-    private ArrayList<User> allUsers = LoginAsUser.getAllUsers();
+    private ArrayList<User> allUsers = LoginActivity.getAllUsers();
 
     private User selectedUser;
     private Shift selectedShift;

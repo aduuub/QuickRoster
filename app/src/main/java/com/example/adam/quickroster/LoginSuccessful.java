@@ -18,7 +18,7 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-public class LoginSuccessful extends AppCompatActivity {
+public class LoginSuccessful extends AppCompatActivity implements View.OnClickListener {
 
     Button continueButton;
     Button logoutButton;
@@ -30,38 +30,45 @@ public class LoginSuccessful extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int content_login_successful = R.layout.content_login_successful;
-        setContentView(content_login_successful);
+        setContentView(R.layout.activity_login_successful);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         continueButton = (Button) findViewById(R.id.continueButton2);
         logoutButton = (Button) findViewById(R.id.logOut);
         displayWelcomeText = (TextView) findViewById(R.id.loggedInText2);
-
+        continueButton.setOnClickListener(this);
+        logoutButton.setOnClickListener(this);
         user = ParseUser.getCurrentUser();
+
         if (user != null) {
             if (user.containsKey("isManager")) {
-                user.fetchInBackground(new GetCallback<ParseObject>() {
-                    public void done(ParseObject object, ParseException e) {
-                        if (e == null) {
-                            // Success!
-                            setManager(user.getBoolean("isManager"));
-                            setName(user.getString("firstName"));
-                            setWelcomeText();
+                try {
+                    user.fetch();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                // Success!
+                this.isManager = user.getBoolean("isManager");
+                this.name = user.getString("firstName");
+                setWelcomeText();
 
-                        } else {
-                            // Failure!
-                            Toast.makeText(getApplicationContext(), "Error loading" + e, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+            } else {
+                // Failure!
+                Toast.makeText(getApplicationContext(), "Error loading", Toast.LENGTH_LONG).show();
             }
         }
 
-        continueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.continueButton2:
                 if (isManager) {
                     Intent intent = new Intent(LoginSuccessful.this, DisplayManagerOptions.class);
                     startActivity(intent);
@@ -69,24 +76,20 @@ public class LoginSuccessful extends AppCompatActivity {
                     Intent intent = new Intent(LoginSuccessful.this, StaffHomeActivity.class);
                     startActivity(intent);
                 }
-            }
-        });
+                break;
 
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            case R.id.logOut:
                 ParseUser.logOut();
                 Intent intent = new Intent(LoginSuccessful.this, Welcome.class);
                 startActivity(intent);
-            }
-        });
+                break;
+        }
     }
-
 
     /**
      * Sets the welcome text. Takes the default message and adds the users name and staff type
      */
-    public void setWelcomeText(){
+    public void setWelcomeText() {
         String userType = this.isManager ? "Manager" : "Staff Member";
         StringBuilder welcomeText = new StringBuilder();
         if (name != null)

@@ -72,7 +72,7 @@ public class ManagerAddActivity extends AppCompatActivity implements View.OnClic
         setSupportActionBar(toolbar);
 
         user = getIntent().getParcelableExtra("User");
-        allUsers = LoginAsUser.getAllUsers();
+        allUsers = LoginActivity.getAllUsers();
 
         date = (TextView) findViewById(R.id.dateChooser);
         fromTime = (TextView) findViewById(R.id.pickStartTime);
