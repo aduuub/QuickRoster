@@ -38,7 +38,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class RegisterBuisness extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class RegisterBusinessActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -172,7 +172,7 @@ public class RegisterBuisness extends AppCompatActivity implements LoaderCallbac
             }
 
             String businessObjectID = newBusiness.getObjectId();
-            Intent intent = new Intent(RegisterBuisness.this, AddStaffMemeberActivity.class);
+            Intent intent = new Intent(RegisterBusinessActivity.this, AddStaffMemeberActivity.class);
             intent.putExtra("BusinessID", businessObjectID);
             startActivity(intent);
             finish();
@@ -263,7 +263,7 @@ public class RegisterBuisness extends AppCompatActivity implements LoaderCallbac
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(RegisterBuisness.this,
+                new ArrayAdapter<>(RegisterBusinessActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -299,7 +299,7 @@ private interface ProfileQuery {
  *
  * @Override protected Boolean doInBackground(Void... params) {
  * <p/>
- * final ProgressDialog dlg = new ProgressDialog(RegisterBuisness.this);
+ * final ProgressDialog dlg = new ProgressDialog(RegisterBusinessActivity.this);
  * dlg.setTitle("Please wait.");
  * dlg.setMessage("Creating your account");
  * dlg.show();
@@ -316,10 +316,10 @@ private interface ProfileQuery {
  * dlg.dismiss();
  * if (e != null) {
  * // Show the error message
- * Toast.makeText(RegisterBuisness.this, e.getMessage(), Toast.LENGTH_LONG).show();
+ * Toast.makeText(RegisterBusinessActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
  * } else {
  * // Start an intent for the dispatch activity
- * Intent intent = new Intent(RegisterBuisness.this, DisplayManagerOptions.class);
+ * Intent intent = new Intent(RegisterBusinessActivity.this, DisplayManagerOptions.class);
  * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
  * startActivity(intent);
  * }

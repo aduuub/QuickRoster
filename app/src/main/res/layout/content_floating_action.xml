@@ -9,18 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".CalendarViewActivity"
-    tools:showIn="@layout/activity_calendar_view">
+    tools:context="com.example.adam.quickroster.FloatingActionActivity"
+    tools:showIn="@layout/activity_floating_action">
 
-    <CalendarView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/calendarView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="false"
-        android:showWeekNumber="false"
-        android:scrollIndicators="right"
-        android:minDate="01/01/2016"
-        />
 </RelativeLayout>

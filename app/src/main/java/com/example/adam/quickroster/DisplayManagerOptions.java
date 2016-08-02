@@ -27,16 +27,17 @@ public class DisplayManagerOptions extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_view);
 
+        // Set buttons
         addShift = (Button) findViewById(R.id.addNewShiftButton);
         removeShift = (Button) findViewById(R.id.managerRemoveShiftsButton);
         showCal = (Button) findViewById(R.id.viewAllShifts);
         addStaff = (Button) findViewById(R.id.addStaffMemeberButton);
-        removeStaff = (Button) findViewById(R.id.removeStaffMemeberButton);
-        viewStaff = (Button) findViewById(R.id.viewCurrentStaffButton);
+        removeStaff = (Button) findViewById(R.id.removeStaffMemberButton);
+        viewStaff = (Button) findViewById(R.id.viewStaffButton);
         viewBuisInfo = (Button) findViewById(R.id.managerViewBuisnessDetailsButton);
         logout = (Button) findViewById(R.id.logOutManagerButton);
 
-
+        // Set onClick listeners
         addShift.setOnClickListener(this);
         removeShift.setOnClickListener(this);
         showCal.setOnClickListener(this);
@@ -51,17 +52,17 @@ public class DisplayManagerOptions extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addNewShiftButton:
-                Intent intentAdd = new Intent(this, ManagerAddActivity.class);
+                Intent intentAdd = new Intent(this, AddShiftActivity.class);
                 startActivity(intentAdd);
                 break;
 
             case R.id.managerRemoveShiftsButton:
-                Intent intentRemove = new Intent(this, ManagerRemoveActivity.class);
+                Intent intentRemove = new Intent(this, RemoveShiftActivity.class);
                 startActivity(intentRemove);
                 break;
 
             case R.id.viewAllShifts:
-                Intent intentView = new Intent(this, CalendarView.class);
+                Intent intentView = new Intent(this, CalendarViewActivity.class);
                 startActivity(intentView);
                 break;
 
@@ -79,10 +80,19 @@ public class DisplayManagerOptions extends AppCompatActivity implements View.OnC
                 startActivity(intentAddStaff);
                 break;
 
+            case R.id.removeStaffMemberButton:
+                Intent removeStaffIntent = new Intent(this, RemoveStaffActivity.class);
+                startActivity(removeStaffIntent);
+                break;
+
+            case R.id.viewStaffButton:
+                Intent viewStaff = new Intent(this, StaffMemberListView.class);
+                startActivity(viewStaff);
+                break;
+
             case R.id.logOutManagerButton:
                 logout();
         }
-
     }
 
     /**
@@ -90,10 +100,9 @@ public class DisplayManagerOptions extends AppCompatActivity implements View.OnC
      */
     public void logout() {
         ParseUser.logOut();
-        Intent intent = new Intent(DisplayManagerOptions.this, Welcome.class);
+        Intent intent = new Intent(DisplayManagerOptions.this, WelcomeActivity.class);
         startActivity(intent);
         finish();
     }
-
 
 }

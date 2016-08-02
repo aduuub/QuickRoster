@@ -2,6 +2,7 @@ package com.example.adam.quickroster;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,17 +14,24 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class ManagerAddActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
+public class AddShiftActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     // XML
     private TextView date;
@@ -35,9 +43,9 @@ public class ManagerAddActivity extends AppCompatActivity implements View.OnClic
     private Spinner selectUsers;
 
 
-    private User user;
-    private User staffForShift;
-    private ArrayList<User> allUsers;
+    private ParseUser currentUser;
+    private ParseUser staffForShift;
+    private List<ParseUser> allUsers;
 
     private TimePickerDialog.OnTimeSetListener fromListener = new TimePickerDialog.OnTimeSetListener() {
         @Override
@@ -70,32 +78,17 @@ public class ManagerAddActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_add);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        user = getIntent().getParcelableExtra("User");
-        allUsers = LoginActivity.getAllUsers();
-
-        date = (TextView) findViewById(R.id.dateChooser);
-        fromTime = (TextView) findViewById(R.id.pickStartTime);
-        toTime = (TextView) findViewById(R.id.pickEndTime);
-        selectUsers = (Spinner) findViewById(R.id.addStaffSelector);
-        submit = (Button) findViewById(R.id.addNewShiftSubmitButton);
-        details = (TextView) findViewById(R.id.addShiftDetails);
-        acceptedText = (TextView) findViewById(R.id.accepted);
+        setFieldsAndListeners();
+        allUsers = getAllUsers(currentUser);
 
 
-        submit.setOnClickListener(this);
-        date.setOnClickListener(this);
-        fromTime.setOnClickListener(this);
-        toTime.setOnClickListener(this);
-
-        // create the the spinner
-
-        final List<User> spinnerArray = new ArrayList<User>();
+        // create the the spinner lists
+        final List<ParseUser> spinnerArray = new ArrayList<ParseUser>();
         List<String> spinnerArrayNames = new ArrayList<String>();
 
-        for (User u : allUsers) {
+        for (ParseUser u : allUsers) {
             spinnerArray.add(u);
-            spinnerArrayNames.add(u.getName());
+            spinnerArrayNames.add(u.getString("firstName") + " " + u.getString("lastName"));
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArrayNames);
@@ -127,7 +120,6 @@ public class ManagerAddActivity extends AppCompatActivity implements View.OnClic
                 TimePickerDialog timePicker = new TimePickerDialog(this, fromListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
                 timePicker.show();
                 break;
-
             case R.id.pickEndTime:
                 TimePickerDialog timePicker2 = new TimePickerDialog(this, toListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
                 timePicker2.show();
@@ -135,7 +127,6 @@ public class ManagerAddActivity extends AppCompatActivity implements View.OnClic
             case R.id.addNewShiftSubmitButton:
                 createShift();
         }
-
     }
 
     @Override
@@ -149,53 +140,92 @@ public class ManagerAddActivity extends AppCompatActivity implements View.OnClic
 
     public void createShift() {
         if (staffForShift == null) {
-            acceptedText.setText("Please Choose a Staff Memeber First");
+            acceptedText.setText("Please Choose a Staff Member First");
             return;
+        }
+
+        List<TextView> widgets = Arrays.asList(date, fromTime, toTime);
+        for (TextView v : widgets) {
+            if (v.toString().equals("")) {
+                v.setError("Please Fill in this Field");
+                return;
+            }
         }
 
         DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
         DateFormat timeFormatter = new SimpleDateFormat("HH:mm");
 
-
         try {
-            // date to long
+            // Convert dates
             String formatText = date.getText().toString();
-            if(formatText.equals("")) {
-                acceptedText.setText("Please Fill All Fields");
-                return;
-            }
-            Date selectedDate = dateFormatter.parse(formatText);
-            long dateInLong = selectedDate.getTime();
+            Date date = dateFormatter.parse(formatText);
 
-            // start time to long
             formatText = fromTime.getText().toString();
-            if(formatText.equals("")){
-                acceptedText.setText("Please Fill All Fields");
-                return;
-            }
-            selectedDate = timeFormatter.parse(formatText);
-            long startTimeLong = selectedDate.getTime();
+            Date startTime = timeFormatter.parse(formatText);
 
-            // end time to long
             formatText = toTime.getText().toString();
-            if(formatText.equals("")){
-                acceptedText.setText("Please Fill All Fields");
-                return;
-            }
-            selectedDate = timeFormatter.parse(formatText);
-            long endTimeLong = selectedDate.getTime();
+            Date endTime = timeFormatter.parse(formatText);
 
-            String shiftDetails = details.getText().toString();
+            // add the new shift to the currentUser
+            ParseObject shift = ParseBusiness.create("Shift");
+            shift.put("staff", staffForShift);
+            shift.put("startTime", combineDateTime(date, startTime));
+            shift.put("endTime", combineDateTime(date, endTime));
+            shift.put("details", details.getText().toString());
+            shift.save();
 
-            // add the new shift to the user
-            staffForShift.addShift(dateInLong, startTimeLong, endTimeLong, shiftDetails);
-
-            acceptedText.setText("Shift Added");
-
-        } catch (ParseException e) {
-            acceptedText.setText("Please Fill All Fields");
+        } catch (ParseException | com.parse.ParseException e) {
+            Toast.makeText(getApplicationContext(), "Error: " + e.toString(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
+
+        Toast.makeText(getApplicationContext(), "Successfully Added Shift", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, DisplayManagerOptions.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Sets fields to be widgets and sets On Click listeners
+     */
+    public void setFieldsAndListeners() {
+        // Fields
+        date = (TextView) findViewById(R.id.dateChooser);
+        fromTime = (TextView) findViewById(R.id.pickStartTime);
+        toTime = (TextView) findViewById(R.id.pickEndTime);
+        selectUsers = (Spinner) findViewById(R.id.addStaffSelector);
+        submit = (Button) findViewById(R.id.addNewShiftSubmitButton);
+        details = (TextView) findViewById(R.id.addShiftDetails);
+        acceptedText = (TextView) findViewById(R.id.accepted);
+        currentUser = ParseUser.getCurrentUser();
+
+        // On Click Listeners
+        submit.setOnClickListener(this);
+        date.setOnClickListener(this);
+        fromTime.setOnClickListener(this);
+        toTime.setOnClickListener(this);
+    }
+
+    /**
+     * Gets all users of the business
+     */
+    public static List<ParseUser> getAllUsers(ParseUser currentUser) {
+        ParseQuery<ParseUser> queryUsers = ParseUser.getQuery();
+        try {
+            ParseObject business = currentUser.getParseObject("Business").fetch();
+            queryUsers.whereEqualTo("Business", business);
+            return queryUsers.find();
+
+        } catch (com.parse.ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Date combineDateTime(Date date, Date time){
+        return new Date(
+                date.getYear(), date.getMonth(), date.getDay(),
+                time.getHours(), time.getMinutes(), time.getSeconds()
+        );
     }
 
 }

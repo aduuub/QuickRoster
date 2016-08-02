@@ -10,6 +10,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,8 +49,27 @@ public class ShiftListViewAdapter extends BaseAdapter {
 
         View view = inflater.inflate(R.layout.row_shift, parent, false);
         ParseShift shift = mItems.get(position);
-
         SimpleDateFormat formattedTime = new SimpleDateFormat("HH:mm");
+
+        // staff member
+
+        TextView staffMember = (TextView) view.findViewById(R.id.staffMember);
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if(currentUser.getBoolean("isManager")){
+            // find and set staff member name
+            ParseUser staff = shift.getParseUser("staff");
+            String staffName = staff.getString("firstName");
+            if(staffName == null || staffName.equals(currentUser.get("firstName"))) { // name not set or self
+                staffMember.setText("Self");
+            }else {
+                staffMember.setText(staffName);
+            }
+
+        }else{
+            staffMember.setText("Self");
+        }
+
+        // dates
 
         TextView startView = (TextView) view.findViewById(R.id.startTime);
         Date startDate = shift.getStartDate();

@@ -5,11 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-public class CalendarView extends AppCompatActivity implements android.widget.CalendarView.OnDateChangeListener {
+public class CalendarViewActivity extends AppCompatActivity implements android.widget.CalendarView.OnDateChangeListener {
 
     private android.widget.CalendarView cal;
     @Override
@@ -27,7 +23,7 @@ public class CalendarView extends AppCompatActivity implements android.widget.Ca
 
     @Override
     public void onSelectedDayChange(android.widget.CalendarView view, int year, int month, int dayOfMonth) {
-        Intent intent = new Intent(CalendarView.this, ShiftListView.class);
+        Intent intent = new Intent(CalendarViewActivity.this, ShiftListView.class);
         intent.putExtra("Day", dayOfMonth);
         intent.putExtra("Month", month);
         intent.putExtra("Year", year);

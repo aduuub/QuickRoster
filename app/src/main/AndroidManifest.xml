@@ -18,15 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Welcome"
-            android:label="QuickRoster"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".WelcomeActivity"
+            android:label="QuickRoster">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -36,7 +36,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".CalendarView"
+            android:name=".CalendarViewActivity"
             android:label="Calendar"
             android:parentActivityName=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -51,22 +51,26 @@
             android:name=".DisplayManagerOptions"
             android:label="Manager View" />
         <activity
-            android:name=".ManagerAddActivity"
+            android:name=".AddShiftActivity"
             android:label="Add Shift"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ManagerRemoveActivity"
+            android:name=".RemoveShiftActivity"
             android:label="Remove Shift"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RegisterBuisness"
+            android:name=".RemoveStaffActivity"
+            android:label="Remove Staff"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RegisterBusinessActivity"
             android:label="@string/title_activity_login" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_welcome"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LoginSuccessful"
+            android:name=".LoginSuccessfulActivity"
             android:label="@string/title_activity_welcome"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -76,6 +80,17 @@
         <activity
             android:name=".AddStaffMemeberActivity"
             android:label="@string/title_activity_add_staff_memeber"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EditStaffMemeberActivity"
+            android:label="Edit Staff Member"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ManageStaffActivity" />
+        <activity android:name=".StaffMemberListView" />
+        <activity android:name=".StaffListViewAdapter" />
+        <activity
+            android:name=".FloatingActionActivity"
+            android:label="@string/title_activity_floating_action"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

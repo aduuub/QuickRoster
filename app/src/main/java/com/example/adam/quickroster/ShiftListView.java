@@ -60,7 +60,7 @@ public class ShiftListView extends AppCompatActivity {
 
             if (currentUser.getBoolean("isManager")) {
                 ParseObject business = currentUser.getParseObject("Business").fetch();
-                shiftsOnDay.addAll(getAllShifts(business)); // add shifts of everyone in business
+                shiftsOnDay.addAll(getAllShifts(business, startDate, endDate)); // add shifts of everyone in business
             }
         } catch (ParseException e) {
             Toast.makeText(getApplicationContext(), "Error loading shifts", Toast.LENGTH_LONG).show();
@@ -85,13 +85,16 @@ public class ShiftListView extends AppCompatActivity {
     }
 
     /**
-     * Retrieves all shifts of all employees from the business
+     * Retrieves all shifts of all employees from the business that are between the start
+     * and end date
      *
      * @param business
+     * @param start
+     * @param end
      * @return List of ParseObject, which are ParseShifts
      * @throws ParseException
      */
-    public static List<ParseObject> getAllShifts(ParseObject business) throws ParseException {
+    public static List<ParseObject> getAllShifts(ParseObject business, Date start, Date end) throws ParseException {
         // Query to get all users of the business
         ParseQuery<ParseUser> queryUsers = ParseUser.getQuery();
         queryUsers.whereEqualTo("Business", business);
@@ -100,6 +103,7 @@ public class ShiftListView extends AppCompatActivity {
         // Get all shifts from the users
         ParseQuery<ParseObject> queryShifts = new ParseQuery<ParseObject>("Shift");
         queryShifts.whereContainedIn("staff", users);
-        return queryShifts.find();
+        queryShifts.whereGreaterThanOrEqualTo("startTime", start);
+        queryShifts.whereLessThanOrEqualTo("endTime", end);        return queryShifts.find();
     }
 }

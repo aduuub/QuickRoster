@@ -9,22 +9,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".RemoveShiftActivity"
+    tools:context=".RemoveStaffActivity"
     android:orientation="vertical"
-    tools:showIn="@layout/activity_remove">
+    tools:showIn="@layout/content_remove_staff">
 
     <Spinner
-        android:id="@+id/selectStaffToModify"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="12dp"
-        android:paddingBottom="30dp"
-        android:layout_gravity="center_horizontal"
-        android:textSize="20sp"
-        />
-
-    <Spinner
-        android:id="@+id/selectShiftToModify"
+        android:id="@+id/selectStaffRemove"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="12dp"
@@ -34,9 +24,9 @@
         />
 
     <Button
-        android:id="@+id/removeShiftButton"
+        android:id="@+id/removeStaffButton"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Remove Shift" />
+        android:text="Remove Staff" />
 </LinearLayout>

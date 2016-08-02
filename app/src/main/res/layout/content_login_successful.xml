@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.adam.quickroster.LoginSuccessful"
+    tools:context=".LoginSuccessfulActivity"
     tools:showIn="@layout/activity_login_successful">
 
     <TextView
@@ -15,7 +15,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:layout_marginTop="70dp"
-        android:text="Successfully Logged In!"
+        android:text="Successfully Logged In"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="28sp" />
 

@@ -25,4 +25,5 @@
     <string name="title_activity_welcome">Welcome</string>
     <string name="title_activity_staff_home">StaffHomeActivity</string>
     <string name="title_activity_add_staff_memeber">AddStaffMemeberActivity</string>
+    <string name="title_activity_floating_action">FloatingActionActivity</string>
 </resources>

@@ -96,7 +96,7 @@ public class AddStaffMemeberActivity extends AppCompatActivity {
     public void addStaffToBusiness(final ParseUser user) throws ParseException {
 
         if (isManager) {
-            business.add("Managers", user);  // TODO this doesn't save, trying to gives save error
+            business.add("Managers", user);
 
             Toast.makeText(getApplicationContext(), "Successfully added user", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(AddStaffMemeberActivity.this, DisplayManagerOptions.class);

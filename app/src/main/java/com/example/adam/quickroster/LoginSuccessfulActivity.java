@@ -9,16 +9,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.List;
-
-public class LoginSuccessful extends AppCompatActivity implements View.OnClickListener {
+public class LoginSuccessfulActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button continueButton;
     Button logoutButton;
@@ -60,8 +54,6 @@ public class LoginSuccessful extends AppCompatActivity implements View.OnClickLi
                 Toast.makeText(getApplicationContext(), "Error loading", Toast.LENGTH_LONG).show();
             }
         }
-
-
     }
 
     @Override
@@ -70,17 +62,17 @@ public class LoginSuccessful extends AppCompatActivity implements View.OnClickLi
 
             case R.id.continueButton2:
                 if (isManager) {
-                    Intent intent = new Intent(LoginSuccessful.this, DisplayManagerOptions.class);
+                    Intent intent = new Intent(LoginSuccessfulActivity.this, DisplayManagerOptions.class);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(LoginSuccessful.this, StaffHomeActivity.class);
+                    Intent intent = new Intent(LoginSuccessfulActivity.this, StaffHomeActivity.class);
                     startActivity(intent);
                 }
                 break;
 
             case R.id.logOut:
                 ParseUser.logOut();
-                Intent intent = new Intent(LoginSuccessful.this, Welcome.class);
+                Intent intent = new Intent(LoginSuccessfulActivity.this, WelcomeActivity.class);
                 startActivity(intent);
                 break;
         }

@@ -30,14 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
-
-    private static ArrayList<User> users;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void login() {
+        password.setError(null);
         String usernameString = username.getText().toString();
         String passwordString = password.getText().toString();
 
@@ -85,37 +78,11 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         } catch (ParseException e) {
+            showProgress(false);
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+            password.setError(e.getMessage());
             return;
         }
-    }
-
-
-//    public void saveToFile() {
-//        Gson gson = new Gson();
-//        String text = gson.toJson(users);
-//
-//        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        defaultSharedPreferences.edit().putString("Users", text).apply();
-//    }
-//
-//    public void loadFile() {
-//
-//        Gson gson = new Gson();
-//        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        String read = defaultSharedPreferences.getString("Users", null);
-//
-//        this.users = gson.fromJson(read, new TypeToken<ArrayList<User>>() {
-//        }.getType());
-//    }
-
-    public static ArrayList<User> getAllUsers() {
-        return users;
-    }
-
-    private boolean isEmailValid(String email) {
-        return email.contains("@") && email.contains(".");
     }
 
     private boolean isPasswordValid(String password) {

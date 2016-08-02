@@ -46,7 +46,7 @@
         android:layout_alignStart="@+id/managerRemoveShiftsButton" />
 
     <Button
-        android:id="@+id/removeStaffMemeberButton"
+        android:id="@+id/removeStaffMemberButton"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:text="Remove Staff"
@@ -55,11 +55,11 @@
         android:layout_alignStart="@+id/managerRemoveShiftsButton" />
 
     <Button
-        android:id="@+id/viewCurrentStaffButton"
+        android:id="@+id/viewStaffButton"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:text="View Staff"
-        android:layout_below="@+id/removeStaffMemeberButton"
+        android:layout_below="@+id/removeStaffMemberButton"
         android:layout_alignLeft="@+id/managerRemoveShiftsButton"
         android:layout_marginBottom="20dp"
         android:layout_alignStart="@+id/managerRemoveShiftsButton" />
@@ -69,7 +69,7 @@
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:text="View Buisness Info"
-        android:layout_below="@+id/viewCurrentStaffButton"
+        android:layout_below="@+id/viewStaffButton"
         android:layout_alignLeft="@+id/managerRemoveShiftsButton"
         android:layout_alignStart="@+id/managerRemoveShiftsButton" />
 
