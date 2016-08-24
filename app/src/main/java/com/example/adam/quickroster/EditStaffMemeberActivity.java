@@ -63,27 +63,27 @@ public class EditStaffMemeberActivity extends AppCompatActivity {
      */
     public void updateStaffMember() {
         // Create new user and set values
-        if(staffMember == null){
+        if (staffMember == null) {
             Toast.makeText(getApplicationContext(), "Error: Can't find user to update", Toast.LENGTH_LONG).show();
             return;
         }
 
-        // TODO JavaScript here so we can securely edit and delete users without having to log them in
-        String data = "{ 'isManager' : " + isManager.isPressed() + ", 'userName:" + userName.getText().toString() +
-                ", email : " + email.getText().toString();
+        // Add params to hashmap so we can parse to cloud code
+        Map<String, Object> params = new HashMap<>();
+        params.put("ObjectId", staffMember.getObjectId());
+        params.put("isManager", isManager.isPressed());
+        params.put("userName", userName.getText().toString());
+        params.put("email", email.getText().toString());
+        params.put("firstName", firstName.getText().toString());
+        params.put("lastName", lastName.getText().toString());
 
-        staffMember.setUsername(userName.getText().toString());
-        staffMember.setEmail(email.getText().toString());
-        staffMember.put("firstName", firstName.getText().toString());
-        staffMember.put("lastName", lastName.getText().toString());
-        staffMember.put("isManager", !isManager.isPressed());
-        staffMember.saveInBackground(new SaveCallback() {
+
+        ParseCloud.callFunctionInBackground("updateUser", params, new FunctionCallback<String>() {
             @Override
-            public void done(ParseException e) {
-                if (e == null)
-                    Toast.makeText(getApplicationContext(), "Staff Updated", Toast.LENGTH_LONG).show();
-                else
-                    Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            public void done(String object, ParseException e) {
+                if(object != null)
+                    Toast.makeText(getApplicationContext(), object, Toast.LENGTH_LONG);
+                finish();
             }
         });
     }
@@ -91,13 +91,14 @@ public class EditStaffMemeberActivity extends AppCompatActivity {
     /**
      * Deletes the selected user using cloud code
      */
-    public void deleteUser(){
+    public void deleteUser() {
         Map<String, String> params = new HashMap<>();
         params.put("ObjectId", staffMember.getObjectId());
-        ParseCloud.callFunctionInBackground("deleteUser", params, new FunctionCallback<String>() {
+        ParseCloud.callFunctionInBackground("deleteUser", params, new FunctionCallback<Object>() {
             @Override
-            public void done(String object, ParseException e) {
-                Toast.makeText(getApplicationContext(), object, Toast.LENGTH_LONG);
+            public void done(Object object, ParseException e) {
+                Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG);
+                finishActivity(0);
             }
         });
     }

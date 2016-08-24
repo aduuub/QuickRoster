@@ -132,7 +132,7 @@
                     android:textAlignment="center"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:text="Edit"
+                    android:text="Save"
                     android:textStyle="bold"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true" />

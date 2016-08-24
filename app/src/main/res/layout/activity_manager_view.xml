@@ -31,44 +31,25 @@
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:text="Remove Shift"
-        android:layout_below="@+id/viewAllShifts"
+        android:layout_below="@+id/addNewShiftButton"
         android:layout_marginBottom="20dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp" />
-
-    <Button
-        android:id="@+id/addStaffMemeberButton"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:text="Add Staff"
-        android:layout_below="@+id/managerRemoveShiftsButton"
-        android:layout_alignLeft="@+id/managerRemoveShiftsButton"
-        android:layout_alignStart="@+id/managerRemoveShiftsButton" />
-
-    <Button
-        android:id="@+id/removeStaffMemberButton"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:text="Remove Staff"
-        android:layout_below="@+id/addStaffMemeberButton"
-        android:layout_alignLeft="@+id/managerRemoveShiftsButton"
-        android:layout_alignStart="@+id/managerRemoveShiftsButton" />
+        />
 
     <Button
         android:id="@+id/viewStaffButton"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:text="View Staff"
-        android:layout_below="@+id/removeStaffMemberButton"
+        android:text="Manage Staff"
+        android:layout_below="@+id/managerRemoveShiftsButton"
         android:layout_alignLeft="@+id/managerRemoveShiftsButton"
-        android:layout_marginBottom="20dp"
         android:layout_alignStart="@+id/managerRemoveShiftsButton" />
 
     <Button
-        android:id="@+id/managerViewBuisnessDetailsButton"
+        android:id="@+id/noticeBoardButton"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:text="View Buisness Info"
+        android:text="Notice Board"
         android:layout_below="@+id/viewStaffButton"
         android:layout_alignLeft="@+id/managerRemoveShiftsButton"
         android:layout_alignStart="@+id/managerRemoveShiftsButton" />
@@ -78,7 +59,7 @@
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:text="Log Out"
-        android:layout_below="@+id/managerViewBuisnessDetailsButton"
+        android:layout_below="@+id/noticeBoardButton"
         android:layout_alignLeft="@+id/managerRemoveShiftsButton"
         android:layout_alignStart="@+id/managerRemoveShiftsButton" />
 

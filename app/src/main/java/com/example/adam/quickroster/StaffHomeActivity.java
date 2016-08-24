@@ -34,7 +34,6 @@ public class StaffHomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     public void logout() {
