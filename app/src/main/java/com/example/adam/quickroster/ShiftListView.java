@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ShiftListView extends AppCompatActivity {
 
@@ -37,30 +39,30 @@ public class ShiftListView extends AppCompatActivity {
 
         // create date from day, month, year
         Calendar cal = GregorianCalendar.getInstance();
-        cal.set(year, month, day);
+        cal.set(year, month, day );
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
 
         // get selected date and next day's date
-        Date startDate = cal.getTime();
+        Date startDateNoon = cal.getTime();
         cal.add(Calendar.DATE, 1);
-        Date endDate = cal.getTime();
+        Date startDateMidnight = cal.getTime();
 
         // Get all shifts on this day
         ParseUser currentUser = ParseUser.getCurrentUser();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Shift");
         query.whereEqualTo("staff", currentUser);
-        query.whereGreaterThanOrEqualTo("startTime", startDate);
-        query.whereLessThanOrEqualTo("endTime", endDate);
+        query.whereGreaterThanOrEqualTo("startTime", startDateNoon);
+        query.whereLessThanOrEqualTo("startTime", startDateMidnight);
 
-        List<ParseObject> shiftsOnDay = null;
+        Set<ParseObject> shiftsOnDay = new HashSet<>();
         try {
-            shiftsOnDay = query.find(); // get all the users shifts
+            shiftsOnDay.addAll(query.find()); // get all the users shifts
 
             if (currentUser.getBoolean("isManager")) {
                 ParseObject business = currentUser.getParseObject("Business").fetch();
-                shiftsOnDay.addAll(getAllShifts(business, startDate, endDate)); // add shifts of everyone in business
+                shiftsOnDay.addAll(getAllShifts(business, startDateNoon, startDateMidnight)); // add shifts of everyone in business
             }
         } catch (ParseException e) {
             Toast.makeText(getApplicationContext(), "Error loading shifts", Toast.LENGTH_LONG).show();
@@ -76,7 +78,7 @@ public class ShiftListView extends AppCompatActivity {
      *
      * @param objects
      */
-    public void convertAllToParseShift(List<ParseObject> objects) {
+    public void convertAllToParseShift(Set<ParseObject> objects) {
         for (ParseObject obj : objects) {
             if (obj instanceof ParseShift) {
                 shifts.add((ParseShift) obj);
@@ -90,11 +92,10 @@ public class ShiftListView extends AppCompatActivity {
      *
      * @param business
      * @param start
-     * @param end
      * @return List of ParseObject, which are ParseShifts
      * @throws ParseException
      */
-    public static List<ParseObject> getAllShifts(ParseObject business, Date start, Date end) throws ParseException {
+    public static Set<ParseObject> getAllShifts(ParseObject business, Date start, Date end) throws ParseException {
         // Query to get all users of the business
         ParseQuery<ParseUser> queryUsers = ParseUser.getQuery();
         queryUsers.whereEqualTo("Business", business);
@@ -104,6 +105,10 @@ public class ShiftListView extends AppCompatActivity {
         ParseQuery<ParseObject> queryShifts = new ParseQuery<ParseObject>("Shift");
         queryShifts.whereContainedIn("staff", users);
         queryShifts.whereGreaterThanOrEqualTo("startTime", start);
-        queryShifts.whereLessThanOrEqualTo("endTime", end);        return queryShifts.find();
+        queryShifts.whereLessThanOrEqualTo("startTime", end);
+
+        Set s = new HashSet<>();
+        s.addAll(queryShifts.find());
+        return s;
     }
 }

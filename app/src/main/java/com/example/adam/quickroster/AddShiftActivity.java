@@ -133,6 +133,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         Calendar cal = Calendar.getInstance();
         cal.set(year, monthOfYear, dayOfMonth);
+        cal.add(Calendar.DATE, 1);
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String text = formatter.format(cal.getTime());
         this.date.setText(text);
@@ -222,10 +223,12 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public Date combineDateTime(Date date, Date time){
-        return new Date(
-                date.getYear(), date.getMonth(), date.getDay(),
-                time.getHours(), time.getMinutes(), time.getSeconds()
-        );
+        long millis = date.getTime() + time.getTime();
+        return new Date(millis);
+//        return new Date(
+//                date.getYear(), date.getMonth(), date.getDay(),
+//                time.getHours(), time.getMinutes(), time.getSeconds()
+//        );
     }
 
 }

@@ -11,10 +11,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EditStaffMemeberActivity extends AppCompatActivity {
 
@@ -45,6 +50,12 @@ public class EditStaffMemeberActivity extends AppCompatActivity {
                 updateStaffMember();
             }
         });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteUser();
+            }
+        });
     }
 
     /**
@@ -56,16 +67,10 @@ public class EditStaffMemeberActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Error: Can't find user to update", Toast.LENGTH_LONG).show();
             return;
         }
-        ParseUser loggedInUser = ParseUser.getCurrentUser();
 
+        // TODO JavaScript here so we can securely edit and delete users without having to log them in
         String data = "{ 'isManager' : " + isManager.isPressed() + ", 'userName:" + userName.getText().toString() +
-                ", email : " + email.getText().toString() +
-
-
-
-
-
-
+                ", email : " + email.getText().toString();
 
         staffMember.setUsername(userName.getText().toString());
         staffMember.setEmail(email.getText().toString());
@@ -84,12 +89,26 @@ public class EditStaffMemeberActivity extends AppCompatActivity {
     }
 
     /**
+     * Deletes the selected user using cloud code
+     */
+    public void deleteUser(){
+        Map<String, String> params = new HashMap<>();
+        params.put("ObjectId", staffMember.getObjectId());
+        ParseCloud.callFunctionInBackground("deleteUser", params, new FunctionCallback<String>() {
+            @Override
+            public void done(String object, ParseException e) {
+                Toast.makeText(getApplicationContext(), object, Toast.LENGTH_LONG);
+            }
+        });
+    }
+
+    /**
      * Called on create, sets the text edits to have the current values of the staff member.
      * This is passed in as an extra to this intent.
      */
     public void fillOutTextFields() {
         // Get values
-        String usernameText = getIntent().getStringExtra("userName");
+        String usernameText = getIntent().getStringExtra("username");
         String firstNameText = getIntent().getStringExtra("firstName");
         String lastNameText = getIntent().getStringExtra("lastName");
         String emailText = getIntent().getStringExtra("email");
@@ -104,7 +123,6 @@ public class EditStaffMemeberActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
-
 
         // Set values
         userName.setText(usernameText == null ? "" : usernameText);

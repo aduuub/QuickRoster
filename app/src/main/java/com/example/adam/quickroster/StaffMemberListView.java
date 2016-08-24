@@ -81,7 +81,7 @@ public class StaffMemberListView extends AppCompatActivity implements View.OnCli
 
         public void staffMemberSelected(ParseUser user){
             Intent modifyUserIntent = new Intent(getApplicationContext(), EditStaffMemeberActivity.class);
-            modifyUserIntent.putExtra("username", user.getUsername());
+            modifyUserIntent.putExtra("username", user.getString("username"));
             modifyUserIntent.putExtra("firstName", user.getString("firstName"));
             modifyUserIntent.putExtra("lastName", user.getString("lastName"));
             modifyUserIntent.putExtra("email", user.getEmail());
