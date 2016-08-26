@@ -1,4 +1,4 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.staff;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.adam.quickroster.R;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -21,7 +22,7 @@ import com.parse.SaveCallback;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EditStaffMemeberActivity extends AppCompatActivity {
+public class EditStaffMemberActivity extends AppCompatActivity {
 
     private Button saveButton;
     private Button deleteButton;
@@ -32,6 +33,8 @@ public class EditStaffMemeberActivity extends AppCompatActivity {
     private TextView lastName;
     private TextView email;
     private Switch isManager;
+    private TextView password;
+
 
     private ParseUser staffMember;
 
@@ -71,12 +74,13 @@ public class EditStaffMemeberActivity extends AppCompatActivity {
         // Add params to hashmap so we can parse to cloud code
         Map<String, Object> params = new HashMap<>();
         params.put("ObjectId", staffMember.getObjectId());
-        params.put("isManager", isManager.isPressed());
+        params.put("isManager", !isManager.isPressed());
         params.put("userName", userName.getText().toString());
         params.put("email", email.getText().toString());
         params.put("firstName", firstName.getText().toString());
         params.put("lastName", lastName.getText().toString());
-
+        String passwordText = password.getText().toString();
+        params.put("password", passwordText);
 
         ParseCloud.callFunctionInBackground("updateUser", params, new FunctionCallback<String>() {
             @Override
@@ -114,6 +118,7 @@ public class EditStaffMemeberActivity extends AppCompatActivity {
         String lastNameText = getIntent().getStringExtra("lastName");
         String emailText = getIntent().getStringExtra("email");
         String userID = getIntent().getStringExtra("staffID");
+        boolean isManagerText = getIntent().getBooleanExtra("isManager", false);
 
         // Get the Parse User
         ParseQuery<ParseUser> query = ParseUser.getQuery();
@@ -130,6 +135,7 @@ public class EditStaffMemeberActivity extends AppCompatActivity {
         firstName.setText(firstNameText == null ? "" : firstNameText);
         lastName.setText(lastNameText == null ? "" : lastNameText);
         email.setText(emailText == null ? "" : emailText);
+        isManager.setChecked(isManagerText);
     }
 
     /**
@@ -141,6 +147,7 @@ public class EditStaffMemeberActivity extends AppCompatActivity {
         lastName = (TextView) findViewById(R.id.staffLastName);
         email = (TextView) findViewById(R.id.email);
         isManager = (Switch) findViewById(R.id.isManagerSwitch);
+        password = (TextView) findViewById(R.id.editStaffPassword);
         deleteButton = (Button) findViewById(R.id.delete_staff_member_button);
         saveButton = (Button) findViewById(R.id.save_staff_member_button);
     }

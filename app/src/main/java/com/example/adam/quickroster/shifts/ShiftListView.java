@@ -1,12 +1,12 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.shifts;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.ActionMode;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
+import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.model.ParseShift;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;

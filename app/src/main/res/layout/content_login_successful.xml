@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginSuccessfulActivity"
+    tools:context=".login.LoginSuccessfulActivity"
     tools:showIn="@layout/activity_login_successful">
 
     <TextView
@@ -28,6 +28,8 @@
         android:layout_below="@+id/sucessfullyLoggedInText"
         android:layout_gravity="center"
         android:layout_marginTop="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="18sp" />

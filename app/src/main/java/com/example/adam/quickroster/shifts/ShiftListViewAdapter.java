@@ -1,21 +1,19 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.shifts;
 
 import android.content.Context;
-import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.parse.ParseObject;
+import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.model.ParseShift;
 import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.SimpleFormatter;
 
 /**
  * Created by Adam on 30/04/16.

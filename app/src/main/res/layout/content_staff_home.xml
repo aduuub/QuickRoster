@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.adam.quickroster.StaffHomeActivity"
+    tools:context=".staff.StaffHomeActivity"
     tools:showIn="@layout/activity_staff_home">
 
     <TextView
@@ -39,40 +39,44 @@
         android:layout_below="@+id/viewShiftsButton"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Message Employer" />
+        android:text="Contact Employer" />
 
-    <Button
-        android:id="@+id/viewEmployerDetails"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/messageEmployerButton"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="View Employer Details" />
-
-    <Button
-        android:id="@+id/accountOptionsButton"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/viewEmployerDetails"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Account Details" />
 
     <Button
         android:id="@+id/staticsButton"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/accountOptionsButton"
+        android:layout_below="@+id/messageEmployerButton"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="View Work Stats" />
 
     <Button
-        android:id="@+id/logOutButton"
+        android:id="@+id/staffNoticeBoardButton"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/staticsButton"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Notice Board" />
+
+
+    <Button
+        android:id="@+id/accountOptionsButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/staffNoticeBoardButton"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="30dp"
+        android:text="Account Details" />
+
+
+    <Button
+        android:id="@+id/logOutButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountOptionsButton"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="Log Out" />

@@ -1,4 +1,4 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;

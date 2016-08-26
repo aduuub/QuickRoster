@@ -1,4 +1,4 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.shifts;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -17,10 +17,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 
+import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
+import com.example.adam.quickroster.model.ParseBusiness;
+import com.example.adam.quickroster.R;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.RequestPasswordResetCallback;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -181,7 +183,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
         }
 
         Toast.makeText(getApplicationContext(), "Successfully Added Shift", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, DisplayManagerOptions.class);
+        Intent intent = new Intent(this, ManagerHomeActivity.class);
         startActivity(intent);
     }
 

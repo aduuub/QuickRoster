@@ -1,9 +1,11 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.shifts;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.example.adam.quickroster.R;
 
 public class CalendarViewActivity extends AppCompatActivity implements android.widget.CalendarView.OnDateChangeListener {
 

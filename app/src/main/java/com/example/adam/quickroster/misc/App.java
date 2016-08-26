@@ -1,12 +1,12 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.misc;
 
 import android.app.Application;
 
+import com.example.adam.quickroster.model.ParseShift;
+import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 import com.parse.*;
 

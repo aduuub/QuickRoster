@@ -11,14 +11,14 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:name=".App"
+        android:name=".misc.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".login.WelcomeActivity"
             android:label="QuickRoster">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,63 +36,63 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".CalendarViewActivity"
+            android:name=".shifts.CalendarViewActivity"
             android:label="Calendar"
-            android:parentActivityName=".LoginActivity"
+            android:parentActivityName=".login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginActivity" />
+                android:value=".login.LoginActivity" />
         </activity>
         <activity
-            android:name=".ShiftListView"
+            android:name=".shifts.ShiftListView"
             android:label="Shifts" />
         <activity
-            android:name=".DisplayManagerOptions"
-            android:label="Manager View" />
+            android:name=".manager_options.ManagerHomeActivity"
+            android:label="Manager Dashboard" />
         <activity
-            android:name=".AddShiftActivity"
+            android:name=".shifts.AddShiftActivity"
             android:label="Add Shift"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RemoveShiftActivity"
+            android:name=".shifts.RemoveShiftActivity"
             android:label="Remove Shift"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RemoveStaffActivity"
-            android:label="Remove Staff"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".RegisterBusinessActivity"
+            android:name=".login.RegisterBusinessActivity"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".login.LoginActivity"
             android:label="@string/title_activity_welcome"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".LoginSuccessfulActivity"
+            android:name=".login.LoginSuccessfulActivity"
             android:label="@string/title_activity_welcome"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".StaffHomeActivity"
-            android:label="@string/title_activity_staff_home"
+            android:name=".staff.StaffHomeActivity"
+            android:label="Dashboard"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AddStaffMemeberActivity"
-            android:label="@string/title_activity_add_staff_memeber"
+            android:name=".staff.AddStaffMemeberActivity"
+            android:label="Add Staff Member"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".EditStaffMemeberActivity"
+            android:name=".staff.EditStaffMemberActivity"
             android:label="Edit Staff Member"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ManageStaffActivity" />
-        <activity android:name=".StaffMemberListView" />
-        <activity android:name=".StaffListViewAdapter" />
         <activity
-            android:name=".FloatingActionActivity"
-            android:label="@string/title_activity_floating_action"
+            android:name=".staff.StaffListView"
+            android:label="Staff" />
+        <activity android:name=".staff.StaffListViewAdapter" />
+        <activity android:name=".NoticeBoardActivity" />
+        <activity
+            android:name=".NoticeBoardListAdapter"
+            android:label="@string/title_activity_notice_board_list_adapter"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".NoticeBoardActivity"></activity>
+        <activity android:name=".staff_options.ContactEmployerActivity"
+            android:label="Contact Employer">
+        </activity>
     </application>
 
 </manifest>

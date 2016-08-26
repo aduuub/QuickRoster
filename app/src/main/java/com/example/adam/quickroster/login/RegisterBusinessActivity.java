@@ -1,4 +1,4 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -27,6 +27,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.model.ParseBusiness;
+import com.example.adam.quickroster.staff.AddStaffMemeberActivity;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 
@@ -36,7 +39,7 @@ import java.util.List;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
- * A login screen that offers login via email/password.
+ * Register a new business with the application
  */
 public class RegisterBusinessActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -45,7 +48,7 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    // UI references.
+    // UI references
     private AutoCompleteTextView mEmailView;
     private EditText business;
     private EditText numEmployeesView;
@@ -74,6 +77,7 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
         mProgressView = findViewById(R.id.login_progress);
     }
 
+
     /**
      * Autocomplete
      */
@@ -84,8 +88,11 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
         getLoaderManager().initLoader(0, null, this);
     }
 
+
     /**
-     * @return If we can request contacts
+     * Can we request the clients contacts?
+     *
+     * @return
      */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -167,7 +174,7 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
             try {
                 newBusiness.save();
             } catch (ParseException e) {
-                Toast.makeText(getApplicationContext(), e.toString() , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -177,16 +184,16 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
             startActivity(intent);
             finish();
         }
-
-
     }
 
+    /**
+     * Checks to see if the email is valid, only checks the correct formatting
+     *
+     * @param email
+     * @return
+     */
     private boolean isEmailValid(String email) {
         return email.contains("@") && email.contains(".");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 6;
     }
 
 
@@ -257,7 +264,6 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
     }
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
@@ -270,76 +276,14 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
     }
 
 
-private interface ProfileQuery {
-    String[] PROJECTION = {
-            ContactsContract.CommonDataKinds.Email.ADDRESS,
-            ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-    };
+    private interface ProfileQuery {
+        String[] PROJECTION = {
+                ContactsContract.CommonDataKinds.Email.ADDRESS,
+                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+        };
 
-    int ADDRESS = 0;
-    int IS_PRIMARY = 1;
-}
-
-/**
- * Represents an asynchronous login/registration task used to authenticate
- * the user.
- * <p/>
- * public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
- * <p/>
- * private final String mBuisnessName;
- * private final String mEmail;
- * private final int mStaff;
- * <p/>
- * <p/>
- * UserLoginTask(String buisnessName, String email, int staff) {
- * mBuisnessName = buisnessName;
- * mEmail = email;
- * mStaff = staff;
- * }
- *
- * @Override protected Boolean doInBackground(Void... params) {
- * <p/>
- * final ProgressDialog dlg = new ProgressDialog(RegisterBusinessActivity.this);
- * dlg.setTitle("Please wait.");
- * dlg.setMessage("Creating your account");
- * dlg.show();
- * <p/>
- * // Set up a new Parse user
- * ParseUser user = new ParseUser();
- * user.setUsername(mBuisnessName);
- * user.setStaff(staff);
- * user.setEmail(mEmail);
- * <p/>
- * // Call the Parse sign up method
- * user.signUpInBackground(new SignUpCallback() {
- * @Override public void done(ParseException e) {
- * dlg.dismiss();
- * if (e != null) {
- * // Show the error message
- * Toast.makeText(RegisterBusinessActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
- * } else {
- * // Start an intent for the dispatch activity
- * Intent intent = new Intent(RegisterBusinessActivity.this, DisplayManagerOptions.class);
- * intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
- * startActivity(intent);
- * }
- * }
- * });
- * return true;
- * }
- * @Override protected void onPostExecute(final Boolean success) {
- * mAuthTask = null;
- * showProgress(false);
- * if (success) {
- * finish();
- * }
- * }
- * @Override protected void onCancelled() {
- * mAuthTask = null;
- * showProgress(false);
- * }
- * }
- */
-
+        int ADDRESS = 0;
+        int IS_PRIMARY = 1;
+    }
 }
 

@@ -1,4 +1,4 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.staff;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.adam.quickroster.R;
 import com.parse.ParseUser;
 
 import java.util.List;

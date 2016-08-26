@@ -1,4 +1,4 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -12,16 +12,19 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.lang.*;
-import java.util.ArrayList;
 
 
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
+import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.staff.StaffHomeActivity;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+/**
+ * This is where the staff member logs into the application using there user name and password
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private Button login;
@@ -50,7 +53,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Attempt to log the user in
+     */
     public void login() {
         password.setError(null);
         String usernameString = username.getText().toString();
@@ -67,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
             boolean manager = user.getBoolean("isManager");
 
             if (manager) {
-                Intent intent = new Intent(LoginActivity.this, DisplayManagerOptions.class);
+                Intent intent = new Intent(LoginActivity.this, ManagerHomeActivity.class);
                 startActivity(intent);
                 finish();
 
@@ -85,6 +90,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Validate the password to ensure its correctly formatted
+     * @param password
+     * @return
+     */
     private boolean isPasswordValid(String password) {
         return password.length() > 6;
     }

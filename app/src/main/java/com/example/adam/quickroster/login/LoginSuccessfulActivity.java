@@ -1,4 +1,4 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
+import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.staff.StaffHomeActivity;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -62,7 +65,7 @@ public class LoginSuccessfulActivity extends AppCompatActivity implements View.O
 
             case R.id.continueButton2:
                 if (isManager) {
-                    Intent intent = new Intent(LoginSuccessfulActivity.this, DisplayManagerOptions.class);
+                    Intent intent = new Intent(LoginSuccessfulActivity.this, ManagerHomeActivity.class);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(LoginSuccessfulActivity.this, StaffHomeActivity.class);

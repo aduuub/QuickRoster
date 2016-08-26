@@ -1,8 +1,7 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.staff;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.hardware.display.DisplayManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,12 +10,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
+import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
+import com.example.adam.quickroster.R;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 public class AddStaffMemeberActivity extends AppCompatActivity {
 
@@ -99,7 +98,7 @@ public class AddStaffMemeberActivity extends AppCompatActivity {
             business.add("Managers", user);
 
             Toast.makeText(getApplicationContext(), "Successfully added user", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(AddStaffMemeberActivity.this, DisplayManagerOptions.class);
+            Intent intent = new Intent(AddStaffMemeberActivity.this, ManagerHomeActivity.class);
             startActivity(intent);
 
         } else {

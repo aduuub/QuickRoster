@@ -1,4 +1,4 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.shifts;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +10,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.parse.Parse;
+import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.shifts.AddShiftActivity;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
