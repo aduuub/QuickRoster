@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Adam on 30/04/16.
+ * This is a view adapter for displaying information on the shift
  */
 public class ShiftListViewAdapter extends BaseAdapter {
     private Context mContext;
@@ -50,11 +50,11 @@ public class ShiftListViewAdapter extends BaseAdapter {
         SimpleDateFormat formattedTime = new SimpleDateFormat("HH:mm");
 
         // staff member
-
         TextView staffMember = (TextView) view.findViewById(R.id.staffMember);
         ParseUser currentUser = ParseUser.getCurrentUser();
+
         if(currentUser.getBoolean("isManager")){
-            // find and set staff member name
+            // Find and set shifts staff member's name
             ParseUser staff = shift.getParseUser("staff");
             String staffName = staff.getString("firstName");
             if(staffName == null || staffName.equals(currentUser.get("firstName"))) { // name not set or self
@@ -67,7 +67,7 @@ public class ShiftListViewAdapter extends BaseAdapter {
             staffMember.setText("Self");
         }
 
-        // dates
+        // Dates
 
         TextView startView = (TextView) view.findViewById(R.id.startTime);
         Date startDate = shift.getStartDate();

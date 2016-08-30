@@ -7,13 +7,16 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +25,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
     ListView noticesList;
     FloatingActionButton addDetailFab;
+    List<String> notices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +42,28 @@ public class NoticeBoardActivity extends AppCompatActivity {
         });
         ParseUser currentUser = ParseUser.getCurrentUser();
 
-        ParseObject business = currentUser.getParseObject("Business");
-        List<String> notices = business.getList("Notices");
-        if (notices == null)
-            notices = new ArrayList<>();
-        notices.addAll(Arrays.asList("New"));
-        business.saveInBackground();
-        noticesList.setAdapter(new NoticeBoardListAdapter(this, notices));
+        currentUser.getParseObject("Business").fetchInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject business, ParseException e) {
+                notices = business.getList("Notices");
+                // If no notices in the cloud already init a new list
+                if (notices == null)
+                    notices = new ArrayList<>();
+
+                business.put("Notices", notices);
+                business.saveInBackground();
+                setAdapter(notices);
+            }
+        });
+    }
+
+    public void setAdapter(List<String> notices) {
+        this.noticesList.setAdapter(new NoticeBoardListAdapter(this, notices));
     }
 
 
     private void addNotice() {
-        List<String> notices = getAllCurrentNotices();
+        notices = getAllCurrentNotices();
         notices.add("");
         noticesList.setAdapter(new NoticeBoardListAdapter(this, notices));
     }
@@ -57,7 +71,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
     private List<String> getAllCurrentNotices() {
         NoticeBoardListAdapter adapter = (NoticeBoardListAdapter) noticesList.getAdapter();
-        List<String> notices = adapter.getAllNotices();
+        notices = adapter.getNotices();
         if (notices == null)
             notices = new ArrayList<>();
         return notices;
@@ -70,13 +84,26 @@ public class NoticeBoardActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        List<String> notices = getAllCurrentNotices();
+        notices = getAllCurrentNotices();
+        final Set<String> noticesSet = new HashSet<>();
+        noticesSet.addAll(notices);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
-        ParseObject business = currentUser.getParseObject("Business");
-        business.addAll("Notices", notices);
-        business.saveInBackground();
-        finish();
+        currentUser.getParseObject("Business").fetchInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject business, ParseException e) {
+                business.addAllUnique("Notices", noticesSet);
+                business.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null)
+                            Toast.makeText(getApplicationContext(), "Sucessfully saved", Toast.LENGTH_LONG);
+                        else
+                            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG);
+                        finish();
+                    }
+                });
+            }
+        });
     }
-
 }

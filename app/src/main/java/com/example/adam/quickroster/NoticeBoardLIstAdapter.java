@@ -2,13 +2,13 @@ package com.example.adam.quickroster;
 
 import android.content.Context;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class NoticeBoardListAdapter extends BaseAdapter {
@@ -37,12 +37,29 @@ public class NoticeBoardListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.content_notice_board_list_adapter, parent, false);
 
-        String notice = notices.get(position);
+        final String notice = notices.get(position);
         EditText textBox = (EditText) view.findViewById(R.id.noticeMessage);
+        textBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                notices.set(position, s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         if(notice != null)
             textBox.setText(notice);
         else
@@ -50,8 +67,5 @@ public class NoticeBoardListAdapter extends BaseAdapter {
         return view;
     }
 
-    public List<String> getAllNotices(){
-        List<String> notices = new ArrayList<>();
-        return notices;
-    }
+    public List<String> getNotices(){ return this.notices; }
 }

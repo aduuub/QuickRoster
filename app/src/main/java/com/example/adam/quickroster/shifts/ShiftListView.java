@@ -6,6 +6,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.model.ParseShift;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -20,10 +21,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This is a view that shows all the shifts on the selected day. It retrieves them from Parse
+ */
 public class ShiftListView extends AppCompatActivity {
 
     List<ParseShift> shifts;
-    private final double MillisInDay = 8.64e+7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,53 +65,27 @@ public class ShiftListView extends AppCompatActivity {
 
             if (currentUser.getBoolean("isManager")) {
                 ParseObject business = currentUser.getParseObject("Business").fetch();
-                shiftsOnDay.addAll(getAllShifts(business, startDateNoon, startDateMidnight)); // add shifts of everyone in business
+                shiftsOnDay.addAll(ParseQueryUtil.getAllShifts(business, startDateNoon, startDateMidnight)); // add shifts of everyone in business
             }
         } catch (ParseException e) {
             Toast.makeText(getApplicationContext(), "Error loading shifts", Toast.LENGTH_LONG).show();
             return;
         }
 
-        convertAllToParseShift(shiftsOnDay);
+        castAllToParseShifts(shiftsOnDay);
         list.setAdapter(new ShiftListViewAdapter(this, shifts));
     }
 
     /**
-     * Terrible way of doing it, but it casts all ParseObject's to ParseShifts
+     * Casts all ParseObject's to ParseShifts
      *
      * @param objects
      */
-    public void convertAllToParseShift(Set<ParseObject> objects) {
+    public void castAllToParseShifts(Set<ParseObject> objects) {
         for (ParseObject obj : objects) {
             if (obj instanceof ParseShift) {
                 shifts.add((ParseShift) obj);
             }
         }
-    }
-
-    /**
-     * Retrieves all shifts of all employees from the business that are between the start
-     * and end date
-     *
-     * @param business
-     * @param start
-     * @return List of ParseObject, which are ParseShifts
-     * @throws ParseException
-     */
-    public static Set<ParseObject> getAllShifts(ParseObject business, Date start, Date end) throws ParseException {
-        // Query to get all users of the business
-        ParseQuery<ParseUser> queryUsers = ParseUser.getQuery();
-        queryUsers.whereEqualTo("Business", business);
-        List<ParseUser> users = queryUsers.find();
-
-        // Get all shifts from the users
-        ParseQuery<ParseObject> queryShifts = new ParseQuery<ParseObject>("Shift");
-        queryShifts.whereContainedIn("staff", users);
-        queryShifts.whereGreaterThanOrEqualTo("startTime", start);
-        queryShifts.whereLessThanOrEqualTo("startTime", end);
-
-        Set s = new HashSet<>();
-        s.addAll(queryShifts.find());
-        return s;
     }
 }

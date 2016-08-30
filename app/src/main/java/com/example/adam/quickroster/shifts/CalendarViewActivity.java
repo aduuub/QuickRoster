@@ -7,9 +7,14 @@ import android.support.v7.widget.Toolbar;
 
 import com.example.adam.quickroster.R;
 
+/**
+ * This shows a calendar, where the user can select a date, once they have done this it will transition
+ * them to ShiftListView activity.
+ */
 public class CalendarViewActivity extends AppCompatActivity implements android.widget.CalendarView.OnDateChangeListener {
 
     private android.widget.CalendarView cal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +26,6 @@ public class CalendarViewActivity extends AppCompatActivity implements android.w
         cal = (android.widget.CalendarView) findViewById(R.id.calendarView);
         cal.setOnDateChangeListener(this);
     }
-
 
     @Override
     public void onSelectedDayChange(android.widget.CalendarView view, int year, int month, int dayOfMonth) {

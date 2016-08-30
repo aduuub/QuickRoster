@@ -17,12 +17,15 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+/**
+ * This is used for adding a new staff member to a business in Parse.
+ */
 public class AddStaffMemeberActivity extends AppCompatActivity {
 
     private Button createStaff;
     private ParseObject business;
 
-    // widgets
+    // UI
     private String userName;
     private String password;
     private String firstName;
@@ -93,7 +96,6 @@ public class AddStaffMemeberActivity extends AppCompatActivity {
      * @param user
      */
     public void addStaffToBusiness(final ParseUser user) throws ParseException {
-
         if (isManager) {
             business.add("Managers", user);
 

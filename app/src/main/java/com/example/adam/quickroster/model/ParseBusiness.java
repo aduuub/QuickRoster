@@ -7,7 +7,7 @@ import com.parse.ParseUser;
 import java.util.List;
 
 /**
- * Created by Adam on 27/06/16.
+ * Represents a Business object in Parse
  */
 @ParseClassName("Business")
 public class ParseBusiness extends ParseObject {

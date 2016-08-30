@@ -15,6 +15,10 @@ import com.example.adam.quickroster.shifts.RemoveShiftActivity;
 import com.example.adam.quickroster.staff.StaffListView;
 import com.parse.ParseUser;
 
+/**
+ * This is the managers home view. Its where they are taken once they have been logged in,
+ * and also provides buttons to the various tasks they can perform
+ */
 public class ManagerHomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button showCal;
@@ -23,7 +27,6 @@ public class ManagerHomeActivity extends AppCompatActivity implements View.OnCli
     Button viewStaff;
     Button noticeBoardButton;
     Button logout;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.shifts.AddShiftActivity;
+import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -28,20 +28,20 @@ public class StaffListView extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_staff_member_list_view);
         staffList = (ListView) findViewById(R.id.staffListView);
 
-        // set Floating Action Button
+        // Set Floating Action Button
         FloatingActionButton addStaffFab = (FloatingActionButton) findViewById(R.id.add_staff_member_fab);
         addStaffFab.setOnClickListener(this);
-        //addStaffFab.setImageResource(R.drawable.add_button);
-
         populateList();
     }
 
+
     /**
-     * Populates the list view with all staff memebers in the current managers business
+     * Populates the list view with all staff members in the current managers business. Adds managers
+     * at the top, and the staff at the bottom
      */
     public void populateList(){
         // Get all staff of the business
-        final List<ParseUser> allStaff = AddShiftActivity.getAllUsers(ParseUser.getCurrentUser());
+        final List<ParseUser> allStaff = ParseQueryUtil.getAllUsers(ParseUser.getCurrentUser());
         Collections.sort(allStaff, new Comparator<ParseUser>() {
             @Override
             public int compare(ParseUser lhs, ParseUser rhs) {
@@ -82,6 +82,11 @@ public class StaffListView extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
+    /**
+     * Called when a staff member has been clicked on, transitions to the edit staff member activity.
+     * @param user
+     */
     public void staffMemberSelected(ParseUser user) {
         Intent modifyUserIntent = new Intent(getApplicationContext(), EditStaffMemberActivity.class);
         modifyUserIntent.putExtra("username", user.getString("username"));

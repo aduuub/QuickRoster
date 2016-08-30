@@ -27,4 +27,5 @@
     <string name="title_activity_add_staff_memeber">AddStaffMemeberActivity</string>
     <string name="title_activity_floating_action">FloatingActionActivity</string>
     <string name="title_activity_notice_board_list_adapter">NoticeBoardLIstAdapter</string>
+    <string name="title_activity_business_details">BusinessDetailsActivity</string>
 </resources>

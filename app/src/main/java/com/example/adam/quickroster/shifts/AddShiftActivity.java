@@ -18,10 +18,10 @@ import android.widget.Toast;
 
 
 import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
+import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.R;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.text.DateFormat;
@@ -33,9 +33,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * This has options for the user to create a new shift. It also puts the shift into Parse.
+ */
 public class AddShiftActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
-    // XML
+    // UI
     private TextView date;
     private TextView fromTime;
     private TextView toTime;
@@ -43,7 +46,6 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
     private Button submit;
     private TextView details;
     private Spinner selectUsers;
-
 
     private ParseUser currentUser;
     private ParseUser staffForShift;
@@ -81,7 +83,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setFieldsAndListeners();
-        allUsers = getAllUsers(currentUser);
+        allUsers = ParseQueryUtil.getAllUsers(currentUser);
 
 
         // create the the spinner lists
@@ -105,7 +107,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO
+
             }
         });
     }
@@ -198,10 +200,9 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
         selectUsers = (Spinner) findViewById(R.id.addStaffSelector);
         submit = (Button) findViewById(R.id.addNewShiftSubmitButton);
         details = (TextView) findViewById(R.id.addShiftDetails);
-        acceptedText = (TextView) findViewById(R.id.accepted);
         currentUser = ParseUser.getCurrentUser();
 
-        // On Click Listeners
+        // On click listeners
         submit.setOnClickListener(this);
         date.setOnClickListener(this);
         fromTime.setOnClickListener(this);
@@ -209,30 +210,15 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * Gets all users of the business
+     * Combine the date
+     * @param date
+     * @param time
+     * @return
      */
-    public static List<ParseUser> getAllUsers(ParseUser currentUser) {
-        ParseQuery<ParseUser> queryUsers = ParseUser.getQuery();
-        try {
-            ParseObject business = currentUser.getParseObject("Business").fetch();
-            queryUsers.whereEqualTo("Business", business);
-            return queryUsers.find();
-
-        } catch (com.parse.ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public Date combineDateTime(Date date, Date time){
         long millis = date.getTime() + time.getTime();
         return new Date(millis);
-//        return new Date(
-//                date.getYear(), date.getMonth(), date.getDay(),
-//                time.getHours(), time.getMinutes(), time.getSeconds()
-//        );
     }
-
 }
 
 

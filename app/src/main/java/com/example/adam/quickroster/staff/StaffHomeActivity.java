@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.*;
 
+import com.example.adam.quickroster.NoticeBoardActivity;
 import com.example.adam.quickroster.staff_options.ContactEmployerActivity;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.login.WelcomeActivity;
@@ -35,9 +36,11 @@ public class StaffHomeActivity extends AppCompatActivity implements View.OnClick
         accountDetails.setOnClickListener(this);
         viewShifts.setOnClickListener(this);
         logout.setOnClickListener(this);
-
     }
 
+    /**
+     * Log out the current user
+     */
     public void logout() {
         ParseUser.logOut();
         Intent intent = new Intent(StaffHomeActivity.this, WelcomeActivity.class);
@@ -47,7 +50,6 @@ public class StaffHomeActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         Intent intent;
-
         switch (v.getId()) {
 
             case R.id.viewShiftsButton:
@@ -65,11 +67,13 @@ public class StaffHomeActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.staffNoticeBoardButton:
-                // TODO
+                intent = new Intent(this, NoticeBoardActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.accountOptionsButton:
-                // TODO
+                intent = new Intent(this, BusinessDetailsActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.logOutButton:

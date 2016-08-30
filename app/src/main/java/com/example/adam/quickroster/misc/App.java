@@ -11,7 +11,7 @@ import com.parse.ParseUser;
 import com.parse.*;
 
 /**
- * Created by Adam on 16/05/16.
+ * This is the entry point of the application. It initialises the Parse database.
  */
 public class App extends Application {
 

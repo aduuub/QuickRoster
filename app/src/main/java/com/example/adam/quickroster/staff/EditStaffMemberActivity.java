@@ -1,6 +1,5 @@
 package com.example.adam.quickroster.staff;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,23 +10,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
-import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A view that provides a way to edit staff member details
+ */
 public class EditStaffMemberActivity extends AppCompatActivity {
 
     private Button saveButton;
     private Button deleteButton;
 
-    // widgets
+    // UI
     private TextView userName;
     private TextView firstName;
     private TextView lastName;
@@ -35,8 +35,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
     private Switch isManager;
     private TextView password;
 
-
-    private ParseUser staffMember;
+    private ParseUser selectedStaffMember;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +65,14 @@ public class EditStaffMemberActivity extends AppCompatActivity {
      */
     public void updateStaffMember() {
         // Create new user and set values
-        if (staffMember == null) {
+        if (selectedStaffMember == null) {
             Toast.makeText(getApplicationContext(), "Error: Can't find user to update", Toast.LENGTH_LONG).show();
             return;
         }
 
         // Add params to hashmap so we can parse to cloud code
         Map<String, Object> params = new HashMap<>();
-        params.put("ObjectId", staffMember.getObjectId());
+        params.put("ObjectId", selectedStaffMember.getObjectId());
         params.put("isManager", !isManager.isPressed());
         params.put("userName", userName.getText().toString());
         params.put("email", email.getText().toString());
@@ -97,7 +96,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
      */
     public void deleteUser() {
         Map<String, String> params = new HashMap<>();
-        params.put("ObjectId", staffMember.getObjectId());
+        params.put("ObjectId", selectedStaffMember.getObjectId());
         ParseCloud.callFunctionInBackground("deleteUser", params, new FunctionCallback<Object>() {
             @Override
             public void done(Object object, ParseException e) {
@@ -124,7 +123,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("objectId", userID);
         try {
-            staffMember = query.getFirst();
+            selectedStaffMember = query.getFirst();
         } catch (ParseException e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();

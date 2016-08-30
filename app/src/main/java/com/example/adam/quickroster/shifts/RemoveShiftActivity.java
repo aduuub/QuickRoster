@@ -11,7 +11,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.shifts.AddShiftActivity;
+import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -54,7 +54,7 @@ public class RemoveShiftActivity extends AppCompatActivity implements View.OnCli
     public void createStaffSpinner() {
         final List<ParseUser> spinnerArray = new ArrayList<ParseUser>();
         List<String> spinnerArrayNames = new ArrayList<String>();
-        allUsers = AddShiftActivity.getAllUsers(ParseUser.getCurrentUser());
+        allUsers = ParseQueryUtil.getAllUsers(ParseUser.getCurrentUser());
 
         for (ParseUser u : allUsers) {
             spinnerArray.add(u);

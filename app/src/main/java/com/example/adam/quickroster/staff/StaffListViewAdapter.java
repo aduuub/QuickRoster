@@ -14,6 +14,9 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
+/**
+ * An adapter for displaying the staff member details.
+ */
 public class StaffListViewAdapter extends BaseAdapter {
 
     private List<ParseUser> users;
@@ -41,19 +44,21 @@ public class StaffListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // get the view
+        // Get the view
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.activity_staff_list_view_adapter, parent, false);
 
-        // get the staff member and their name
+        // Get the staff member and their name
         ParseUser selectedUser = users.get(position);
+
         String firstName = selectedUser.getString("firstName");
         firstName = firstName == null ? "" : firstName;
+
         String lastName = selectedUser.getString("lastName");
         lastName = lastName == null ? "" : lastName;
         String combinedName = firstName + " " + lastName;
 
-        // set the text edits
+        // Set the text edits with the new name
         TextView staffNameTextView = (TextView) view.findViewById(R.id.staffName);
         staffNameTextView.setText(combinedName);
 

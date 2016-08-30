@@ -90,9 +90,13 @@
             android:name=".NoticeBoardListAdapter"
             android:label="@string/title_activity_notice_board_list_adapter"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".staff_options.ContactEmployerActivity"
-            android:label="Contact Employer">
-        </activity>
+        <activity
+            android:name=".staff_options.ContactEmployerActivity"
+            android:label="Contact Employer"></activity>
+        <activity
+            android:name=".staff.BusinessDetailsActivity"
+            android:label="@string/title_activity_business_details"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
