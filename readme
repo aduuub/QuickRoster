@@ -1,0 +1,5 @@
+This is an Android Application that allows managers to add, track and assign their employees shifts at work. 
+Businesses can register multiple staff and managers, with each user having there own unique username/ password login.
+
+This is in working progress and there are a lot of great features to come, including shifts being automatically added
+into the phone/ google cal, and the option to flag shifts that the employee cannot make.
