@@ -11,9 +11,15 @@ import android.widget.Toast;
 
 import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.misc.CalendarShiftController;
+import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.staff.StaffHomeActivity;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+
+import java.util.Date;
+import java.util.List;
 
 public class LoginSuccessfulActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -44,8 +50,10 @@ public class LoginSuccessfulActivity extends AppCompatActivity implements View.O
                     user.fetch();
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Error: " + e.toString(), Toast.LENGTH_LONG).show();
-                    return;
+                    Toast.makeText(getApplicationContext(), "Please log in again", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(LoginSuccessfulActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 // Success!
                 this.isManager = user.getBoolean("isManager");
@@ -56,6 +64,28 @@ public class LoginSuccessfulActivity extends AppCompatActivity implements View.O
                 // Failure!
                 Toast.makeText(getApplicationContext(), "Error loading", Toast.LENGTH_LONG).show();
             }
+        }
+        addNewShiftsToCalendar();
+    }
+
+    /**
+     * Adds the new shifts to the users calendar
+     */
+    private void addNewShiftsToCalendar() {
+        List<ParseObject> usersShifts;
+        try {
+            usersShifts = ParseQueryUtil.getAllUsersShiftsAfterDate(ParseUser.getCurrentUser(), new Date(1));
+        } catch (ParseException e) {
+            // TODO
+            return;
+        }
+
+        CalendarShiftController csc = new CalendarShiftController(this, getApplicationContext());
+        for (ParseObject shift : usersShifts) {
+            String details = shift.getString("details");
+            Date start = shift.getDate("startTime");
+            Date end = shift.getDate("endTime");
+            csc.makeNewEntry("Work",details, "Default Location", start.getTime(), end.getTime());
         }
     }
 

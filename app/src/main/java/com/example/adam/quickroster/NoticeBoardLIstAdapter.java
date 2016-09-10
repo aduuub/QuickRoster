@@ -9,16 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+
 import java.util.List;
 
 public class NoticeBoardListAdapter extends BaseAdapter {
 
     private List<String> notices;
     private Context context;
+    private boolean editable;
 
-    public NoticeBoardListAdapter(Context context, List<String> notices){
+    public NoticeBoardListAdapter(Context context, List<String> notices, boolean editable) {
         this.notices = notices;
         this.context = context;
+        this.editable = editable;
     }
 
     @Override
@@ -43,10 +46,10 @@ public class NoticeBoardListAdapter extends BaseAdapter {
 
         final String notice = notices.get(position);
         EditText textBox = (EditText) view.findViewById(R.id.noticeMessage);
+        textBox.setEnabled(editable);
         textBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -56,16 +59,13 @@ public class NoticeBoardListAdapter extends BaseAdapter {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
-
-        if(notice != null)
-            textBox.setText(notice);
-        else
-            throw new RuntimeException("lol");
+        textBox.setText(notice);
         return view;
     }
 
-    public List<String> getNotices(){ return this.notices; }
+    public List<String> getNotices() {
+        return this.notices;
+    }
 }

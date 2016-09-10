@@ -56,4 +56,35 @@ public class ParseQueryUtil {
         s.addAll(queryShifts.find());
         return s;
     }
+
+    /**
+     * Retrieves all shifts of the user from the business that are after the date
+     *
+     * @param user
+     * @param dateAfter
+     * @return List of ParseObject, which are ParseShifts
+     * @throws ParseException
+     */
+    public static List<ParseObject> getAllUsersShiftsAfterDate(ParseUser user, Date dateAfter) throws ParseException {
+
+        // Query to get all shifts
+        ParseQuery<ParseObject> queryUserShifts = ParseQuery.getQuery("Shift");
+        queryUserShifts.whereEqualTo("staff", user);
+        //queryUserShifts.whereGreaterThanOrEqualTo("Date", dateAfter);
+        return queryUserShifts.find();
+    }
+
+    /**
+     * Probs not correct
+     * @param user
+     * @return
+     */
+    public static ParseObject getParseUsersBusiness(ParseUser user){
+        try {
+            return user.getParseObject("Business").fetch(); // user business
+        } catch (com.parse.ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

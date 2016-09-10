@@ -26,6 +26,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
     ListView noticesList;
     FloatingActionButton addDetailFab;
     List<String> notices;
+    boolean editable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,11 @@ public class NoticeBoardActivity extends AppCompatActivity {
             }
         });
         ParseUser currentUser = ParseUser.getCurrentUser();
+        this.editable = currentUser.getBoolean("isManager");
+
+        // Only managers can add notices
+        if(!currentUser.getBoolean("isManager"))
+            addDetailFab.setVisibility(View.INVISIBLE);
 
         currentUser.getParseObject("Business").fetchInBackground(new GetCallback<ParseObject>() {
             @Override
@@ -58,14 +64,14 @@ public class NoticeBoardActivity extends AppCompatActivity {
     }
 
     public void setAdapter(List<String> notices) {
-        this.noticesList.setAdapter(new NoticeBoardListAdapter(this, notices));
+        this.noticesList.setAdapter(new NoticeBoardListAdapter(this, notices, editable));
     }
 
 
     private void addNotice() {
         notices = getAllCurrentNotices();
         notices.add("");
-        noticesList.setAdapter(new NoticeBoardListAdapter(this, notices));
+        noticesList.setAdapter(new NoticeBoardListAdapter(this, notices, editable));
     }
 
 
