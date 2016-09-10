@@ -14,11 +14,12 @@
 
     <EditText
         android:id="@+id/noticeMessage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:width="375dp"
+        android:layout_marginRight="16dp"
+        android:paddingBottom="8dp"
         android:background="@android:color/transparent"
-        android:textSize="16dp"  />
+        android:textSize="18sp"
+        android:textColor="#000"/>
 
 </LinearLayout>

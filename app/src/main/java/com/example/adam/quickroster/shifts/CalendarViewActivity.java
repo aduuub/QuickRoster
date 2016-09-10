@@ -25,6 +25,7 @@ public class CalendarViewActivity extends AppCompatActivity implements android.w
 
         cal = (android.widget.CalendarView) findViewById(R.id.calendarView);
         cal.setOnDateChangeListener(this);
+        
     }
 
     @Override

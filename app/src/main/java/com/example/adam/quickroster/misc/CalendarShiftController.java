@@ -12,7 +12,13 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+
 import java.security.Permission;
+import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import static java.security.AccessController.getContext;
@@ -22,9 +28,6 @@ import static java.security.AccessController.getContext;
  */
 public class CalendarShiftController {
 
-    //Remember to initialize this activityObj first, by calling initActivityObj(this) from
-    //your activity
-    
     private static final String DEBUG_TAG = "CalendarActivity";
     private Activity activityObj;
     private Context context;
@@ -50,7 +53,6 @@ public class CalendarShiftController {
         values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
         Log.i(DEBUG_TAG, "Timezone retrieved: " + TimeZone.getDefault().getID());
 
-        // maybe need to do this? initActivityObj(this)
         // Check permission
         int permissionCheck = ContextCompat.checkSelfPermission(this.context,
                 Manifest.permission.WRITE_CALENDAR);
@@ -59,17 +61,31 @@ public class CalendarShiftController {
             Uri eventUri = activityObj.getApplicationContext()
                     .getContentResolver()
                     .insert(Uri.parse(eventUriString), values);
-            //Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-            //Log.i(DEBUG_TAG, "Uri returned: " + uri.toString());
-
-            // get the event ID that is the last element in the Uri
-           // long eventID = Long.parseLong(uri.getLastPathSegment());
-
-        }else{
+            Toast.makeText(this.context, "Successfully updated new shifts in calendar", Toast.LENGTH_LONG).show();
+        } else {
             Toast.makeText(this.context, "Invalid permission to write to calendar", Toast.LENGTH_LONG).show();
         }
+    }
 
 
+    /**
+     * Adds the new shifts to the users calendar
+     */
+    public void addNewShiftsToCalendar(Context ctx) {
+        List<ParseObject> usersShifts;
+        try {
+            usersShifts = ParseQueryUtil.getAllUsersShiftsAfterDate(ParseUser.getCurrentUser(), new Date(1));
+        } catch (ParseException e) {
+            Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG);
+            return;
+        }
 
+        for (ParseObject shift : usersShifts) {
+            String details = shift.getString("details");
+            Date start = shift.getDate("startTime");
+            Date end = shift.getDate("endTime");
+            makeNewEntry("Work", details, "Default Location", start.getTime(), end.getTime());
+        }
     }
 }
+

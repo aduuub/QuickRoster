@@ -25,5 +25,8 @@
         android:layout_gravity="right|bottom"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/staffListView"
+        android:elevation="0dp"
+        android:src="@mipmap/ic_add_white_24dp"
+        android:layout_margin="10dp"
         android:layout_alignEnd="@+id/staffListView" />
 </RelativeLayout>

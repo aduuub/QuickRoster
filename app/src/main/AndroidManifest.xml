@@ -88,7 +88,8 @@
             android:name=".staff.StaffListView"
             android:label="Staff" />
         <activity android:name=".staff.StaffListViewAdapter" />
-        <activity android:name=".NoticeBoardActivity" />
+        <activity android:name=".NoticeBoardActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".NoticeBoardListAdapter"
             android:label="@string/title_activity_notice_board_list_adapter"

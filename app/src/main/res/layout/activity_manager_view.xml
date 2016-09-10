@@ -50,6 +50,7 @@
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:text="Notice Board"
+        android:textSize="15dp"
         android:layout_below="@+id/viewStaffButton"
         android:layout_alignLeft="@+id/managerRemoveShiftsButton"
         android:layout_alignStart="@+id/managerRemoveShiftsButton" />

@@ -17,6 +17,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="Staff Name"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:paddingTop="4sp"
+        android:paddingBottom="8dp" />
 
     </RelativeLayout>

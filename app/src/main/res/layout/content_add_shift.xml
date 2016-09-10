@@ -6,40 +6,40 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_add">
+    tools:showIn="@layout/activity_add_shift">
 
     <TextView
         android:id="@+id/dateChooser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Choose a Date"
+        android:hint="Date"
         android:paddingBottom="30dp"
         android:paddingLeft="16dp"
         android:paddingTop="16dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
 
     <TextView
         android:id="@+id/pickStartTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Choose a Start Time"
+        android:hint="Start time"
         android:paddingBottom="30dp"
         android:paddingLeft="16dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
 
     <TextView
         android:id="@+id/pickEndTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Choose an End Time"
+        android:hint="End time"
         android:paddingBottom="30dp"
         android:paddingLeft="16dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <Spinner
         android:id="@+id/addStaffSelector"
@@ -47,16 +47,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:paddingBottom="30dp"
-        android:paddingLeft="12dp"
-        android:textSize="20sp" />
+        android:paddingLeft="8dp"
+        android:textSize="30sp" />
 
     <EditText
         android:id="@+id/addShiftDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter details of the shift"
+        android:hint="Details"
         android:paddingBottom="40dp"
         android:paddingLeft="16dp"
+        android:textSize="18sp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button

@@ -135,6 +135,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         lastName.setText(lastNameText == null ? "" : lastNameText);
         email.setText(emailText == null ? "" : emailText);
         isManager.setChecked(isManagerText);
+        password.setText("******");
     }
 
     /**

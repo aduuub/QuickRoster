@@ -83,6 +83,7 @@ public class ManagerHomeActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+
     /**
      * Logs out the current Parse User
      */

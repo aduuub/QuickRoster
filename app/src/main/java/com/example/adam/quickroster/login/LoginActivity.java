@@ -18,6 +18,7 @@ import java.lang.*;
 
 import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.misc.CalendarShiftController;
 import com.example.adam.quickroster.staff.StaffHomeActivity;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -64,12 +65,12 @@ public class LoginActivity extends AppCompatActivity {
         if (!isPasswordValid(passwordString)) {
             password.setError("Password must have 6 characters or more");
         }
-
         showProgress(true);
         try {
             ParseUser.logIn(usernameString, passwordString);
             ParseUser user = ParseUser.getCurrentUser();
             boolean manager = user.getBoolean("isManager");
+            CalendarShiftController.addNewShiftsToCalendar(getApplicationContext());
 
             if (manager) {
                 Intent intent = new Intent(LoginActivity.this, ManagerHomeActivity.class);

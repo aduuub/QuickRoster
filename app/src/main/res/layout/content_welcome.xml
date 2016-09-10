@@ -38,7 +38,7 @@
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Login as User / Manager"
+        android:text="Login"
         android:id="@+id/loginAsUserButton"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
@@ -46,7 +46,7 @@
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Register my buisness"
+        android:text="Register"
         android:id="@+id/registerBusinessButton"
         android:layout_below="@+id/loginAsUserButton"
         android:layout_centerHorizontal="true" />

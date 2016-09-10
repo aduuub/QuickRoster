@@ -7,6 +7,8 @@
     tools:context=".login.LoginSuccessfulActivity"
     tools:showIn="@layout/activity_login_successful">
 
+
+
     <TextView
         android:id="@+id/sucessfullyLoggedInText"
         android:layout_width="wrap_content"

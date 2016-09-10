@@ -45,7 +45,7 @@ public class NoticeBoardListAdapter extends BaseAdapter {
         View view = inflater.inflate(R.layout.content_notice_board_list_adapter, parent, false);
 
         final String notice = notices.get(position);
-        EditText textBox = (EditText) view.findViewById(R.id.noticeMessage);
+        final EditText textBox = (EditText) view.findViewById(R.id.noticeMessage);
         textBox.setEnabled(editable);
         textBox.addTextChangedListener(new TextWatcher() {
             @Override

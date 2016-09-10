@@ -1,5 +1,6 @@
 package com.example.adam.quickroster.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -65,29 +66,11 @@ public class LoginSuccessfulActivity extends AppCompatActivity implements View.O
                 Toast.makeText(getApplicationContext(), "Error loading", Toast.LENGTH_LONG).show();
             }
         }
-        addNewShiftsToCalendar();
-    }
-
-    /**
-     * Adds the new shifts to the users calendar
-     */
-    private void addNewShiftsToCalendar() {
-        List<ParseObject> usersShifts;
-        try {
-            usersShifts = ParseQueryUtil.getAllUsersShiftsAfterDate(ParseUser.getCurrentUser(), new Date(1));
-        } catch (ParseException e) {
-            // TODO
-            return;
-        }
-
         CalendarShiftController csc = new CalendarShiftController(this, getApplicationContext());
-        for (ParseObject shift : usersShifts) {
-            String details = shift.getString("details");
-            Date start = shift.getDate("startTime");
-            Date end = shift.getDate("endTime");
-            csc.makeNewEntry("Work",details, "Default Location", start.getTime(), end.getTime());
-        }
+        csc.addNewShiftsToCalendar(getApplicationContext());
     }
+
+
 
     @Override
     public void onClick(View v) {
