@@ -28,7 +28,7 @@
         android:layout_gravity="bottom|right"
         android:elevation="0dp"
         android:layout_margin="10dp"
-        android:src="@mipmap/add_icon" />
+        android:src="@mipmap/ic_add_white_24dp" />
 
 </RelativeLayout>
 

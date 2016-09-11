@@ -70,7 +70,10 @@ public class LoginActivity extends AppCompatActivity {
             ParseUser.logIn(usernameString, passwordString);
             ParseUser user = ParseUser.getCurrentUser();
             boolean manager = user.getBoolean("isManager");
-            CalendarShiftController.addNewShiftsToCalendar(getApplicationContext());
+
+            // Add new shifts to the calendar
+            CalendarShiftController csc = new CalendarShiftController(this, getApplicationContext());
+            csc.addNewShiftsToCalendar(getApplicationContext());
 
             if (manager) {
                 Intent intent = new Intent(LoginActivity.this, ManagerHomeActivity.class);

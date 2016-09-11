@@ -39,8 +39,6 @@ public class CalendarShiftController {
     }
 
     public void makeNewEntry(String title, String description, String location, long startTime, long endTime) {
-
-
         ContentResolver cr = activityObj.getContentResolver();
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, startTime);

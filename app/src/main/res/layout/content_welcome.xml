@@ -13,41 +13,43 @@
     tools:showIn="@layout/activity_welcome">
 
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Welcome to QuickRoster"
-        android:textSize="28sp"
-        android:id="@+id/textView3"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Welcome to QuickRoster"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="28sp" />
 
     <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="If you, or your manager already has an account here, please login as an exsiting customer. Otherwise you can register QuickRoster for your buisness."
-        android:textSize="18sp"
-        android:textAlignment="center"
-        android:id="@+id/textView4"
-        android:layout_marginTop="50dp"
-        android:layout_below="@+id/textView3"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView3"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="50dp"
+        android:text="Welcome to QuickRoster, you can either login if you know your credentials or you can register a new business."
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="18sp" />
 
     <Button
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="Login"
         android:id="@+id/loginAsUserButton"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:layout_below="@id/textView4"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Login" />
+
+    <Button
         android:id="@+id/registerBusinessButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/loginAsUserButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:text="Register" />
 </RelativeLayout>
