@@ -28,4 +28,8 @@
     <string name="title_activity_floating_action">FloatingActionActivity</string>
     <string name="title_activity_notice_board_list_adapter">NoticeBoardLIstAdapter</string>
     <string name="title_activity_business_details">BusinessDetailsActivity</string>
+
+    <string name="cal_last_synced_at">BusinessDetailsActivity</string>
+    <string name="welcome_message">"Welcome to QuickRoster, you can either login if you know your credentials or you can register a new business."</string>
+
 </resources>

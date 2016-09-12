@@ -12,22 +12,11 @@
     tools:context=".staff.StaffHomeActivity"
     tools:showIn="@layout/activity_staff_home">
 
-    <TextView
-        android:id="@+id/staffOptionsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:paddingBottom="50dp"
-        android:text="Staff Options"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="28sp" />
-
     <Button
         android:id="@+id/viewShiftsButton"
         android:layout_width="200dp"
+        android:layout_alignParentTop="true"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/staffOptionsTitle"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="View Shifts" />

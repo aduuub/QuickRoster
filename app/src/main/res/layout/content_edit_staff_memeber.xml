@@ -117,24 +117,25 @@
                 android:layout_marginTop="5dp"
                 android:checked="false"
                 android:text="Manager"
+                android:textOff="No"
+                android:textOn="Yes"
                 android:textColor="#737373"
                 android:textSize="18dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:paddingLeft="40dp"
-                android:paddingRight="40dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
                 android:layout_marginTop="16dp">
 
                 <Button
                     android:id="@+id/delete_staff_member_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="120dp"
-                    android:paddingTop="16dp"
                     android:textAlignment="center"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:layout_marginRight="10dp"
                     android:text="Delete"
                     android:textStyle="bold" />
 
@@ -142,10 +143,8 @@
                     android:id="@+id/save_staff_member_button"
                     style="?android:textAppearanceSmall"
                     android:layout_width="120dp"
-                    android:paddingTop="16dp"
                     android:textAlignment="center"
                     android:layout_height="wrap_content"
-                    android:gravity="right"
                     android:text="Save"
                     android:textStyle="bold"
                     android:layout_alignParentRight="true"

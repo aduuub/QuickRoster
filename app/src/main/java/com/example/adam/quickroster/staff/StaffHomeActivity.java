@@ -8,10 +8,12 @@ import android.view.View;
 import android.widget.*;
 
 import com.example.adam.quickroster.NoticeBoardActivity;
+import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.staff_options.ContactEmployerActivity;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.login.WelcomeActivity;
 import com.example.adam.quickroster.shifts.CalendarViewActivity;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 public class StaffHomeActivity extends AppCompatActivity implements View.OnClickListener {
@@ -80,5 +82,24 @@ public class StaffHomeActivity extends AppCompatActivity implements View.OnClick
                 logout();
                 break;
         }
+    }
+
+    /**
+     * Sends an email to to the current parse users business
+     */
+    private void sendEmail() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseObject business = ParseQueryUtil.getParseUsersBusiness(currentUser);
+        String email = business.getString("email");
+
+
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+        //  Fill it the with extra data
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{email});
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject");
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Example Text");
+        startActivity(Intent.createChooser(emailIntent, "Send Employer Email"));
     }
 }

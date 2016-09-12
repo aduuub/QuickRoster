@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".login.WelcomeActivity"
-            android:label="QuickRoster">
+            android:label="Welcome to QuickRoster">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,15 +66,15 @@
             android:label="@string/title_activity_login" />
         <activity
             android:name=".login.LoginActivity"
-            android:label="@string/title_activity_welcome"
+            android:label="Log In"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".login.LoginSuccessfulActivity"
-            android:label="@string/title_activity_welcome"
+            android:label="Successfully Logged In"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".staff.StaffHomeActivity"
-            android:label="Dashboard"
+            android:label="Staff Dashboard"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".staff.AddStaffMemeberActivity"
@@ -87,8 +87,11 @@
         <activity
             android:name=".staff.StaffListView"
             android:label="Staff" />
-        <activity android:name=".staff.StaffListViewAdapter" />
+
+        <activity android:name=".staff.StaffListViewAdapter"
+            />
         <activity android:name=".NoticeBoardActivity"
+            android:label="Notice Board"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".NoticeBoardListAdapter"
@@ -99,7 +102,7 @@
             android:label="Contact Employer"></activity>
         <activity
             android:name=".staff.BusinessDetailsActivity"
-            android:label="@string/title_activity_business_details"
+            android:label="Business Details"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

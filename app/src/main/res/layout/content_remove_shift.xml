@@ -11,7 +11,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".shifts.RemoveShiftActivity"
     android:orientation="vertical"
-    tools:showIn="@layout/activity_remove">
+    tools:showIn="@layout/activity_remove_shift">
 
     <Spinner
         android:id="@+id/selectStaffToModify"
@@ -38,5 +38,5 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Remove Shift" />
+        android:text="Remove" />
 </LinearLayout>

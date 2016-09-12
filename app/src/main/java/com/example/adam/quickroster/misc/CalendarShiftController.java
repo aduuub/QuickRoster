@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.CalendarContract;
@@ -12,11 +13,14 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.adam.quickroster.R;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.security.Permission;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -39,12 +43,15 @@ public class CalendarShiftController {
     }
 
     public void makeNewEntry(String title, String description, String location, long startTime, long endTime) {
-        ContentResolver cr = activityObj.getContentResolver();
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, startTime);
         values.put(CalendarContract.Events.DTEND, endTime);
-        values.put(CalendarContract.Events.TITLE, title);
-        values.put(CalendarContract.Events.DESCRIPTION, description);
+        if(description.equals(""))
+            values.put(CalendarContract.Events.TITLE, "Work");
+        else
+            values.put(CalendarContract.Events.TITLE, "Work: " + description);
+
+        //values.put(CalendarContract.Events.DESCRIPTION, description);
         values.put(CalendarContract.Events.CALENDAR_ID, 1);
 
         // Get current timezone
@@ -56,10 +63,10 @@ public class CalendarShiftController {
                 Manifest.permission.WRITE_CALENDAR);
 
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            Uri eventUri = activityObj.getApplicationContext()
+            activityObj.getApplicationContext()
                     .getContentResolver()
                     .insert(Uri.parse(eventUriString), values);
-            Toast.makeText(this.context, "Successfully updated new shifts in calendar", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.context, "New shifts added to calendar", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this.context, "Invalid permission to write to calendar", Toast.LENGTH_LONG).show();
         }
@@ -70,13 +77,17 @@ public class CalendarShiftController {
      * Adds the new shifts to the users calendar
      */
     public void addNewShiftsToCalendar(Context ctx) {
+        Date lastUpdated = getCalLastUpdated();
         List<ParseObject> usersShifts;
         try {
-            usersShifts = ParseQueryUtil.getAllUsersShiftsAfterDate(ParseUser.getCurrentUser(), new Date(1));
+            usersShifts = ParseQueryUtil.getAllUsersShiftsAfterDate(ParseUser.getCurrentUser(), lastUpdated);
         } catch (ParseException e) {
             Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG);
             return;
         }
+
+        // Put updated edit time
+        setCalLastUpdatedNow();
 
         for (ParseObject shift : usersShifts) {
             String details = shift.getString("details");
@@ -85,5 +96,36 @@ public class CalendarShiftController {
             makeNewEntry("Work", details, "Default Location", start.getTime(), end.getTime());
         }
     }
+
+    /**
+     * Sets the field 'calendarLastSync' in the shared preferences to be the current time
+     */
+    public void setCalLastUpdatedNow() {
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        SharedPreferences sharedPref = activityObj.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("calendarLastSync", currentDate);
+        editor.commit();
+    }
+
+
+    /**
+     *
+     * @return
+     */
+    public Date getCalLastUpdated() {
+        SharedPreferences sharedPref = activityObj.getPreferences(Context.MODE_PRIVATE);
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        String dateString = sharedPref.getString(activityObj.getString(R.string.cal_last_synced_at), currentDate);
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return dateFormatter.parse(dateString);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }
 

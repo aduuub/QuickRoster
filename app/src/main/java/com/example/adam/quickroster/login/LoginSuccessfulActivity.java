@@ -71,7 +71,6 @@ public class LoginSuccessfulActivity extends AppCompatActivity implements View.O
     }
 
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -94,6 +93,7 @@ public class LoginSuccessfulActivity extends AppCompatActivity implements View.O
         }
     }
 
+
     /**
      * Sets the welcome text. Takes the default message and adds the users name and staff type
      */
@@ -101,10 +101,9 @@ public class LoginSuccessfulActivity extends AppCompatActivity implements View.O
         String userType = this.isManager ? "Manager" : "Staff Member";
         StringBuilder welcomeText = new StringBuilder();
         if (name != null)
-            welcomeText.append("Welcome: " + name + ". \n \n");
+            welcomeText.append("Welcome " + name + ". \n \n");
 
         welcomeText.append("Thank you for choosing QuickRoster. We know you are going to love it. Please continue to get started. \n \n");
-        welcomeText.append("You are logged in as: " + userType + ". \n");
         displayWelcomeText.append(welcomeText.toString());
     }
 
