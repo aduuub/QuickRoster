@@ -70,7 +70,7 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
     private void addNotice() {
         notices = getAllCurrentNotices();
-        notices.add("");
+        notices.add("New Notice");
         noticesList.setAdapter(new NoticeBoardListAdapter(this, notices, editable));
     }
 
@@ -89,7 +89,6 @@ public class NoticeBoardActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-
         notices = getAllCurrentNotices();
         final Set<String> noticesSet = new HashSet<>();
         noticesSet.addAll(notices);
@@ -112,4 +111,32 @@ public class NoticeBoardActivity extends AppCompatActivity {
             }
         });
     }
+
+//    /**
+//     * Saves the current notices
+//     */
+//    @Override
+//    public void onBackPressed() {
+//        notices = getAllCurrentNotices();
+//        final Set<String> noticesSet = new HashSet<>();
+//        noticesSet.addAll(notices);
+//
+//        ParseUser currentUser = ParseUser.getCurrentUser();
+//        currentUser.getParseObject("Business").fetchInBackground(new GetCallback<ParseObject>() {
+//            @Override
+//            public void done(ParseObject business, ParseException e) {
+//                business.addAllUnique("Notices", noticesSet);
+//                business.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(ParseException e) {
+//                        if (e == null)
+//                            Toast.makeText(getApplicationContext(), "Sucessfully saved", Toast.LENGTH_LONG);
+//                        else
+//                            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG);
+//                        finish();
+//                    }
+//                });
+//            }
+//        });
+//    }
 }
