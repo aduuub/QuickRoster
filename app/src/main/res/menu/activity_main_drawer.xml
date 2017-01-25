@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_view_shifts"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="View Shifts" />
+        <item
+            android:id="@+id/nav_add_shift"
+            android:icon="@drawable/add_icon_white"
+            android:title="Add Shift" />
+        <item
+            android:id="@+id/nav_remove_staff"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Remove Shift" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Manage Staff" />
+
+        <item
+            android:id="@+id/nav_notices"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Notices" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Settings" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

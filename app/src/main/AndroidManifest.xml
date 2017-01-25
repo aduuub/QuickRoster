@@ -52,7 +52,7 @@
             android:label="Shifts" />
         <activity
             android:name=".manager_options.ManagerHomeActivity"
-            android:label="Manager Dashboard" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".shifts.AddShiftActivity"
             android:label="Add Shift"
