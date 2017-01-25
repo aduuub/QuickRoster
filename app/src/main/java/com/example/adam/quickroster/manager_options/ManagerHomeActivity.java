@@ -50,56 +50,7 @@ public class ManagerHomeActivity extends AppCompatActivity implements Navigation
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        // Set buttons
-//        addShift = (Button) findViewById(R.id.addNewShiftButton);
-//        showCal = (Button) findViewById(R.id.viewAllShifts);
-//        removeShift = (Button) findViewById(R.id.managerRemoveShiftsButton);
-//        viewStaff = (Button) findViewById(R.id.viewStaffButton);
-//        noticeBoardButton = (Button) findViewById(R.id.noticeBoardButton);
-//        logout = (Button) findViewById(R.id.logOutManagerButton);
-
-        // Set onClick listeners
-//        addShift.setOnClickListener(this);
-//        removeShift.setOnClickListener(this);
-//        showCal.setOnClickListener(this);
-//        viewStaff.setOnClickListener(this);
-//        noticeBoardButton.setOnClickListener(this);
-//        logout.setOnClickListener(this);
     }
-
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.addNewShiftButton:
-//                Intent intentAdd = new Intent(this, AddShiftActivity.class);
-//                startActivity(intentAdd);
-//                break;
-//
-//            case R.id.managerRemoveShiftsButton:
-//                Intent intentRemove = new Intent(this, RemoveShiftActivity.class);
-//                startActivity(intentRemove);
-//                break;
-//
-//            case R.id.viewAllShifts:
-//                Intent intentView = new Intent(this, CalendarViewActivity.class);
-//                startActivity(intentView);
-//                break;
-//
-//            case R.id.viewStaffButton:
-//                Intent viewStaff = new Intent(this, StaffListView.class);
-//                startActivity(viewStaff);
-//                break;
-//
-//            case R.id.noticeBoardButton:
-//                Intent noticeBoard = new Intent(this, NoticeBoardActivity.class);
-//                startActivity(noticeBoard);
-//                break;
-//
-//            case R.id.logOutManagerButton:
-//                logout();
-//        }
-//    }
 
 
     /**

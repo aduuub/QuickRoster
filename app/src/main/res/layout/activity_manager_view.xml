@@ -8,13 +8,6 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="?attr/actionBarSize"-->
-        <!--android:background="?attr/colorPrimary"-->
-        <!--app:popupTheme="@style/AppTheme.PopupOverlay" />-->
-
     <include
         layout="@layout/activity_edit_staff_memeber"
         android:layout_width="match_parent"
@@ -26,86 +19,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 
 </android.support.v4.widget.DrawerLayout>
-
-
-
-    <!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<android.support.v4.widget.DrawerLayout-->
-    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:id="@+id/drawer_layout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
-
-    <!--<FrameLayout-->
-        <!--android:id="@+id/content_frame"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-
-    <!--<ListView android:id="@+id/left_drawer"-->
-        <!--android:layout_width="240dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="start"-->
-        <!--android:choiceMode="singleChoice"-->
-        <!--android:divider="@android:color/transparent"-->
-        <!--android:dividerHeight="0dp"-->
-        <!--android:background="#111">-->
-    <!--<Button-->
-        <!--android:id="@+id/viewAllShifts"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_alignLeft="@+id/managerRemoveShiftsButton"-->
-        <!--android:layout_alignStart="@+id/managerRemoveShiftsButton"-->
-        <!--android:text="View Schedule" />-->
-
-    <!--<Button-->
-        <!--android:id="@+id/addNewShiftButton"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:text="Add Shift"-->
-        <!--android:layout_below="@+id/viewAllShifts"-->
-        <!--android:layout_alignLeft="@+id/viewAllShifts"-->
-        <!--android:layout_alignStart="@+id/viewAllShifts" />-->
-
-    <!--<Button-->
-        <!--android:id="@+id/managerRemoveShiftsButton"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:text="Remove Shift"-->
-        <!--android:layout_below="@+id/addNewShiftButton"-->
-        <!--android:layout_marginBottom="20dp"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--/>-->
-
-    <!--<Button-->
-        <!--android:id="@+id/viewStaffButton"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:text="Manage Staff"-->
-        <!--android:layout_below="@+id/managerRemoveShiftsButton"-->
-        <!--android:layout_alignLeft="@+id/managerRemoveShiftsButton"-->
-        <!--android:layout_alignStart="@+id/managerRemoveShiftsButton" />-->
-
-    <!--<Button-->
-        <!--android:id="@+id/noticeBoardButton"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:text="Notice Board"-->
-        <!--android:layout_below="@+id/viewStaffButton"-->
-        <!--android:layout_alignLeft="@+id/managerRemoveShiftsButton"-->
-        <!--android:layout_alignStart="@+id/managerRemoveShiftsButton" />-->
-
-    <!--<Button-->
-        <!--android:id="@+id/logOutManagerButton"-->
-        <!--android:layout_width="200dp"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:text="Log Out"-->
-        <!--android:layout_below="@+id/noticeBoardButton"-->
-        <!--android:layout_alignLeft="@+id/managerRemoveShiftsButton"-->
-        <!--android:layout_alignStart="@+id/managerRemoveShiftsButton" />-->
-
-<!--</ListView>-->
-
-<!--</android.support.v4.widget.DrawerLayout>-->
