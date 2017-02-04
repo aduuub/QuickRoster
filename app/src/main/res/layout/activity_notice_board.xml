@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.adam.quickroster.NoticeBoardActivity">
+    tools:context="com.example.adam.quickroster.notice_board.NoticeBoardActivity">
 
     <ListView
         android:id="@+id/notice_board_list_view"

@@ -6,25 +6,30 @@
             android:id="@+id/nav_view_shifts"
             android:icon="@drawable/ic_event_note_black"
             android:title="View Shifts" />
-        <item
-            android:id="@+id/nav_add_shift"
-            android:icon="@drawable/ic_add_black"
-            android:title="Add Shift" />
-        <item
-            android:id="@+id/nav_remove_staff"
-            android:icon="@drawable/ic_remove_black_24px"
-            android:title="Remove Shift" />
+        <!--<item-->
+            <!--android:id="@+id/nav_add_shift"-->
+            <!--android:icon="@drawable/ic_add_black"-->
+            <!--android:title="Add Shift" />-->
+        <!--<item-->
+            <!--android:id="@+id/nav_remove_staff"-->
+            <!--android:icon="@drawable/ic_remove_black_24px"-->
+            <!--android:title="Remove Shift" />-->
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_person_black"
             android:title="Manage Staff" />
 
         <item
+            android:id="@+id/nav_messages"
+            android:icon="@drawable/ic_message_black"
+            android:title="Messages" />
+
+        <item
             android:id="@+id/nav_notices"
             android:icon="@drawable/ic_list_black"
             android:title="Notices" />
     </group>
-    <item android:title="Communicate">
+    <group>
         <menu>
             <item
                 android:id="@+id/nav_settings"
@@ -35,6 +40,6 @@
                 android:icon="@drawable/ic_menu_send"
                 android:title="Logout" />
         </menu>
-    </item>
+    </group>
 
 </menu>

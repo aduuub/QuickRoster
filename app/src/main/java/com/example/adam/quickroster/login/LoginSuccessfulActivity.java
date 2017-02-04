@@ -1,6 +1,5 @@
 package com.example.adam.quickroster.login;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,17 +9,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
+import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.CalendarShiftController;
-import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.staff.StaffHomeActivity;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
-
-import java.util.Date;
-import java.util.List;
 
 public class LoginSuccessfulActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -77,7 +71,7 @@ public class LoginSuccessfulActivity extends AppCompatActivity implements View.O
 
             case R.id.continueButton2:
                 if (isManager) {
-                    Intent intent = new Intent(LoginSuccessfulActivity.this, ManagerHomeActivity.class);
+                    Intent intent = new Intent(LoginSuccessfulActivity.this, Menu.class);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(LoginSuccessfulActivity.this, StaffHomeActivity.class);

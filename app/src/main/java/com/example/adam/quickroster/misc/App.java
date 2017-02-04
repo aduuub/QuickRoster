@@ -20,10 +20,16 @@ public class App extends Application {
         ParseObject.registerSubclass(ParseShift.class);
         ParseObject.registerSubclass(ParseStaffUser.class);
         Parse.enableLocalDatastore(getApplicationContext());
-        Parse.initialize(this, "HU35CHA4t0ebOb7AwQR3l8XmqE82oKC8QfoHu2Ed", "N84KATdzjuYIln0zKB1k3dDpcrl0Ev0BxRJSDtf1");
+
+        Parse.initialize(new Parse.Configuration.Builder(this)
+                .applicationId("HU35CHA4t0ebOb7AwQR3l8XmqE82oKC8QfoHu2Ed")
+                .clientKey("N84KATdzjuYIln0zKB1k3dDpcrl0Ev0BxRJSDtf1")
+                .server("https://parseapi.back4app.com/").build()
+        );
+
         ParseUser.enableAutomaticUser();
-        ParseACL defauAc1 = new ParseACL();
-        defauAc1.setPublicReadAccess(true);
-        ParseACL.setDefaultACL(defauAc1,true);
+        //ParseACL defauAc1 = new ParseACL();
+        //defauAc1.setPublicReadAccess(true);
+        //ParseACL.setDefaultACL(defauAc1,true);
     }
 }

@@ -17,7 +17,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 
-import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
+import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.R;
@@ -185,7 +185,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
         }
 
         Toast.makeText(getApplicationContext(), "Successfully Added Shift", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(this, ManagerHomeActivity.class);
+        Intent intent = new Intent(this, Menu.class);
         startActivity(intent);
     }
 

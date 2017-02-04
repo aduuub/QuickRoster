@@ -1,4 +1,4 @@
-package com.example.adam.quickroster;
+package notice_board;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -7,16 +7,14 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.adam.quickroster.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

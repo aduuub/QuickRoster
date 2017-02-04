@@ -68,7 +68,7 @@ public class StaffListView extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.add_staff_member_fab) {
-            Intent intentAddStaff = new Intent(this, AddStaffMemeberActivity.class);
+            Intent intentAddStaff = new Intent(this, AddStaffMemberActivity.class);
             ParseUser user = ParseUser.getCurrentUser();
             if (user == null) {
                 Toast.makeText(getApplicationContext(), "Session Expired: Log in again"

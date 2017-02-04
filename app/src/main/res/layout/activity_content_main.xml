@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,17 +9,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="notice_board.NoticeBoardListAdapter"
-    tools:showIn="@layout/activity_notice_board_list_adapter">
+    tools:context=".menu.Menu"
+    tools:showIn="@layout/app_bar_main">
 
-    <EditText
-        android:id="@+id/noticeMessage"
+
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
-        android:paddingBottom="8dp"
-        android:background="@android:color/transparent"
-        android:textSize="18sp"
-        android:textColor="#000"/>
+        android:layout_height="match_parent" />
 
-</LinearLayout>
+</RelativeLayout>

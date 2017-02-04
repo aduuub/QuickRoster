@@ -2,8 +2,6 @@ package com.example.adam.quickroster.staff;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,9 +11,7 @@ import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.login.LoginActivity;
-import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;

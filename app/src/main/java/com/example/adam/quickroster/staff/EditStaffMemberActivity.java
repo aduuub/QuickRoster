@@ -40,7 +40,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_staff_memeber);
+        setContentView(R.layout.activity_edit_staff_member);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Edit Staff Member");

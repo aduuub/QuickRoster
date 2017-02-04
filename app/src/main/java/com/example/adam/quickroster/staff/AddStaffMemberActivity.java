@@ -10,7 +10,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
+import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.R;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -20,7 +20,7 @@ import com.parse.ParseUser;
 /**
  * This is used for adding a new staff member to a business in Parse.
  */
-public class AddStaffMemeberActivity extends AppCompatActivity {
+public class AddStaffMemberActivity extends AppCompatActivity {
 
     private Button createStaff;
     private ParseObject business;
@@ -36,7 +36,7 @@ public class AddStaffMemeberActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_staff_memeber);
+        setContentView(R.layout.activity_add_staff_member);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Add Staff Member");
@@ -100,7 +100,7 @@ public class AddStaffMemeberActivity extends AppCompatActivity {
             business.add("Managers", user);
 
             Toast.makeText(getApplicationContext(), "Successfully added user", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(AddStaffMemeberActivity.this, ManagerHomeActivity.class);
+            Intent intent = new Intent(AddStaffMemberActivity.this, Menu.class);
             startActivity(intent);
 
         } else {
@@ -108,7 +108,7 @@ public class AddStaffMemeberActivity extends AppCompatActivity {
             business.save();
 
             Toast.makeText(getApplicationContext(), "Successfully added user", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(AddStaffMemeberActivity.this, StaffHomeActivity.class);
+            Intent intent = new Intent(AddStaffMemberActivity.this, StaffHomeActivity.class);
             startActivity(intent);
         }
     }

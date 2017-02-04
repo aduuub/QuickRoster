@@ -16,7 +16,7 @@ import android.widget.TextView;
 import java.lang.*;
 
 
-import com.example.adam.quickroster.manager_options.ManagerHomeActivity;
+import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.CalendarShiftController;
 import com.example.adam.quickroster.staff.StaffHomeActivity;
@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
             csc.addNewShiftsToCalendar(getApplicationContext());
 
             if (manager) {
-                Intent intent = new Intent(LoginActivity.this, ManagerHomeActivity.class);
+                Intent intent = new Intent(LoginActivity.this, Menu.class);
                 startActivity(intent);
                 finish();
 

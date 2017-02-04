@@ -11,8 +11,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".staff.AddStaffMemeberActivity"
-    tools:showIn="@layout/activity_edit_staff_memeber">
+    tools:context=".staff.AddStaffMemberActivity"
+    tools:showIn="@layout/activity_edit_staff_member">
 
     <!-- LoginActivity progress -->
     <ProgressBar

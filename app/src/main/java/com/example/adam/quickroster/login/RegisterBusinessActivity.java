@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.model.ParseBusiness;
-import com.example.adam.quickroster.staff.AddStaffMemeberActivity;
+import com.example.adam.quickroster.staff.AddStaffMemberActivity;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 
@@ -179,7 +179,7 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
             }
 
             String businessObjectID = newBusiness.getObjectId();
-            Intent intent = new Intent(RegisterBusinessActivity.this, AddStaffMemeberActivity.class);
+            Intent intent = new Intent(RegisterBusinessActivity.this, AddStaffMemberActivity.class);
             intent.putExtra("BusinessID", businessObjectID);
             startActivity(intent);
             finish();
