@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.*;
 
-import notice_board.NoticeBoardActivity;
+import com.example.adam.quickroster.notice_board.NoticeBoardActivity;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.staff_options.ContactEmployerActivity;
 import com.example.adam.quickroster.R;

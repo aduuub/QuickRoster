@@ -88,11 +88,11 @@
             android:label="Staff" />
         <activity android:name=".staff.StaffListViewAdapter" />
         <activity
-            android:name="notice_board.NoticeBoardActivity"
+            android:name="com.example.adam.quickroster.notice_board.NoticeBoardActivity"
             android:label="Notice Board"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="notice_board.NoticeBoardListAdapter"
+            android:name="com.example.adam.quickroster.notice_board.NoticeBoardListAdapter"
             android:label="@string/title_activity_notice_board_list_adapter"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -104,7 +104,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ContentMain"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.adam.quickroster.menu;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -10,12 +11,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-import notice_board.NoticeBoardActivity;
+import com.example.adam.quickroster.HomeFragment;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.login.WelcomeActivity;
+import com.example.adam.quickroster.model.ParseStaffUser;
+import com.example.adam.quickroster.notice_board.NoticeBoardActivity;
 import com.example.adam.quickroster.shifts.CalendarViewActivity;
 import com.example.adam.quickroster.staff.StaffListView;
 import com.parse.ParseUser;
@@ -38,9 +44,13 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
 
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_frame, new HomeFragment());
+        ft.commit();
+
+        // set tool bar and nav drawer
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -49,6 +59,15 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Set name and business
+        View header = navigationView.getHeaderView(0);
+        TextView nameTextField = (TextView) header.findViewById(R.id.nav_header_name);
+        TextView businessTextField = (TextView) header.findViewById(R.id.nav_header_business);
+
+        ParseStaffUser currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
+        nameTextField.setText(currentUser.getFullName());
+        businessTextField.setText(currentUser.getBusinessName());
     }
 
 
@@ -69,45 +88,36 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_view_shifts:
                 fragment = new CalendarViewActivity();
                 break;
+
+            case R.id.nav_manage:
+                fragment = new StaffListView();
+                break;
+
+            case R.id.nav_notices:
+                fragment = new NoticeBoardActivity();
+                break;
+
+            case R.id.nav_logout:
+                logout();
+                break;
         }
 
         if(fragment != null){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
+            ft.addToBackStack(null);
             ft.commit();
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
         }
     }
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         displaySelectedScreen(id);
-
-//        if (id == R.id.nav_view_shifts) {
-//            Intent intentView = new Intent(this, CalendarViewActivity.class);
-//            startActivity(intentView);
-//
-//        } else if (id == R.id.nav_manage) {
-//            Intent viewStaff = new Intent(this, StaffListView.class);
-//            startActivity(viewStaff);
-//
-//        } else if (id == R.id.nav_notices) {
-//            Intent noticeBoard = new Intent(this, NoticeBoardActivity.class);
-//            startActivity(noticeBoard);
-//
-//        } else if (id == R.id.nav_settings) {
-//
-//        } else if (id == R.id.nav_logout) {
-//            logout();
-//        }
-//
-
         return true;
     }
 }

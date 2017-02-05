@@ -33,4 +33,7 @@
     <string name="welcome_message">"Welcome to QuickRoster, you can either login if you know your credentials or you can register a new business."</string>
     <string name="title_activity_content_main">ContentMain</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

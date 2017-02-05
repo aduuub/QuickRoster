@@ -18,7 +18,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         ParseObject.registerSubclass(ParseShift.class);
-        ParseObject.registerSubclass(ParseStaffUser.class);
+        ParseUser.registerSubclass(ParseStaffUser.class);
         Parse.enableLocalDatastore(getApplicationContext());
 
         Parse.initialize(new Parse.Configuration.Builder(this)

@@ -1,9 +1,13 @@
-package notice_board;
+package com.example.adam.quickroster.notice_board;
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,7 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class NoticeBoardActivity extends AppCompatActivity {
+public class NoticeBoardActivity extends Fragment {
 
     ListView noticesList;
     FloatingActionButton addDetailFab;
@@ -27,12 +31,18 @@ public class NoticeBoardActivity extends AppCompatActivity {
     boolean editable;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notice_board);
+    }
 
-        noticesList = (ListView) findViewById(R.id.notice_board_list_view);
-        addDetailFab = (FloatingActionButton) findViewById(R.id.addNoticeFab);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.activity_notice_board, container, false);
+
+        noticesList = (ListView) view.findViewById(R.id.notice_board_list_view);
+        addDetailFab = (FloatingActionButton) view.findViewById(R.id.addNoticeFab);
         addDetailFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,17 +69,23 @@ public class NoticeBoardActivity extends AppCompatActivity {
                 setAdapter(notices);
             }
         });
+
+        return view;
     }
 
     public void setAdapter(List<String> notices) {
-        this.noticesList.setAdapter(new NoticeBoardListAdapter(this, notices, editable));
+        NoticeBoardListAdapter adapter = new NoticeBoardListAdapter(getActivity(),
+                R.layout.content_notice_board_list_adapter, notices);
+        adapter.setEditable(editable);
+        this.noticesList.setAdapter(adapter);
     }
 
 
     private void addNotice() {
         notices = getAllCurrentNotices();
         notices.add("New Notice");
-        noticesList.setAdapter(new NoticeBoardListAdapter(this, notices, editable));
+        //TODO
+        // noticesList.setAdapter(new NoticeBoardListAdapter(getActivity(), notices, editable));
     }
 
 
@@ -84,8 +100,9 @@ public class NoticeBoardActivity extends AppCompatActivity {
 
     /**
      * Saves the current notices
+     *
+     * // TODO make this work in the activity
      */
-    @Override
     public void onBackPressed() {
         notices = getAllCurrentNotices();
         final Set<String> noticesSet = new HashSet<>();
@@ -100,10 +117,10 @@ public class NoticeBoardActivity extends AppCompatActivity {
                     @Override
                     public void done(ParseException e) {
                         if (e == null)
-                            Toast.makeText(getApplicationContext(), "Sucessfully saved", Toast.LENGTH_LONG);
+                            Toast.makeText(getActivity().getApplicationContext(), "Sucessfully saved", Toast.LENGTH_LONG);
                         else
-                            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG);
-                        finish();
+                            Toast.makeText(getActivity().getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG);
+                        getActivity().finish();
                     }
                 });
             }

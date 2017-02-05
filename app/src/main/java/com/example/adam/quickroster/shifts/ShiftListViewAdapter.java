@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.model.ParseShift;
+import com.example.adam.quickroster.model.ParseStaffUser;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
@@ -55,11 +57,12 @@ public class ShiftListViewAdapter extends BaseAdapter {
 
         if(currentUser.getBoolean("isManager")){
             // Find and set shifts staff member's name
-            ParseUser staff = shift.getParseUser("staff");
-            String staffName = staff.getString("firstName");
-            if(staffName == null || staffName.equals(currentUser.get("firstName"))) { // name not set or self
+            ParseStaffUser staff = (ParseStaffUser) shift.getStaff();
+
+            if(staff.getObjectId().equals(currentUser.getObjectId())) { // same user
                 staffMember.setText("Self");
             }else {
+                String staffName = staff.getFullName();
                 staffMember.setText(staffName);
             }
 

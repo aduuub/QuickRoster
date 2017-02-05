@@ -73,9 +73,11 @@ public class LoginSuccessfulActivity extends AppCompatActivity implements View.O
                 if (isManager) {
                     Intent intent = new Intent(LoginSuccessfulActivity.this, Menu.class);
                     startActivity(intent);
+                    finish();
                 } else {
                     Intent intent = new Intent(LoginSuccessfulActivity.this, StaffHomeActivity.class);
                     startActivity(intent);
+                    finish();
                 }
                 break;
 
@@ -83,6 +85,7 @@ public class LoginSuccessfulActivity extends AppCompatActivity implements View.O
                 ParseUser.logOut();
                 Intent intent = new Intent(LoginSuccessfulActivity.this, WelcomeActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
     }

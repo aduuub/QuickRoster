@@ -2,9 +2,12 @@ package com.example.adam.quickroster.staff;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -18,20 +21,31 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class StaffListView extends AppCompatActivity implements View.OnClickListener {
+public class StaffListView extends Fragment implements View.OnClickListener {
 
     ListView staffList;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staff_member_list_view);
-        staffList = (ListView) findViewById(R.id.staffListView);
+
+
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.activity_staff_member_list_view, container, false);
+        staffList = (ListView) view.findViewById(R.id.staffListView);
 
         // Set Floating Action Button
-        FloatingActionButton addStaffFab = (FloatingActionButton) findViewById(R.id.add_staff_member_fab);
+        FloatingActionButton addStaffFab = (FloatingActionButton) view.findViewById(R.id.add_staff_member_fab);
         addStaffFab.setOnClickListener(this);
         populateList();
+
+        return view;
     }
 
 
@@ -56,7 +70,7 @@ public class StaffListView extends AppCompatActivity implements View.OnClickList
             }
         });
 
-        staffList.setAdapter(new StaffListViewAdapter(this, allStaff));
+        staffList.setAdapter(new StaffListViewAdapter(getActivity(), allStaff));
         staffList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -68,10 +82,10 @@ public class StaffListView extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.add_staff_member_fab) {
-            Intent intentAddStaff = new Intent(this, AddStaffMemberActivity.class);
+            Intent intentAddStaff = new Intent(getActivity(), AddStaffMemberActivity.class);
             ParseUser user = ParseUser.getCurrentUser();
             if (user == null) {
-                Toast.makeText(getApplicationContext(), "Session Expired: Log in again"
+                Toast.makeText(getActivity().getApplicationContext(), "Session Expired: Log in again"
                         , Toast.LENGTH_LONG);
                 return;
             }
@@ -88,7 +102,7 @@ public class StaffListView extends AppCompatActivity implements View.OnClickList
      * @param user
      */
     public void staffMemberSelected(ParseUser user) {
-        Intent modifyUserIntent = new Intent(getApplicationContext(), EditStaffMemberActivity.class);
+        Intent modifyUserIntent = new Intent(getActivity().getApplicationContext(), EditStaffMemberActivity.class);
         modifyUserIntent.putExtra("username", user.getString("username"));
         modifyUserIntent.putExtra("firstName", user.getString("firstName"));
         modifyUserIntent.putExtra("lastName", user.getString("lastName"));
