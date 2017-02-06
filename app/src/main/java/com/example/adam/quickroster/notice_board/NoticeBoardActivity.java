@@ -1,5 +1,6 @@
 package com.example.adam.quickroster.notice_board;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,7 +29,7 @@ public class NoticeBoardActivity extends Fragment {
 
     ListView noticesList;
     FloatingActionButton addDetailFab;
-    List<String> notices;
+    List<List<String>> notices;
     boolean editable;
 
     @Override
@@ -52,6 +54,9 @@ public class NoticeBoardActivity extends Fragment {
         ParseUser currentUser = ParseUser.getCurrentUser();
         this.editable = currentUser.getBoolean("isManager");
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Notices");
+
+
         // Only managers can add notices
         if(!currentUser.getBoolean("isManager"))
             addDetailFab.setVisibility(View.INVISIBLE);
@@ -61,41 +66,60 @@ public class NoticeBoardActivity extends Fragment {
             public void done(ParseObject business, ParseException e) {
                 notices = business.getList("Notices");
                 // If no notices in the cloud already init a new list
-                if (notices == null)
+                if (notices == null) {
                     notices = new ArrayList<>();
-
-                business.put("Notices", notices);
-                business.saveInBackground();
+                    business.put("Notices", notices);
+                    business.saveInBackground();
+                }
                 setAdapter(notices);
             }
         });
-
         return view;
     }
 
-    public void setAdapter(List<String> notices) {
+
+    public void setAdapter(List<List<String>> notices) {
         NoticeBoardListAdapter adapter = new NoticeBoardListAdapter(getActivity(),
                 R.layout.content_notice_board_list_adapter, notices);
-        adapter.setEditable(editable);
-        this.noticesList.setAdapter(adapter);
+        noticesList.setAdapter(adapter);
+
+        noticesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                editNotice(position);
+            }
+        });
+
+    }
+
+
+    private void editNotice(int pos){
+        List<String> notice = notices.get(pos);
+        if(notice != null){
+            Intent intent = new Intent(getActivity(), NoticeBoardEdit.class);
+            intent.putExtra("title", notice.get(0));
+            intent.putExtra("message", notice.get(1));
+            startActivity(intent);
+        }
     }
 
 
     private void addNotice() {
-        notices = getAllCurrentNotices();
-        notices.add("New Notice");
+//        notices = getAllCurrentNotices();
+//        notices.add("New Notice");
         //TODO
         // noticesList.setAdapter(new NoticeBoardListAdapter(getActivity(), notices, editable));
     }
 
 
-    private List<String> getAllCurrentNotices() {
-        NoticeBoardListAdapter adapter = (NoticeBoardListAdapter) noticesList.getAdapter();
-        notices = adapter.getNotices();
-        if (notices == null)
-            notices = new ArrayList<>();
-        return notices;
-    }
+//    private List<String> getAllCurrentNotices() {
+////        NoticeBoardListAdapter adapter = (NoticeBoardListAdapter) noticesList.getAdapter();
+////        notices = adapter.getNotices();
+////        if (notices == null)
+////            notices = new ArrayList<>();
+////        return notices;
+//        return null;
+//    }
 
 
     /**
@@ -103,29 +127,29 @@ public class NoticeBoardActivity extends Fragment {
      *
      * // TODO make this work in the activity
      */
-    public void onBackPressed() {
-        notices = getAllCurrentNotices();
-        final Set<String> noticesSet = new HashSet<>();
-        noticesSet.addAll(notices);
-
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        currentUser.getParseObject("Business").fetchInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject business, ParseException e) {
-                business.addAllUnique("Notices", noticesSet);
-                business.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null)
-                            Toast.makeText(getActivity().getApplicationContext(), "Sucessfully saved", Toast.LENGTH_LONG);
-                        else
-                            Toast.makeText(getActivity().getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG);
-                        getActivity().finish();
-                    }
-                });
-            }
-        });
-    }
+//    public void onBackPressed() {
+//        notices = getAllCurrentNotices();
+//        final Set<String> noticesSet = new HashSet<>();
+//        noticesSet.addAll(notices);
+//
+//        ParseUser currentUser = ParseUser.getCurrentUser();
+//        currentUser.getParseObject("Business").fetchInBackground(new GetCallback<ParseObject>() {
+//            @Override
+//            public void done(ParseObject business, ParseException e) {
+//                business.addAllUnique("Notices", noticesSet);
+//                business.saveInBackground(new SaveCallback() {
+//                    @Override
+//                    public void done(ParseException e) {
+//                        if (e == null)
+//                            Toast.makeText(getActivity().getApplicationContext(), "Sucessfully saved", Toast.LENGTH_LONG);
+//                        else
+//                            Toast.makeText(getActivity().getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG);
+//                        getActivity().finish();
+//                    }
+//                });
+//            }
+//        });
+//    }
 
 //    /**
 //     * Saves the current notices

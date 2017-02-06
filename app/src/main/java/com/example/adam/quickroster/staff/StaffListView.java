@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,9 +24,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class StaffListView extends Fragment implements View.OnClickListener {
+public class StaffListView extends Fragment {
 
-    ListView staffList;
+    private ListView staffList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,11 +43,9 @@ public class StaffListView extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.activity_staff_member_list_view, container, false);
         staffList = (ListView) view.findViewById(R.id.staffListView);
 
-        // Set Floating Action Button
-        FloatingActionButton addStaffFab = (FloatingActionButton) view.findViewById(R.id.add_staff_member_fab);
-        addStaffFab.setOnClickListener(this);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Staff");
         populateList();
-
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -56,19 +57,6 @@ public class StaffListView extends Fragment implements View.OnClickListener {
     public void populateList(){
         // Get all staff of the business
         final List<ParseUser> allStaff = ParseQueryUtil.getAllUsers(ParseUser.getCurrentUser());
-        Collections.sort(allStaff, new Comparator<ParseUser>() {
-            @Override
-            public int compare(ParseUser lhs, ParseUser rhs) {
-                boolean left = lhs.getBoolean("isManager");
-                boolean right = rhs.getBoolean("isManager");
-                if (left && right)
-                    return 0;
-                if (left && !right)
-                    return 1;
-                else
-                    return -1;
-            }
-        });
 
         staffList.setAdapter(new StaffListViewAdapter(getActivity(), allStaff));
         staffList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,21 +67,27 @@ public class StaffListView extends Fragment implements View.OnClickListener {
         });
     }
 
+
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.add_staff_member_fab) {
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        if(ParseUser.getCurrentUser().getBoolean("isManager")) {
+            inflater.inflate(R.menu.add_staff_menu, menu);
+        }
+    }
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.add_staff_member){
             Intent intentAddStaff = new Intent(getActivity(), AddStaffMemberActivity.class);
             ParseUser user = ParseUser.getCurrentUser();
-            if (user == null) {
-                Toast.makeText(getActivity().getApplicationContext(), "Session Expired: Log in again"
-                        , Toast.LENGTH_LONG);
-                return;
-            }
             ParseObject business = user.getParseObject("Business");
             String businessID = business.getObjectId().toString();
             intentAddStaff.putExtra("BusinessID", businessID);
             startActivity(intentAddStaff);
+            return true;
         }
+        return false;
     }
 
 

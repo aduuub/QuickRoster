@@ -51,6 +51,8 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
 
         // set tool bar and nav drawer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -64,6 +66,8 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         View header = navigationView.getHeaderView(0);
         TextView nameTextField = (TextView) header.findViewById(R.id.nav_header_name);
         TextView businessTextField = (TextView) header.findViewById(R.id.nav_header_business);
+
+
 
         ParseStaffUser currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
         nameTextField.setText(currentUser.getFullName());

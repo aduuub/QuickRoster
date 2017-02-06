@@ -44,68 +44,45 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".shifts.CalendarViewActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
             android:name=".shifts.ShiftListView"
             android:label="Shifts" />
         <activity
-            android:name=".menu.Menu"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".menu.Menu" />
         <activity
             android:name=".shifts.AddShiftActivity"
-            android:label="Add Shift"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Add Shift" />
         <activity
             android:name=".shifts.RemoveShiftActivity"
-            android:label="Remove Shift"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Remove Shift" />
         <activity
             android:name=".login.RegisterBusinessActivity"
             android:label="@string/title_activity_login" />
         <activity
             android:name=".login.LoginActivity"
-            android:label="Log In"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Log In" />
         <activity
             android:name=".login.LoginSuccessfulActivity"
-            android:label="Successfully Logged In"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Successfully Logged In" />
         <activity
             android:name=".staff.StaffHomeActivity"
-            android:label="Staff Dashboard"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Staff Dashboard" />
         <activity
             android:name=".staff.AddStaffMemberActivity"
-            android:label="Add Staff Member"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Add Staff Member" />
         <activity
             android:name=".staff.EditStaffMemberActivity"
-            android:label="Edit Staff Member"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".staff.StaffListView"
-            android:label="Staff" />
-        <activity android:name=".staff.StaffListViewAdapter" />
-        <activity
-            android:name="com.example.adam.quickroster.notice_board.NoticeBoardActivity"
-            android:label="Notice Board"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="com.example.adam.quickroster.notice_board.NoticeBoardListAdapter"
-            android:label="@string/title_activity_notice_board_list_adapter"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Edit Staff Member" />
         <activity
             android:name=".staff_options.ContactEmployerActivity"
             android:label="Contact Employer" />
         <activity
             android:name=".staff.BusinessDetailsActivity"
-            android:label="Business Details"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Business Details" />
         <activity
             android:name=".ContentMain"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".notice_board.NoticeBoardEdit" />
     </application>
 
 </manifest>

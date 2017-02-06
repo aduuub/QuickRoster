@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.adam.quickroster.R;
 
@@ -18,9 +19,8 @@ import java.util.List;
 
 public class NoticeBoardListAdapter extends ArrayAdapter {
 
-    private List<String> notices;
+    private List<List<String>> notices;
     private Context context;
-    private boolean editable;
 
     public NoticeBoardListAdapter(Context context, int resource, List objects) {
         super(context, resource, objects);
@@ -47,34 +47,21 @@ public class NoticeBoardListAdapter extends ArrayAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.content_notice_board_list_adapter, parent, false);
-        String notice = notices.get(position);
-        EditText textBox = (EditText) view.findViewById(R.id.noticeMessage);
-        textBox.setEnabled(editable);
-        textBox.onWindowFocusChanged(true);
-        textBox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+        List<String> notice = notices.get(position);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+        // set title
+        String title = notice.get(0);
+        TextView titleBox = (TextView) view.findViewById(R.id.notice_title);
+        titleBox.setText(title);
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                notices.set(position, s.toString());
-            }
-        });
-        textBox.setText(notice);
+        // set message
+        String message = notice.get(1);
+        TextView messageBox = (TextView) view.findViewById(R.id.notice_message);
+        if(message.length() > 100){
+            message = message.substring(0, 100);
+            message += " ...";
+        }
+        messageBox.setText(message);
         return view;
-    }
-
-
-    public List<String> getNotices() {
-        return this.notices;
-    }
-
-    public void setEditable(boolean editable) {
-        this.editable = editable;
     }
 }

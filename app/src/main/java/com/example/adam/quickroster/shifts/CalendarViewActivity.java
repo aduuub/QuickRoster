@@ -36,6 +36,9 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
         View view = inflater.inflate(R.layout.activity_calendar_view, container, false);
         cal = (android.widget.CalendarView) view.findViewById(R.id.calendarView);
         cal.setOnDateChangeListener(this);
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Calendar");
+
         return view;
     }
 
