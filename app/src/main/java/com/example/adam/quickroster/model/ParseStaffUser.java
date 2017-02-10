@@ -14,6 +14,8 @@ import java.util.UUID;
 @ParseClassName("_User")
 public class ParseStaffUser extends ParseUser {
 
+    private ParseBusiness business;
+
     public ParseStaffUser(){
 
     }
@@ -41,6 +43,12 @@ public class ParseStaffUser extends ParseUser {
     }
 
 
+    public void setBusiness(ParseBusiness business) {
+        this.business = business;
+    }
 
+    public ParseBusiness getBusiness(){
+        return this.business;
+    }
 }
 

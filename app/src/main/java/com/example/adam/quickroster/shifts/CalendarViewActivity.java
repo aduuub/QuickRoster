@@ -11,10 +11,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.staff.AddStaffMemberActivity;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 /**
  * This shows a calendar, where the user can select a date, once they have done this it will transition
@@ -38,8 +44,27 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
         cal.setOnDateChangeListener(this);
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Calendar");
+        setHasOptionsMenu(true);
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        if(ParseUser.getCurrentUser().getBoolean("isManager")) {
+            inflater.inflate(R.menu.add_menu, menu);
+        }
+    }
+
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.menu_icon_add){
+            Intent intentAddStaff = new Intent(getActivity(), AddShiftActivity.class);
+            startActivity(intentAddStaff);
+            return true;
+        }
+        return false;
     }
 
     @Override

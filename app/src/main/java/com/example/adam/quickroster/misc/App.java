@@ -2,6 +2,8 @@ package com.example.adam.quickroster.misc;
 
 import android.app.Application;
 
+import com.example.adam.quickroster.model.ParseBusiness;
+import com.example.adam.quickroster.model.ParseNotice;
 import com.example.adam.quickroster.model.ParseShift;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.Parse;
@@ -19,6 +21,9 @@ public class App extends Application {
         super.onCreate();
         ParseObject.registerSubclass(ParseShift.class);
         ParseUser.registerSubclass(ParseStaffUser.class);
+        ParseUser.registerSubclass(ParseBusiness.class);
+        ParseUser.registerSubclass(ParseNotice.class);
+
         Parse.enableLocalDatastore(getApplicationContext());
 
         Parse.initialize(new Parse.Configuration.Builder(this)
@@ -28,8 +33,8 @@ public class App extends Application {
         );
 
         ParseUser.enableAutomaticUser();
-        //ParseACL defauAc1 = new ParseACL();
-        //defauAc1.setPublicReadAccess(true);
-        //ParseACL.setDefaultACL(defauAc1,true);
+
+        // Set current user
+        ParseUtil.getInstance();
     }
 }

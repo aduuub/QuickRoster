@@ -82,7 +82,8 @@
             android:name=".ContentMain"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".notice_board.NoticeBoardEdit" />
+            android:name=".notice_board.NoticeBoardEdit"
+            />
     </application>
 
 </manifest>

@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,7 +17,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.misc.ParseUtil;
+import com.example.adam.quickroster.model.ParseBusiness;
+import com.example.adam.quickroster.model.ParseNotice;
+import com.example.adam.quickroster.model.ParseStaffUser;
+import com.example.adam.quickroster.staff.AddStaffMemberActivity;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -28,8 +37,7 @@ import java.util.Set;
 public class NoticeBoardActivity extends Fragment {
 
     ListView noticesList;
-    FloatingActionButton addDetailFab;
-    List<List<String>> notices;
+    List<ParseNotice> notices;
     boolean editable;
 
     @Override
@@ -40,142 +48,79 @@ public class NoticeBoardActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_notice_board, container, false);
 
         noticesList = (ListView) view.findViewById(R.id.notice_board_list_view);
-        addDetailFab = (FloatingActionButton) view.findViewById(R.id.addNoticeFab);
-        addDetailFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNotice();
-            }
-        });
-        ParseUser currentUser = ParseUser.getCurrentUser();
+
+        ParseStaffUser currentUser = ParseUtil.getCurrentUser();
         this.editable = currentUser.getBoolean("isManager");
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Notices");
+        setHasOptionsMenu(true);
 
+        ParseBusiness business = currentUser.getBusiness();
+        notices = ParseNotice.getBusinessNotices(business);
+        setAdapter(notices);
 
-        // Only managers can add notices
-        if(!currentUser.getBoolean("isManager"))
-            addDetailFab.setVisibility(View.INVISIBLE);
-
-        currentUser.getParseObject("Business").fetchInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject business, ParseException e) {
-                notices = business.getList("Notices");
-                // If no notices in the cloud already init a new list
-                if (notices == null) {
-                    notices = new ArrayList<>();
-                    business.put("Notices", notices);
-                    business.saveInBackground();
-                }
-                setAdapter(notices);
-            }
-        });
         return view;
     }
 
 
-    public void setAdapter(List<List<String>> notices) {
+    public void setAdapter(List<? extends ParseObject> notices) {
         NoticeBoardListAdapter adapter = new NoticeBoardListAdapter(getActivity(),
                 R.layout.content_notice_board_list_adapter, notices);
         noticesList.setAdapter(adapter);
 
+
         noticesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 editNotice(position);
             }
         });
-
     }
 
 
-    private void editNotice(int pos){
-        List<String> notice = notices.get(pos);
-        if(notice != null){
+    private void editNotice(int pos) {
+        ParseNotice notice = notices.get(pos);
+        if (notice != null) {
             Intent intent = new Intent(getActivity(), NoticeBoardEdit.class);
-            intent.putExtra("title", notice.get(0));
-            intent.putExtra("message", notice.get(1));
+            intent.putExtra("objectId", notice.getObjectId());
             startActivity(intent);
+            updateNoticesAndAdapter();
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
+            inflater.inflate(R.menu.add_menu, menu);
         }
     }
 
 
-    private void addNotice() {
-//        notices = getAllCurrentNotices();
-//        notices.add("New Notice");
-        //TODO
-        // noticesList.setAdapter(new NoticeBoardListAdapter(getActivity(), notices, editable));
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_icon_add) {
+            addNotice();
+            return true;
+        }
+        return false;
     }
 
 
-//    private List<String> getAllCurrentNotices() {
-////        NoticeBoardListAdapter adapter = (NoticeBoardListAdapter) noticesList.getAdapter();
-////        notices = adapter.getNotices();
-////        if (notices == null)
-////            notices = new ArrayList<>();
-////        return notices;
-//        return null;
-//    }
+    private void addNotice() {
+        Intent intent = new Intent(getContext(), NoticeBoardEdit.class);
+        startActivity(intent);
+        updateNoticesAndAdapter();
+    }
 
+    public void updateNoticesAndAdapter(){
+        ParseBusiness business = ParseUtil.getCurrentUser().getBusiness();
+        setAdapter(ParseNotice.getBusinessNotices(business));
+    }
 
-    /**
-     * Saves the current notices
-     *
-     * // TODO make this work in the activity
-     */
-//    public void onBackPressed() {
-//        notices = getAllCurrentNotices();
-//        final Set<String> noticesSet = new HashSet<>();
-//        noticesSet.addAll(notices);
-//
-//        ParseUser currentUser = ParseUser.getCurrentUser();
-//        currentUser.getParseObject("Business").fetchInBackground(new GetCallback<ParseObject>() {
-//            @Override
-//            public void done(ParseObject business, ParseException e) {
-//                business.addAllUnique("Notices", noticesSet);
-//                business.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(ParseException e) {
-//                        if (e == null)
-//                            Toast.makeText(getActivity().getApplicationContext(), "Sucessfully saved", Toast.LENGTH_LONG);
-//                        else
-//                            Toast.makeText(getActivity().getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG);
-//                        getActivity().finish();
-//                    }
-//                });
-//            }
-//        });
-//    }
-
-//    /**
-//     * Saves the current notices
-//     */
-//    @Override
-//    public void onBackPressed() {
-//        notices = getAllCurrentNotices();
-//        final Set<String> noticesSet = new HashSet<>();
-//        noticesSet.addAll(notices);
-//
-//        ParseUser currentUser = ParseUser.getCurrentUser();
-//        currentUser.getParseObject("Business").fetchInBackground(new GetCallback<ParseObject>() {
-//            @Override
-//            public void done(ParseObject business, ParseException e) {
-//                business.addAllUnique("Notices", noticesSet);
-//                business.saveInBackground(new SaveCallback() {
-//                    @Override
-//                    public void done(ParseException e) {
-//                        if (e == null)
-//                            Toast.makeText(getApplicationContext(), "Sucessfully saved", Toast.LENGTH_LONG);
-//                        else
-//                            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG);
-//                        finish();
-//                    }
-//                });
-//            }
-//        });
-//    }
 }

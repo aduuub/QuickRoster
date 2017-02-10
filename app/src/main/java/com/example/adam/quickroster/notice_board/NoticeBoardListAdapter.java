@@ -14,12 +14,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.model.ParseNotice;
+import com.parse.Parse;
 
 import java.util.List;
 
 public class NoticeBoardListAdapter extends ArrayAdapter {
 
-    private List<List<String>> notices;
+    private List<ParseNotice> notices;
     private Context context;
 
     public NoticeBoardListAdapter(Context context, int resource, List objects) {
@@ -47,15 +49,15 @@ public class NoticeBoardListAdapter extends ArrayAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.content_notice_board_list_adapter, parent, false);
-        List<String> notice = notices.get(position);
+        ParseNotice notice = notices.get(position);
 
         // set title
-        String title = notice.get(0);
+        String title = notice.getTitle();
         TextView titleBox = (TextView) view.findViewById(R.id.notice_title);
         titleBox.setText(title);
 
         // set message
-        String message = notice.get(1);
+        String message = notice.getMessage();
         TextView messageBox = (TextView) view.findViewById(R.id.notice_message);
         if(message.length() > 100){
             message = message.substring(0, 100);

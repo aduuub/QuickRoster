@@ -2,11 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <!-- "Mark Favorite", should appear as action button if possible -->
         <item
-            android:id="@+id/add_staff_member"
+            android:id="@+id/menu_icon_add"
             android:icon="@drawable/ic_add_white"
-            android:title="Add Staff"
+            android:title="Add"
             app:showAsAction="ifRoom"/>
 
 </menu>

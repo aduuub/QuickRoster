@@ -10,8 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".login.LoginActivity"
-    tools:showIn="@layout/app_bar_home">
+    tools:context=".login.LoginActivity" >
 
     <!-- LoginActivity progress -->
     <ProgressBar
@@ -19,7 +18,8 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:paddingTop="80sp"
+        android:layout_gravity="center"
         android:visibility="gone" />
 
     <ScrollView

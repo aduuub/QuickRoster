@@ -1,7 +1,6 @@
 package com.example.adam.quickroster.staff;
 
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,15 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
+import com.example.adam.quickroster.misc.ParseUtil;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class StaffListView extends Fragment {
@@ -56,7 +53,7 @@ public class StaffListView extends Fragment {
      */
     public void populateList(){
         // Get all staff of the business
-        final List<ParseUser> allStaff = ParseQueryUtil.getAllUsers(ParseUser.getCurrentUser());
+        final List<ParseUser> allStaff = ParseQueryUtil.getAllUsers(ParseUtil.getCurrentUser());
 
         staffList.setAdapter(new StaffListViewAdapter(getActivity(), allStaff));
         staffList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -72,13 +69,13 @@ public class StaffListView extends Fragment {
     public void onCreateOptionsMenu(
             Menu menu, MenuInflater inflater) {
         if(ParseUser.getCurrentUser().getBoolean("isManager")) {
-            inflater.inflate(R.menu.add_staff_menu, menu);
+            inflater.inflate(R.menu.add_menu, menu);
         }
     }
 
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.add_staff_member){
+        if(item.getItemId() == R.id.menu_icon_add){
             Intent intentAddStaff = new Intent(getActivity(), AddStaffMemberActivity.class);
             ParseUser user = ParseUser.getCurrentUser();
             ParseObject business = user.getParseObject("Business");
