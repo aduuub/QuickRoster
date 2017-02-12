@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
+import com.example.adam.quickroster.misc.ParseUtil;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.R;
 import com.parse.ParseObject;
@@ -177,6 +178,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
             shift.put("startTime", combineDateTime(date, startTime));
             shift.put("endTime", combineDateTime(date, endTime));
             shift.put("details", details.getText().toString());
+            shift.put("business", ParseUtil.getCurrentUser().getBusiness());
             shift.save();
 
         } catch (ParseException | com.parse.ParseException e) {

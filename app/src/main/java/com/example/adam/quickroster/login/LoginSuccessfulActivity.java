@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.CalendarShiftController;
+import com.example.adam.quickroster.misc.ParseUtil;
 import com.example.adam.quickroster.staff.StaffHomeActivity;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -40,6 +41,9 @@ public class LoginSuccessfulActivity extends AppCompatActivity implements View.O
         user = ParseUser.getCurrentUser();
 
         if (user != null) {
+            if(user.isAuthenticated())
+                ParseUtil.getInstance();
+
             if (user.containsKey("isManager")) {
                 try {
                     user.fetch();

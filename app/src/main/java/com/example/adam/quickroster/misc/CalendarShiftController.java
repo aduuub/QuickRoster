@@ -66,9 +66,6 @@ public class CalendarShiftController {
             activityObj.getApplicationContext()
                     .getContentResolver()
                     .insert(Uri.parse(eventUriString), values);
-            Toast.makeText(this.context, "New shifts added to calendar", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this.context, "Invalid permission to write to calendar", Toast.LENGTH_LONG).show();
         }
     }
 

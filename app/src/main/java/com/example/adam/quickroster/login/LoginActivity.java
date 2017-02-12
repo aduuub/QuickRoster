@@ -3,12 +3,15 @@ package com.example.adam.quickroster.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,6 +22,8 @@ import java.lang.*;
 import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.CalendarShiftController;
+import com.example.adam.quickroster.misc.ParseUtil;
+import com.example.adam.quickroster.model.ParseStaffUser;
 import com.example.adam.quickroster.staff.StaffHomeActivity;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -67,24 +72,22 @@ public class LoginActivity extends AppCompatActivity {
         }
         showProgress(true);
         try {
+            // login
             ParseUser.logIn(usernameString, passwordString);
-            ParseUser user = ParseUser.getCurrentUser();
-            boolean manager = user.getBoolean("isManager");
+            ParseStaffUser user = (ParseStaffUser) ParseUser.getCurrentUser();
+
+            if (user.isAuthenticated())
+                ParseUtil.getInstance();
+            boolean manager = user.isManager();
+
+            // TODO update manager incase of change
 
             // Add new shifts to the calendar
-            CalendarShiftController csc = new CalendarShiftController(this, getApplicationContext());
-            csc.addNewShiftsToCalendar(getApplicationContext());
+            new UpdateShifts().execute(this);
 
-            if (manager) {
-                Intent intent = new Intent(LoginActivity.this, Menu.class);
-                startActivity(intent);
-                finish();
-
-            } else {
-                Intent intent = new Intent(LoginActivity.this, StaffHomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
+            Intent intent = new Intent(LoginActivity.this, Menu.class);
+            startActivity(intent);
+            finish();
 
         } catch (ParseException e) {
             showProgress(false);
@@ -97,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Validate the password to ensure its correctly formatted
+     *
      * @param password
      * @return
      */
@@ -137,6 +141,17 @@ public class LoginActivity extends AppCompatActivity {
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+
+    class UpdateShifts extends AsyncTask<LoginActivity, Void, Void> {
+
+        @Override
+        protected Void doInBackground(LoginActivity... params) {
+            CalendarShiftController csc = new CalendarShiftController(params[0], getApplicationContext());
+            csc.addNewShiftsToCalendar(getApplicationContext());
+            return null;
         }
     }
 }

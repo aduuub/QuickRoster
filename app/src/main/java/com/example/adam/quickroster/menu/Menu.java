@@ -17,8 +17,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.adam.quickroster.AccountFragment;
 import com.example.adam.quickroster.HomeFragment;
+import com.example.adam.quickroster.MessagesFragment;
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.StatsFragment;
 import com.example.adam.quickroster.login.WelcomeActivity;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.example.adam.quickroster.notice_board.NoticeBoardActivity;
@@ -89,16 +92,32 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
     private void displaySelectedScreen(int id){
         Fragment fragment = null;
         switch(id){
+            case R.id.nav_home:
+                fragment = new HomeFragment();
+                break;
+
             case R.id.nav_view_shifts:
                 fragment = new CalendarViewActivity();
                 break;
 
-            case R.id.nav_manage:
+            case R.id.nav_manage_staff:
                 fragment = new StaffListView();
+                break;
+
+            case R.id.nav_messages:
+                fragment = new MessagesFragment();
+                break;
+
+            case R.id.nav_stats:
+                fragment = new StatsFragment();
                 break;
 
             case R.id.nav_notices:
                 fragment = new NoticeBoardActivity();
+                break;
+
+            case R.id.nav_account:
+                fragment = new AccountFragment();
                 break;
 
             case R.id.nav_logout:

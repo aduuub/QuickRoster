@@ -1,5 +1,9 @@
 package com.example.adam.quickroster.misc;
 
+import android.widget.Toast;
+
+import com.example.adam.quickroster.model.ParseShift;
+import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -40,21 +44,15 @@ public class ParseQueryUtil {
      * @return List of ParseObject, which are ParseShifts
      * @throws ParseException
      */
-    public static Set<ParseObject> getAllShifts(ParseObject business, Date start, Date end) throws ParseException {
-        // Query to get all users of the business
-        ParseQuery<ParseUser> queryUsers = ParseUser.getQuery();
-        queryUsers.whereEqualTo("Business", business);
-        List<ParseUser> users = queryUsers.find();
+    public static List<ParseObject> getAllShifts(ParseObject business, Date start, Date end) throws ParseException {
 
         // Get all shifts from the users
         ParseQuery<ParseObject> queryShifts = new ParseQuery<ParseObject>("Shift");
-        queryShifts.whereContainedIn("staff", users);
+        queryShifts.whereEqualTo("business", business);
         queryShifts.whereGreaterThanOrEqualTo("startTime", start);
         queryShifts.whereLessThanOrEqualTo("startTime", end);
 
-        Set s = new HashSet<>();
-        s.addAll(queryShifts.find());
-        return s;
+       return queryShifts.find();
     }
 
     /**
@@ -70,16 +68,45 @@ public class ParseQueryUtil {
         // Query to get all shifts
         ParseQuery<ParseObject> queryUserShifts = ParseQuery.getQuery("Shift");
         queryUserShifts.whereEqualTo("staff", user);
-        //queryUserShifts.whereGreaterThanOrEqualTo("Date", dateAfter);
+        queryUserShifts.whereGreaterThanOrEqualTo("Date", dateAfter);
         return queryUserShifts.find();
+    }
+
+
+
+    public static List<ParseShift> getAllStaffsShiftBetweenTime(ParseStaffUser currentUser, Date startDateNoon,
+                                                                Date startDateMidnight) {
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Shift");
+        query.whereEqualTo("staff", currentUser);
+        query.whereGreaterThanOrEqualTo("startTime", startDateNoon);
+        query.whereLessThanOrEqualTo("startTime", startDateMidnight);
+
+        Set<ParseObject> shiftsOnDay = new HashSet<>();
+        try {
+            shiftsOnDay.addAll(query.find()); // get all the users shifts
+
+            if (currentUser.getBoolean("isManager")) {
+                // add shifts of everyone in business
+                ParseObject business = currentUser.getBusiness();
+                return  (List<ParseShift>)(Object) ParseQueryUtil.getAllShifts(business, startDateNoon,
+                        startDateMidnight);
+            }else{
+                // add just the users shifts
+                return  (List<ParseShift>)(Object) query.find();
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 
     /**
      * Probs not correct
+     *
      * @param user
      * @return
      */
-    public static ParseObject getParseUsersBusiness(ParseUser user){
+    public static ParseObject getParseUsersBusiness(ParseUser user) {
         try {
             return user.getParseObject("Business").fetch(); // user business
         } catch (com.parse.ParseException e) {

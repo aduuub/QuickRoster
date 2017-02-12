@@ -21,6 +21,7 @@ import com.example.adam.quickroster.misc.ParseUtil;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.model.ParseNotice;
 import com.example.adam.quickroster.model.ParseStaffUser;
+import com.example.adam.quickroster.shifts.AddShiftActivity;
 import com.example.adam.quickroster.staff.AddStaffMemberActivity;
 import com.parse.GetCallback;
 import com.parse.Parse;
@@ -63,6 +64,7 @@ public class NoticeBoardActivity extends Fragment {
         ParseBusiness business = currentUser.getBusiness();
         notices = ParseNotice.getBusinessNotices(business);
         setAdapter(notices);
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -97,26 +99,21 @@ public class NoticeBoardActivity extends Fragment {
     @Override
     public void onCreateOptionsMenu(
             Menu menu, MenuInflater inflater) {
-        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
+        if(ParseUser.getCurrentUser().getBoolean("isManager")) {
             inflater.inflate(R.menu.add_menu, menu);
         }
     }
 
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_icon_add) {
-            addNotice();
+        if(item.getItemId() == R.id.menu_icon_add){
+            Intent intent = new Intent(getContext(), NoticeBoardEdit.class);
+            startActivity(intent);
             return true;
         }
         return false;
     }
 
-
-    private void addNotice() {
-        Intent intent = new Intent(getContext(), NoticeBoardEdit.class);
-        startActivity(intent);
-        updateNoticesAndAdapter();
-    }
 
     public void updateNoticesAndAdapter(){
         ParseBusiness business = ParseUtil.getCurrentUser().getBusiness();

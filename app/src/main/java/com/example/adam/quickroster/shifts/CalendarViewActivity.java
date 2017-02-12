@@ -2,14 +2,8 @@ package com.example.adam.quickroster.shifts;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,13 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.staff.AddStaffMemberActivity;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 /**
  * This shows a calendar, where the user can select a date, once they have done this it will transition
- * them to ShiftListView activity.
+ * them to ShiftView activity.
  */
 public class CalendarViewActivity extends Fragment implements android.widget.CalendarView.OnDateChangeListener {
 
@@ -69,7 +61,7 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
 
     @Override
     public void onSelectedDayChange(android.widget.CalendarView view, int year, int month, int dayOfMonth) {
-        Intent intent = new Intent(getActivity(), ShiftListView.class);
+        Intent intent = new Intent(getActivity(), ShiftView.class);
         intent.putExtra("Day", dayOfMonth);
         intent.putExtra("Month", month);
         intent.putExtra("Year", year);

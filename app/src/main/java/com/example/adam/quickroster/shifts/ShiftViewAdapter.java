@@ -20,10 +20,10 @@ import java.util.List;
 /**
  * This is a view adapter for displaying information on the shift
  */
-public class ShiftListViewAdapter extends BaseAdapter {
+public class ShiftViewAdapter extends BaseAdapter {
     private Context mContext;
     private List<ParseShift> mItems;
-    public ShiftListViewAdapter(Context ctx, List<ParseShift> items){
+    public ShiftViewAdapter(Context ctx, List<ParseShift> items){
         mContext = ctx;
         mItems = items;
     }

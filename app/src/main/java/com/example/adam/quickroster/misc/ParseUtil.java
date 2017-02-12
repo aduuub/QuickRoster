@@ -2,7 +2,9 @@ package com.example.adam.quickroster.misc;
 
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.model.ParseStaffUser;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 /**
@@ -20,11 +22,13 @@ public class ParseUtil {
         // Set users business
         ParseBusiness business = null;
         try {
-            business = (ParseBusiness) currentUser.getParseObject("Business").fetch();
+            business = currentUser.getParseObject("Business").fetchIfNeeded();
+            currentUser.setBusiness(business);
+            currentUser.setManager(currentUser.getBoolean("isManager"));
         } catch (ParseException e) {
             e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
-        currentUser.setBusiness(business);
     }
 
 

@@ -15,6 +15,7 @@ import java.util.UUID;
 public class ParseStaffUser extends ParseUser {
 
     private ParseBusiness business;
+    private boolean manager;
 
     public ParseStaffUser(){
 
@@ -49,6 +50,14 @@ public class ParseStaffUser extends ParseUser {
 
     public ParseBusiness getBusiness(){
         return this.business;
+    }
+
+    public void setManager(boolean manager) {
+        this.manager = manager;
+    }
+
+    public boolean isManager() {
+        return manager;
     }
 }
 

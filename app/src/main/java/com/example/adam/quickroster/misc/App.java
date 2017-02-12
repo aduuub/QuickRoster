@@ -33,8 +33,5 @@ public class App extends Application {
         );
 
         ParseUser.enableAutomaticUser();
-
-        // Set current user
-        ParseUtil.getInstance();
     }
 }
