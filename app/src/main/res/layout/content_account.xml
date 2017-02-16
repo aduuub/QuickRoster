@@ -4,12 +4,67 @@
     android:layout_height="match_parent"
     tools:context="com.example.adam.quickroster.AccountFragment">
 
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:text="Account" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingTop="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:layout_gravity="bottom"
+                android:paddingBottom="10dp"
+                android:text="Hourly wage:"
+
+                android:textAlignment="center"
+                android:textColor="#000"
+                android:textSize="14sp" />
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="#000" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:text="This is used to help calculate informative statistics for you"
+            android:textSize="10sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Automatically add shifts to calendar"
+                android:textColor="#000"
+                android:textSize="14sp" />
+
+            <Switch
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_weight="0.2" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </FrameLayout>

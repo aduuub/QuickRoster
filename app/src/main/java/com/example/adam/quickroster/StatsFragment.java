@@ -3,59 +3,34 @@ package com.example.adam.quickroster;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link StatsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link StatsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class StatsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class StatsFragment extends Fragment implements View.OnClickListener {
 
+    private GraphView mGraph;
+    private String xFormat; // week, month, year
 
     public StatsFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static StatsFragment newInstance(String param1, String param2) {
-        StatsFragment fragment = new StatsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        xFormat = "week";
     }
 
     @Override
@@ -63,8 +38,66 @@ public class StatsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Statistics");
+        View view = inflater.inflate(R.layout.activity_stats, container, false);
 
-        return inflater.inflate(R.layout.activity_stats, container, false);
+        mGraph = (GraphView) view.findViewById(R.id.statistics_graph);
+        setGraph();
+        return view;
     }
 
+    private void setGraph(){
+        DataPoint[] points = new DataPoint[10];
+        for(int i=0; i < 10; i++){
+            points[i] = new DataPoint(i, i*2);
+        }
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
+        mGraph.addSeries(series);
+
+        // set date label formatter
+        // graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(HRVViewer.this));
+        final SimpleDateFormat dateTimeFormatter = new SimpleDateFormat(getFormatter());
+
+        mGraph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if(isValueX) // dateTimeFormatter.format(new Date((long) value));
+                    return dateTimeFormatter.format(new Date((long) value)); // super.formatLabel(value, isValueX);
+                else
+                    return super.formatLabel(value, isValueX);
+            }
+        });
+
+        mGraph.getGridLabelRenderer().setHumanRounding(true);
+
+        // graph.getGridLabelRenderer().setNumHorizontalLabels(Math.min(8, points.length)); // only 4 because of the space
+        mGraph.getGridLabelRenderer().setNumHorizontalLabels(points.length); // only 4 because of the space
+        mGraph.getGridLabelRenderer().setHorizontalLabelsAngle(90);
+        mGraph.getGridLabelRenderer().setTextSize(30);
+
+        // set manual x bounds to have nice steps
+//        mGraph.getViewport().setMinX(min_d);
+//        mGraph.getViewport().setMaxX(max_d+1);
+        mGraph.getViewport().setXAxisBoundsManual(true);
+    }
+
+
+    private String getFormatter(){
+        switch (xFormat){
+            case "week":
+                return "E";
+            case "month":
+                return "M";
+            case "year":
+                return "y";
+            default:
+                throw new RuntimeException("Unknown formatter");
+
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
 }

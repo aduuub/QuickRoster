@@ -27,7 +27,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".login.WelcomeActivity"
-            android:label="Welcome to QuickRoster">
+            android:label="QuickRoster">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
