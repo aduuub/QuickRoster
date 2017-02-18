@@ -56,9 +56,6 @@
             android:name=".login.LoginActivity"
             android:label="Log In" />
         <activity
-            android:name=".login.LoginSuccessfulActivity"
-            android:label="Successfully Logged In" />
-        <activity
             android:name=".staff.StaffHomeActivity"
             android:label="Staff Dashboard" />
         <activity

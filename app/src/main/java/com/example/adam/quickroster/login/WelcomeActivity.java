@@ -3,10 +3,13 @@ package com.example.adam.quickroster.login;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.*;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.*;
 
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.menu.Menu;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseUser;
 
@@ -16,29 +19,33 @@ import com.parse.ParseUser;
  */
 public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button registerBuisnessButton;
-    Button loginAsUserButton;
+    private Button mRegisterBusinessButton;
+    private Button mLoginAsUserButton;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_welcome);
+        setContentView(R.layout.activity_welcome);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Welcome!");
+        setSupportActionBar(toolbar);
 
         if (!ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
             // already logged in
             ParseUser currentUser = ParseUser.getCurrentUser();
             if (currentUser != null) {
-                Intent intent = new Intent(WelcomeActivity.this, LoginSuccessfulActivity.class);
+                Intent intent = new Intent(WelcomeActivity.this, Menu.class);
                 startActivity(intent);
                 finish();
             }
         }
 
         // Buttons
-        registerBuisnessButton = (Button)findViewById(R.id.registerBusinessButton);
-        loginAsUserButton = (Button)findViewById(R.id.loginAsUserButton);
-        registerBuisnessButton.setOnClickListener(this);
-        loginAsUserButton.setOnClickListener(this);
+        mRegisterBusinessButton = (Button)findViewById(R.id.registerBusinessButton);
+        mLoginAsUserButton = (Button)findViewById(R.id.loginAsUserButton);
+        mRegisterBusinessButton.setOnClickListener(this);
+        mLoginAsUserButton.setOnClickListener(this);
     }
 
 

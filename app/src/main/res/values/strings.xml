@@ -32,8 +32,18 @@
     <string name="cal_last_synced_at">BusinessDetailsActivity</string>
     <string name="welcome_message">"Welcome to QuickRoster, you can either login if you know your credentials or you can register a new business."</string>
     <string name="title_activity_content_main">ContentMain</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string-array name="stat_time_view_options">
+        <item>Week</item>
+        <item>Month</item>
+        <item>Year</item>
+    </string-array>
+
+    <string-array name="stat_viewing_options">
+        <item>Pay</item>
+        <item>Hours</item>
+    </string-array>
 
 </resources>

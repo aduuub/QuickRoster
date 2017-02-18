@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mProgressView = findViewById(R.id.login_user_progress);
-        mLoginFormView = findViewById(R.id.login_user_form);
+        mLoginFormView = findViewById(R.id.login_user_progress);
 
         login = (Button) findViewById(R.id.loginAsUserButton);
         username = (EditText) findViewById(R.id.username);
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                 ParseUtil.getInstance();
             boolean manager = user.isManager();
 
-            // TODO update manager incase of change
+            // TODO update manager in case of change
 
             // Add new shifts to the calendar
             new UpdateShifts().execute(this);

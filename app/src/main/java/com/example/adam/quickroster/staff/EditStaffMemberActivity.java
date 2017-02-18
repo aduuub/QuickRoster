@@ -3,6 +3,8 @@ package com.example.adam.quickroster.staff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
@@ -46,18 +48,6 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Edit Staff Member");
         setFields();
         fillOutTextFields();
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateStaffMember();
-            }
-        });
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteUser();
-            }
-        });
     }
 
     /**
@@ -149,6 +139,27 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         isManager = (Switch) findViewById(R.id.isManagerSwitch);
         password = (TextView) findViewById(R.id.editStaffPassword);
         deleteButton = (Button) findViewById(R.id.delete_staff_member_button);
-        saveButton = (Button) findViewById(R.id.save_staff_member_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteUser();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
+            getMenuInflater().inflate(R.menu.done_menu, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_icon_done) {
+            updateStaffMember();
+        }
+        return true;
     }
 }

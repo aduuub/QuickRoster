@@ -3,12 +3,11 @@ package com.example.adam.quickroster;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
@@ -21,7 +20,13 @@ import java.util.Date;
 public class StatsFragment extends Fragment implements View.OnClickListener {
 
     private GraphView mGraph;
-    private String xFormat; // week, month, year
+    private Spinner mXSpinner;
+    private Spinner mYSpinner;
+
+
+    private String xFormat; // Week, Month, Year
+    private String yFormat; // Pay, Hours
+
 
     public StatsFragment() {
     }
@@ -30,7 +35,9 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        xFormat = "week";
+        xFormat = "Week";
+        yFormat = "Pay";
+
     }
 
     @Override
@@ -41,15 +48,23 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.activity_stats, container, false);
 
         mGraph = (GraphView) view.findViewById(R.id.statistics_graph);
+        setSpinnersAndListeners(view);
         setGraph();
         return view;
     }
 
+    /**
+     * Inits the graph with the set values.
+     */
     private void setGraph(){
         DataPoint[] points = new DataPoint[10];
         for(int i=0; i < 10; i++){
             points[i] = new DataPoint(i, i*2);
         }
+
+
+        // TODO get data
+
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
         mGraph.addSeries(series);
 
@@ -70,29 +85,56 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
 
         mGraph.getGridLabelRenderer().setHumanRounding(true);
 
-        // graph.getGridLabelRenderer().setNumHorizontalLabels(Math.min(8, points.length)); // only 4 because of the space
         mGraph.getGridLabelRenderer().setNumHorizontalLabels(points.length); // only 4 because of the space
         mGraph.getGridLabelRenderer().setHorizontalLabelsAngle(90);
         mGraph.getGridLabelRenderer().setTextSize(30);
 
-        // set manual x bounds to have nice steps
-//        mGraph.getViewport().setMinX(min_d);
-//        mGraph.getViewport().setMaxX(max_d+1);
         mGraph.getViewport().setXAxisBoundsManual(true);
     }
 
+    private void setSpinnersAndListeners(View view){
+        mXSpinner = (Spinner) view.findViewById(R.id.time_view_options_spinner);
+        mYSpinner = (Spinner) view.findViewById(R.id.viewing_options_spinner);
 
+        mXSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        mYSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    /**
+     *
+     * @return
+     */
     private String getFormatter(){
         switch (xFormat){
-            case "week":
+            case "Week":
                 return "E";
-            case "month":
+            case "Month":
                 return "M";
-            case "year":
+            case "Year":
                 return "y";
             default:
                 throw new RuntimeException("Unknown formatter");
-
         }
     }
 
