@@ -20,7 +20,7 @@ public class ParseUtil {
         currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
 
         // Set users business
-        ParseBusiness business = null;
+        ParseBusiness business;
         try {
             business = currentUser.getParseObject("Business").fetchIfNeeded();
             currentUser.setBusiness(business);

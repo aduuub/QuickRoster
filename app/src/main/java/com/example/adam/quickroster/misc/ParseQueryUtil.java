@@ -68,7 +68,7 @@ public class ParseQueryUtil {
         // Query to get all shifts
         ParseQuery<ParseObject> queryUserShifts = ParseQuery.getQuery("Shift");
         queryUserShifts.whereEqualTo("staff", user);
-        queryUserShifts.whereGreaterThanOrEqualTo("Date", dateAfter);
+        queryUserShifts.whereGreaterThanOrEqualTo("updatedAt", dateAfter);
         return queryUserShifts.find();
     }
 
