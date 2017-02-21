@@ -134,8 +134,8 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
                 if (e == null) {
                     // ratings is 4.5
                     ratings.size();
+                }else{
                     Log.e("Parse Error", e.getCode() + " " + e.getMessage());
-
                 }
             }
         });

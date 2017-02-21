@@ -84,7 +84,7 @@ public class CalendarShiftController {
         try {
             usersShifts = ParseQueryUtil.getAllUsersShiftsAfterDate(ParseUser.getCurrentUser(), lastUpdated);
         } catch (ParseException e) {
-            Toast.makeText(ctx, e.getMessage(), Toast.LENGTH_LONG);
+            Log.e("Parse Error", e.getMessage());
             return;
         }
 

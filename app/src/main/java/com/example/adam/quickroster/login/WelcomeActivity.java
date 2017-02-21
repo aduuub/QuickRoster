@@ -35,7 +35,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         setSupportActionBar(toolbar);
         ParseUser currentUser = ParseUser.getCurrentUser();
 
-        new UpdateShifts().execute(this);
+        //new UpdateShifts().execute(this);
 
 
         if (!ParseAnonymousUtils.isLinked(currentUser)) {
