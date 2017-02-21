@@ -1,7 +1,6 @@
 package com.example.adam.quickroster.login;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
@@ -11,9 +10,6 @@ import android.widget.*;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.menu.Menu;
-import com.example.adam.quickroster.misc.CalendarShiftController;
-import com.example.adam.quickroster.misc.ParseUtil;
-import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseUser;
 
@@ -27,36 +23,34 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     private Button mLoginAsUserButton;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Welcome!");
         setSupportActionBar(toolbar);
+<<<<<<< HEAD
         ParseUser currentUser = ParseUser.getCurrentUser();
 
         //new UpdateShifts().execute(this);
 
+=======
+>>>>>>> parent of 033189d... Updated account, started fetching data for stats, improved login data fetching
 
-        if (!ParseAnonymousUtils.isLinked(currentUser)) {
-            // Already logged in and not an anon user
-            if (ParseUser.getCurrentUser().isAuthenticated()){
-                // Update current user
-                ParseUtil.getInstance();
-                ParseStaffUser parseStaffUser = ParseUtil.getCurrentUser();
-                parseStaffUser.fetchInBackground();
-                parseStaffUser.setManager(parseStaffUser.getBoolean("isManager"));
+        if (!ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+            // already logged in
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            if (currentUser != null) {
+                Intent intent = new Intent(WelcomeActivity.this, Menu.class);
+                startActivity(intent);
+                finish();
             }
-
-            Intent intent = new Intent(WelcomeActivity.this, Menu.class);
-            startActivity(intent);
-            finish();
-
         }
 
         // Buttons
-        mRegisterBusinessButton = (Button) findViewById(R.id.registerBusinessButton);
-        mLoginAsUserButton = (Button) findViewById(R.id.loginAsUserButton);
+        mRegisterBusinessButton = (Button)findViewById(R.id.registerBusinessButton);
+        mLoginAsUserButton = (Button)findViewById(R.id.loginAsUserButton);
         mRegisterBusinessButton.setOnClickListener(this);
         mLoginAsUserButton.setOnClickListener(this);
     }
@@ -75,16 +69,6 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                 intent = new Intent(WelcomeActivity.this, LoginActivity.class);
                 startActivity(intent);
                 break;
-        }
-    }
-
-    class UpdateShifts extends AsyncTask<WelcomeActivity, Void, Void> {
-
-        @Override
-        protected Void doInBackground(WelcomeActivity... params) {
-            CalendarShiftController csc = new CalendarShiftController(params[0], getApplicationContext());
-            csc.addNewShiftsToCalendar(getApplicationContext());
-            return null;
         }
     }
 }

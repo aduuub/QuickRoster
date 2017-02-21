@@ -78,8 +78,12 @@ public class LoginActivity extends AppCompatActivity {
 
             if (user.isAuthenticated())
                 ParseUtil.getInstance();
+            boolean manager = user.isManager();
 
             // TODO update manager in case of change
+
+            // Add new shifts to the calendar
+            new UpdateShifts().execute(this);
 
             Intent intent = new Intent(LoginActivity.this, Menu.class);
             startActivity(intent);
@@ -137,6 +141,17 @@ public class LoginActivity extends AppCompatActivity {
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+
+    class UpdateShifts extends AsyncTask<LoginActivity, Void, Void> {
+
+        @Override
+        protected Void doInBackground(LoginActivity... params) {
+            CalendarShiftController csc = new CalendarShiftController(params[0], getApplicationContext());
+            csc.addNewShiftsToCalendar(getApplicationContext());
+            return null;
         }
     }
 }

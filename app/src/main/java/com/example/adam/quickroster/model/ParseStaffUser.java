@@ -17,13 +17,12 @@ public class ParseStaffUser extends ParseUser {
     private ParseBusiness business;
     private boolean manager;
 
-    public ParseStaffUser() {
+    public ParseStaffUser(){
 
     }
 
     public void setPassword(String password) {
         put("password", password);
-        saveInBackground();
     }
 
     public String getBusinessName() {
@@ -35,7 +34,7 @@ public class ParseStaffUser extends ParseUser {
         }
     }
 
-    public String getFullName() {
+    public String getFullName(){
         try {
             return fetchIfNeeded().getString("firstName") + " " + getString("lastName");
         } catch (ParseException e) {
@@ -49,7 +48,7 @@ public class ParseStaffUser extends ParseUser {
         this.business = business;
     }
 
-    public ParseBusiness getBusiness() {
+    public ParseBusiness getBusiness(){
         return this.business;
     }
 
@@ -59,24 +58,6 @@ public class ParseStaffUser extends ParseUser {
 
     public boolean isManager() {
         return manager;
-    }
-
-    public String getHourlyWage() {
-        return getString("wage");
-    }
-
-    public void setHourlyWage(String wage) {
-        put("wage", wage);
-        saveInBackground();
-    }
-
-    public boolean getAutoAddToCalendar() {
-        return getBoolean("autoAddToCal");
-    }
-
-    public void setAutoAddToCalendar(boolean autoAdd) {
-         put("autoAddToCal", autoAdd);
-        saveInBackground();
     }
 }
 
