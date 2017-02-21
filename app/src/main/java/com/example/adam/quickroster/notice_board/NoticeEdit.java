@@ -23,7 +23,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NoticeBoardEdit extends AppCompatActivity {
+public class NoticeEdit extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private EditText mTitleEditText;
