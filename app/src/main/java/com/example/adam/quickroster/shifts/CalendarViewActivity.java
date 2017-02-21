@@ -61,21 +61,11 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
 
     @Override
     public void onSelectedDayChange(android.widget.CalendarView view, int year, int month, int dayOfMonth) {
-//        Intent intent = new Intent(getActivity(), ShiftView.class);
-//        intent.putExtra("Day", dayOfMonth);
-//        intent.putExtra("Month", month);
-//        intent.putExtra("Year", year);
-//        startActivity(intent);
-
-        Fragment fragment = new ShiftView();
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("Day", dayOfMonth);
-        bundle.putInt("Month", month);
-        bundle.putInt("Year", year);
-        fragment.setArguments(bundle);
-
-        ((com.example.adam.quickroster.menu.Menu)getActivity()).displayFragment(fragment);
+        Intent intent = new Intent(getActivity(), ShiftView.class);
+        intent.putExtra("Day", dayOfMonth);
+        intent.putExtra("Month", month);
+        intent.putExtra("Year", year);
+        startActivity(intent);
     }
 
 }
