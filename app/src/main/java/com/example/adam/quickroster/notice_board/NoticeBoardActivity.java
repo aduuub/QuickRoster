@@ -56,7 +56,7 @@ public class NoticeBoardActivity extends Fragment {
         noticesList = (ListView) view.findViewById(R.id.notice_board_list_view);
 
         ParseStaffUser currentUser = ParseUtil.getCurrentUser();
-        this.editable = currentUser.getBoolean("isManager");
+        this.editable = currentUser.isManager();
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Notices");
         setHasOptionsMenu(true);

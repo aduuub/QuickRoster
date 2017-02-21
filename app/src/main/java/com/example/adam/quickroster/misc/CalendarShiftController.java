@@ -74,7 +74,12 @@ public class CalendarShiftController {
      * Adds the new shifts to the users calendar
      */
     public void addNewShiftsToCalendar(Context ctx) {
+        // remove two days from last updated date and find all the updated shifts
         Date lastUpdated = getCalLastUpdated();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(lastUpdated);
+        cal.add(Calendar.DATE, -2);
+        lastUpdated = cal.getTime();
         List<ParseObject> usersShifts;
         try {
             usersShifts = ParseQueryUtil.getAllUsersShiftsAfterDate(ParseUser.getCurrentUser(), lastUpdated);

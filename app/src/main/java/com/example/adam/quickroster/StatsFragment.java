@@ -3,6 +3,7 @@ package com.example.adam.quickroster;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,13 @@ import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class StatsFragment extends Fragment implements View.OnClickListener {
 
@@ -99,7 +104,7 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
         mXSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                getData();
             }
 
             @Override
@@ -121,7 +126,6 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-<<<<<<< HEAD
     private void getData(){
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("timeViewingOptions", "Week");
@@ -137,8 +141,6 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-=======
->>>>>>> parent of 033189d... Updated account, started fetching data for stats, improved login data fetching
     /**
      *
      * @return
