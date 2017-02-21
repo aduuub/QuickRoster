@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
@@ -38,29 +39,23 @@ public class AddStaffMemberActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_staff_member);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Add Staff Member");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Add Staff Member");
-
-        createStaff = (Button) findViewById(R.id.createNewStaffMemberButton);
-        createStaff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get current values from widgets
-                userName = (String) ((TextView) findViewById(R.id.staffUserName)).getText().toString();
-                password = (String) ((TextView) findViewById(R.id.staffPassword)).getText().toString();
-                firstName = (String) ((TextView) findViewById(R.id.staffFirstName)).getText().toString();
-                lastName = (String) ((TextView) findViewById(R.id.staffLastName)).getText().toString();
-                email = (String) ((TextView) findViewById(R.id.email)).getText().toString();
-                isManager = !((Switch) findViewById(R.id.isManagerSwitch)).isPressed();
-                createStaff();
-            }
-        });
     }
 
     /**
      * Creates a new staff member
      */
     public void createStaff() {
+        // Get current values from widgets
+        userName = (String) ((TextView) findViewById(R.id.staffUserName)).getText().toString();
+        password = (String) ((TextView) findViewById(R.id.staffPassword)).getText().toString();
+        firstName = (String) ((TextView) findViewById(R.id.staffFirstName)).getText().toString();
+        lastName = (String) ((TextView) findViewById(R.id.staffLastName)).getText().toString();
+        email = (String) ((TextView) findViewById(R.id.email)).getText().toString();
+        isManager = !((Switch) findViewById(R.id.isManagerSwitch)).isPressed();
+
+
         // Create new user and set values
         final ParseUser user = new ParseUser();
         user.setUsername(userName);
@@ -93,6 +88,7 @@ public class AddStaffMemberActivity extends AppCompatActivity {
 
     /**
      * Adds the user to the to Business that it belongs to
+     *
      * @param user
      */
     public void addStaffToBusiness(final ParseUser user) throws ParseException {
@@ -112,6 +108,23 @@ public class AddStaffMemberActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
+            getMenuInflater().inflate(R.menu.done_menu, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_icon_done) {
+            createStaff();
+        }
+        return true;
+    }
+
 }
 
 

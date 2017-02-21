@@ -21,15 +21,13 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-public class StaffListView extends Fragment {
+public class StaffView extends Fragment {
 
     private ListView staffList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
 
@@ -55,7 +53,7 @@ public class StaffListView extends Fragment {
         // Get all staff of the business
         final List<ParseUser> allStaff = ParseQueryUtil.getAllUsers(ParseUtil.getCurrentUser());
 
-        staffList.setAdapter(new StaffListViewAdapter(getActivity(), allStaff));
+        staffList.setAdapter(new StaffViewAdapter(getActivity(), allStaff));
         staffList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {

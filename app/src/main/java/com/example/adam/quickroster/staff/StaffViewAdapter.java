@@ -17,12 +17,12 @@ import java.util.List;
 /**
  * An adapter for displaying the staff member details.
  */
-public class StaffListViewAdapter extends BaseAdapter {
+public class StaffViewAdapter extends BaseAdapter {
 
     private List<ParseUser> users;
     private Context mContext;
 
-    public StaffListViewAdapter(Context ctx, List<ParseUser> users) {
+    public StaffViewAdapter(Context ctx, List<ParseUser> users) {
         this.users = users;
         this.mContext = ctx;
     }

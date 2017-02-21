@@ -1,100 +1,103 @@
 package com.example.adam.quickroster.shifts;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.misc.ParseUtil;
 import com.example.adam.quickroster.model.ParseShift;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.example.adam.quickroster.staff.StaffView;
 import com.parse.ParseUser;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * This is a view that shows all the shifts on the selected day. It retrieves them from Parse
  */
-public class ShiftView extends AppCompatActivity {
+public class ShiftViewFragment extends Fragment {
 
     private List<Object> shifts;
     private ListView mListView;
     private TextView mTextView;
-    private Toolbar mToolbar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shift_view);
-        mListView = (ListView) findViewById(R.id.listView);
-        mTextView = (TextView) findViewById(R.id.no_shifts_text_view);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.activity_shift_view, container, false);
 
+        mListView = (ListView) view.findViewById(R.id.listView);
+        mTextView = (TextView) view.findViewById(R.id.no_shifts_text_view);
+        Calendar cal = getExtras();
+        getShiftsAndSetAdapter(cal);
+        return view;
+    }
 
-        // create date from day, month, year
+    private Calendar getExtras() {
+        Bundle bundle = this.getArguments();
+        int year = 2016;
+        int month = 0;
+        int day = 1;
+        if (bundle != null) {
+            year = bundle.getInt("Year");
+            month = bundle.getInt("Month");
+            day = bundle.getInt("Day");
+        }
+
         Calendar cal = GregorianCalendar.getInstance();
-        cal.set(getIntent().getIntExtra("Year", 2016), getIntent().getIntExtra("Month", 0),
-                getIntent().getIntExtra("Day", 1));
+        cal.set(year, month, day);
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
+        return cal;
+    }
 
+
+    private void getShiftsAndSetAdapter(Calendar cal) {
         // get selected date and next day's date
         Date startDateNoon = cal.getTime();
         String currentDateString = new SimpleDateFormat("EEEE d MMMM y").format(cal.getTime());
         cal.add(Calendar.DATE, 1);
         Date startDateMidnight = cal.getTime();
 
-        // Set action bar's title for date
-        getSupportActionBar().setTitle(currentDateString);
-
         // Get all shifts on this day and set adapter
         shifts = new ArrayList<>();
+        shifts.add("Today");
         shifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime(ParseUtil.getCurrentUser(), startDateNoon,
                 startDateMidnight));
+        if(shifts.size() == 1)
+            shifts.clear();
+
+        startDateNoon = cal.getTime();
+        cal.add(Calendar.DATE, 1);
+        startDateMidnight = cal.getTime();
+        shifts.add("Tomorrow");
+        shifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime(ParseUtil.getCurrentUser(), startDateNoon,
+                startDateMidnight));
+
         if (shifts.size() > 0) {
-            mListView.setAdapter(new ShiftViewAdapter(this, shifts));
+            mListView.setAdapter(new ShiftViewAdapterFragment(getActivity().getApplicationContext(), shifts));
         } else {
             mListView.setVisibility(View.INVISIBLE);
             mTextView.setVisibility(View.VISIBLE);
         }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
-            getMenuInflater().inflate(R.menu.add_menu, menu);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_icon_add) {
-            Intent intentAddStaff = new Intent(this, AddShiftActivity.class);
-            startActivity(intentAddStaff);
-            return true;
-        }
-        return false;
     }
 }

@@ -9,6 +9,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +26,7 @@ public class ParseQueryUtil {
     public static List<ParseUser> getAllUsers(ParseUser currentUser) {
         ParseQuery<ParseUser> queryUsers = ParseUser.getQuery();
         try {
-            ParseObject business = currentUser.getParseObject("Business").fetch();
+            ParseObject business = ParseUtil.getCurrentUser().getBusiness();
             queryUsers.whereEqualTo("Business", business);
             return queryUsers.find();
 
@@ -74,8 +75,8 @@ public class ParseQueryUtil {
 
 
 
-    public static List<ParseShift> getAllStaffsShiftBetweenTime(ParseStaffUser currentUser, Date startDateNoon,
-                                                                Date startDateMidnight) {
+    public static List<ParseObject> getAllStaffsShiftBetweenTime(ParseStaffUser currentUser, Date startDateNoon,
+                                                            Date startDateMidnight) {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Shift");
         query.whereEqualTo("staff", currentUser);
         query.whereGreaterThanOrEqualTo("startTime", startDateNoon);
@@ -88,11 +89,11 @@ public class ParseQueryUtil {
             if (currentUser.getBoolean("isManager")) {
                 // add shifts of everyone in business
                 ParseObject business = currentUser.getBusiness();
-                return  (List<ParseShift>)(Object) ParseQueryUtil.getAllShifts(business, startDateNoon,
+                return  ParseQueryUtil.getAllShifts(business, startDateNoon,
                         startDateMidnight);
             }else{
                 // add just the users shifts
-                return  (List<ParseShift>)(Object) query.find();
+                return query.find();
             }
         } catch (ParseException e) {
             throw new RuntimeException(e.getMessage());

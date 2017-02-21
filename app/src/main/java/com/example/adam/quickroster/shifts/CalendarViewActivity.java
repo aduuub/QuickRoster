@@ -12,7 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.misc.Util;
 import com.parse.ParseUser;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * This shows a calendar, where the user can select a date, once they have done this it will transition
@@ -45,7 +50,7 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
     public void onCreateOptionsMenu(
             Menu menu, MenuInflater inflater) {
         if(ParseUser.getCurrentUser().getBoolean("isManager")) {
-            inflater.inflate(R.menu.add_menu, menu);
+            inflater.inflate(R.menu.calendar_menu, menu);
         }
     }
 
@@ -56,7 +61,27 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
             startActivity(intentAddStaff);
             return true;
         }
+
+        if(item.getItemId() == R.id.menu_icon_list){
+            displayListView();
+        }
         return false;
+    }
+
+    private void displayListView(){
+        // Get current date
+        Calendar cal = Util.getCurrentDayCalendar();
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int month = cal.get(Calendar.MONTH);
+        int year = cal.get(Calendar.YEAR);
+
+        Fragment fragment = new ShiftViewFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("Day", day);
+        bundle.putInt("Month", month);
+        bundle.putInt("Year", year);
+        fragment.setArguments(bundle);
+        ((com.example.adam.quickroster.menu.Menu)getActivity()).displayFragment(fragment);
     }
 
     @Override

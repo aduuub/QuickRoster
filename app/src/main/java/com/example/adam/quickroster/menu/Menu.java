@@ -1,6 +1,5 @@
 package com.example.adam.quickroster.menu;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +24,8 @@ import com.example.adam.quickroster.login.WelcomeActivity;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.example.adam.quickroster.notice_board.NoticeBoardActivity;
 import com.example.adam.quickroster.shifts.CalendarViewActivity;
-import com.example.adam.quickroster.staff.StaffListView;
+import com.example.adam.quickroster.shifts.ShiftViewFragment;
+import com.example.adam.quickroster.staff.StaffView;
 import com.parse.ParseUser;
 
 /**
@@ -93,7 +92,12 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         Fragment fragment = null;
         switch(id){
             case R.id.nav_home:
-                fragment = new HomeFragment();
+                fragment = new ShiftViewFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("Day", 25);
+                bundle.putInt("Month", 2);
+                bundle.putInt("Year", 2017);
+                fragment.setArguments(bundle);
                 break;
 
             case R.id.nav_view_shifts:
@@ -101,7 +105,7 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
 
             case R.id.nav_manage_staff:
-                fragment = new StaffListView();
+                fragment = new StaffView();
                 break;
 
             case R.id.nav_messages:
@@ -124,7 +128,11 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
                 logout();
                 break;
         }
+        displayFragment(fragment);
+    }
 
+
+    public void displayFragment(Fragment fragment){
         if(fragment != null){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);

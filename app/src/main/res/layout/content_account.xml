@@ -23,7 +23,6 @@
                 android:layout_gravity="bottom"
                 android:paddingBottom="10dp"
                 android:text="Hourly wage:"
-
                 android:textAlignment="center"
                 android:textColor="#000"
                 android:textSize="14sp" />
