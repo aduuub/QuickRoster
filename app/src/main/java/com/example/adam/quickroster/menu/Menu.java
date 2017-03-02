@@ -34,13 +34,6 @@ import com.parse.ParseUser;
  */
 public class Menu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    Button showCal;
-    Button addShift;
-    Button removeShift;
-    Button viewStaff;
-    Button noticeBoardButton;
-    Button logout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,11 +62,11 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         TextView nameTextField = (TextView) header.findViewById(R.id.nav_header_name);
         TextView businessTextField = (TextView) header.findViewById(R.id.nav_header_business);
 
-
-
         ParseStaffUser currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
         nameTextField.setText(currentUser.getFullName());
         businessTextField.setText(currentUser.getBusinessName());
+
+        displaySelectedScreen(R.id.nav_home);
     }
 
 
@@ -93,11 +86,6 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         switch(id){
             case R.id.nav_home:
                 fragment = new ShiftViewFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt("Day", 25);
-                bundle.putInt("Month", 2);
-                bundle.putInt("Year", 2017);
-                fragment.setArguments(bundle);
                 break;
 
             case R.id.nav_view_shifts:

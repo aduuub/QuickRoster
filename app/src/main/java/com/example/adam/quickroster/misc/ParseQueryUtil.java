@@ -53,7 +53,7 @@ public class ParseQueryUtil {
         queryShifts.whereGreaterThanOrEqualTo("startTime", start);
         queryShifts.whereLessThanOrEqualTo("startTime", end);
 
-       return queryShifts.find();
+        return queryShifts.find();
     }
 
     /**
@@ -74,10 +74,10 @@ public class ParseQueryUtil {
     }
 
 
-
     public static List<ParseObject> getAllStaffsShiftBetweenTime(ParseStaffUser currentUser, Date startDateNoon,
-                                                            Date startDateMidnight) {
+                                                                 Date startDateMidnight) {
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Shift");
+
         query.whereEqualTo("staff", currentUser);
         query.whereGreaterThanOrEqualTo("startTime", startDateNoon);
         query.whereLessThanOrEqualTo("startTime", startDateMidnight);
@@ -89,16 +89,33 @@ public class ParseQueryUtil {
             if (currentUser.getBoolean("isManager")) {
                 // add shifts of everyone in business
                 ParseObject business = currentUser.getBusiness();
-                return  ParseQueryUtil.getAllShifts(business, startDateNoon,
+                return ParseQueryUtil.getAllShifts(business, startDateNoon,
                         startDateMidnight);
-            }else{
+            } else {
                 // add just the users shifts
                 return query.find();
             }
         } catch (ParseException e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
 
+
+    public static List<ParseObject> getNextShifts(ParseStaffUser currentUser, Date startDateNoon, int limit) {
+        ParseQuery<ParseObject> query = new ParseQuery<>("Shift");
+        if (!currentUser.isManager())
+            query.whereEqualTo("staff", currentUser);
+        query.whereEqualTo("business", currentUser.getBusiness());
+        query.whereGreaterThanOrEqualTo("startTime", startDateNoon);
+        query.orderByAscending("startTime");
+        query.setLimit(limit);
+
+        try {
+            return query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error trying to find shifts");
+        }
     }
 
     /**

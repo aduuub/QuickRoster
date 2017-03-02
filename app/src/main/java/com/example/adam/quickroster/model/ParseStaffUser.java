@@ -18,13 +18,49 @@ public class ParseStaffUser extends ParseUser {
     private boolean manager;
 
     public ParseStaffUser() {
-
+        // Requires empty constructor
     }
+
+    // Setters
+
+    public void setLocalBusiness(ParseBusiness business) { this.business = business;}
+    public void setLocalManager(boolean manager) {this.manager = manager; }
+
+    public void setFirstName(String name) { put("firstName", name);}
+    public void setLastName(String name) { put("lastName", name);}
+    public void setManager(boolean isManager) { put("isManager", isManager);}
+    public void setBusiness(ParseObject business) {put("Business", business); }
 
     public void setPassword(String password) {
         put("password", password);
         saveInBackground();
     }
+
+    public void setHourlyWage(String wage) {
+        put("wage", wage);
+        saveInBackground();
+    }
+
+
+    public void setAutoAddToCalendar(boolean autoAdd) {
+         put("autoAddToCal", autoAdd);
+        saveInBackground();
+    }
+
+
+    // Getters
+
+    public boolean isManager() {
+        return manager;
+    }
+    public String getHourlyWage() {
+        return getString("wage");
+    }
+    public ParseBusiness getBusiness() { return this.business; }
+    public boolean getAutoAddToCalendar() {
+        return getBoolean("autoAddToCal");
+    }
+
 
     public String getBusinessName() {
         try {
@@ -45,38 +81,5 @@ public class ParseStaffUser extends ParseUser {
     }
 
 
-    public void setBusiness(ParseBusiness business) {
-        this.business = business;
-    }
-
-    public ParseBusiness getBusiness() {
-        return this.business;
-    }
-
-    public void setManager(boolean manager) {
-        this.manager = manager;
-    }
-
-    public boolean isManager() {
-        return manager;
-    }
-
-    public String getHourlyWage() {
-        return getString("wage");
-    }
-
-    public void setHourlyWage(String wage) {
-        put("wage", wage);
-        saveInBackground();
-    }
-
-    public boolean getAutoAddToCalendar() {
-        return getBoolean("autoAddToCal");
-    }
-
-    public void setAutoAddToCalendar(boolean autoAdd) {
-         put("autoAddToCal", autoAdd);
-        saveInBackground();
-    }
 }
 

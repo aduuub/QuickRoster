@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.example.adam.quickroster.misc.ParseUtil;
+import com.example.adam.quickroster.model.ParseStaffUser;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -21,6 +23,8 @@ import com.parse.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class StatsFragment extends Fragment implements View.OnClickListener {
 
@@ -64,11 +68,11 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
     private void setGraph(){
         DataPoint[] points = new DataPoint[10];
         for(int i=0; i < 10; i++){
-            points[i] = new DataPoint(i, i*2);
+            double val = Math.random()*20;
+            points[i] = new DataPoint(i*86400, val);
         }
 
-
-        // TODO get data
+        // TODO get data from server
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
         mGraph.addSeries(series);
@@ -127,15 +131,21 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getData(){
-        HashMap<String, Object> params = new HashMap<String, Object>();
+        Map<String, Object> params = new HashMap<>();
+        ParseStaffUser currentUser = ParseUtil.getCurrentUser();
+
         params.put("timeViewingOptions", "Week");
-        ParseCloud.callFunctionInBackground("getWeeklyHourSummary", params, new FunctionCallback<HashMap>() {
-            public void done(HashMap ratings, ParseException e) {
-                if (e == null) {
-                    // ratings is 4.5
-                    ratings.size();
+        params.put("objectId", currentUser.getObjectId());
+        params.put("businessId", currentUser.getBusiness().getObjectId());
+
+        ParseCloud.callFunctionInBackground("testFunction", params, new FunctionCallback<Object>() {
+            @Override
+            public void done(Object object, ParseException e) {
+                if(e == null){
+                    object.toString();
                 }else{
-                    Log.e("Parse Error", e.getCode() + " " + e.getMessage());
+                    Log.e("Parse error", e.getMessage());
+                    e.printStackTrace();
                 }
             }
         });

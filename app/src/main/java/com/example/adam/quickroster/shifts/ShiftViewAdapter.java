@@ -59,7 +59,7 @@ public class ShiftViewAdapter extends BaseAdapter {
             ParseStaffUser staff = (ParseStaffUser) shift.getStaff();
 
             if(staff.getObjectId().equals(currentUser.getObjectId())) { // same user
-                staffMember.setText("Self");
+                staffMember.setText("You");
             }else {
                 String staffName = staff.getFullName();
                 staffMember.setText(staffName);

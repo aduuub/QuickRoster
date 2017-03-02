@@ -4,35 +4,19 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_calendar_view">calendarView</string>
-    <string name="title_activity_add">AddActivity</string>
-    <string name="title_activity_remove">RemoveActivity</string>
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="title_activity_welcome">Welcome</string>
-    <string name="title_activity_staff_home">StaffHomeActivity</string>
-    <string name="title_activity_add_staff_member">AddStaffMemeberActivity</string>
-    <string name="title_activity_floating_action">FloatingActionActivity</string>
-    <string name="title_activity_notice_board_list_adapter">NoticeBoardLIstAdapter</string>
-    <string name="title_activity_business_details">BusinessDetailsActivity</string>
 
     <string name="cal_last_synced_at">BusinessDetailsActivity</string>
     <string name="welcome_message">"Welcome to QuickRoster, you can either login if you know your credentials or you can register a new business."</string>
-    <string name="title_activity_content_main">ContentMain</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
     <string-array name="stat_time_view_options">
@@ -46,4 +30,10 @@
         <item>Hours</item>
     </string-array>
 
+
+    <!-- Error message -->
+
+    <string name="invalid_input_title">Invalid Input</string>
+    <string name="invalid_input_message">Please ensure all text fields are filled out before trying to continue
+    </string>
 </resources>

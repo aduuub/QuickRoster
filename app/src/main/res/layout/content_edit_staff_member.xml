@@ -29,7 +29,6 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
@@ -139,6 +138,7 @@
                 android:layout_height="wrap_content"
                 android:text="Delete"
                 android:textAlignment="center"
+                android:backgroundTint="@color/red"
                 android:layout_alignParentBottom="true" />
 
         </LinearLayout>

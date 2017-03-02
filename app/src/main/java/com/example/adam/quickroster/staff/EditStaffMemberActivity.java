@@ -3,6 +3,7 @@ package com.example.adam.quickroster.staff;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.misc.ParseUtil;
+import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
@@ -44,8 +47,8 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_staff_member);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Edit Staff Member");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Edit Staff Member");
         setFields();
         fillOutTextFields();
     }
@@ -74,11 +77,11 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         ParseCloud.callFunctionInBackground("updateUser", params, new FunctionCallback<String>() {
             @Override
             public void done(String object, ParseException e) {
-                if(object != null)
-                    Toast.makeText(getApplicationContext(), object, Toast.LENGTH_LONG);
-                finish();
+                if(e != null)
+                    Log.e("Parse error", e.getMessage());
             }
         });
+        finish();
     }
 
     /**
@@ -149,7 +152,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
+        if (ParseUtil.getCurrentUser().isManager()) {
             getMenuInflater().inflate(R.menu.done_menu, menu);
         }
         return true;

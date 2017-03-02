@@ -47,28 +47,30 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
     }
 
     @Override
-    public void onCreateOptionsMenu(
-            Menu menu, MenuInflater inflater) {
-        if(ParseUser.getCurrentUser().getBoolean("isManager")) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
             inflater.inflate(R.menu.calendar_menu, menu);
         }
     }
 
-
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.menu_icon_add){
+        if (item.getItemId() == R.id.menu_icon_add) {
             Intent intentAddStaff = new Intent(getActivity(), AddShiftActivity.class);
             startActivity(intentAddStaff);
-            return true;
+
+        } else if (item.getItemId() == R.id.menu_icon_list) {
+            displayListView();
+
+        }else {
+            // Menu not found
+            return false;
         }
 
-        if(item.getItemId() == R.id.menu_icon_list){
-            displayListView();
-        }
-        return false;
+        return true;
     }
 
-    private void displayListView(){
+    private void displayListView() {
         // Get current date
         Calendar cal = Util.getCurrentDayCalendar();
         int day = cal.get(Calendar.DAY_OF_MONTH);
@@ -81,7 +83,7 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
         bundle.putInt("Month", month);
         bundle.putInt("Year", year);
         fragment.setArguments(bundle);
-        ((com.example.adam.quickroster.menu.Menu)getActivity()).displayFragment(fragment);
+        ((com.example.adam.quickroster.menu.Menu) getActivity()).displayFragment(fragment);
     }
 
     @Override

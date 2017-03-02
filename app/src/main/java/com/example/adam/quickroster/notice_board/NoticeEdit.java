@@ -1,5 +1,7 @@
 package com.example.adam.quickroster.notice_board;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseUtil;
+import com.example.adam.quickroster.misc.Util;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.model.ParseNotice;
 import com.example.adam.quickroster.staff.AddStaffMemberActivity;
@@ -95,10 +98,8 @@ public class NoticeEdit extends AppCompatActivity {
         String title = mTitleEditText.getText().toString();
         String message = mMessageEditText.getText().toString();
 
-        if (title == null || message == null) {
-            // TODO better error
-            Toast.makeText(getApplicationContext(), "Please ensure both fields are filled out",
-                    Toast.LENGTH_SHORT);
+        if (title.equals("") || message.equals("")) {
+            displayInputAlert();
             return;
         }
 
@@ -119,4 +120,19 @@ public class NoticeEdit extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Alerts the user that the input is invalid.
+     */
+    private void displayInputAlert() {
+        AlertDialog alertDialog = new AlertDialog.Builder(NoticeEdit.this).create();
+        alertDialog.setTitle(getString(R.string.invalid_input_title));
+        alertDialog.setMessage(getString(R.string.invalid_input_message));
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
 }

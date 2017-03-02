@@ -3,39 +3,40 @@ package com.example.adam.quickroster.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import java.lang.*;
+import java.util.Arrays;
+import java.util.List;
 
 
 import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.misc.CalendarShiftController;
 import com.example.adam.quickroster.misc.ParseUtil;
+import com.example.adam.quickroster.misc.Util;
 import com.example.adam.quickroster.model.ParseStaffUser;
-import com.example.adam.quickroster.staff.StaffHomeActivity;
+import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
 /**
- * This is where the staff member logs into the application using there user name and password
+ * This is where the staff member logs into the application using there user name and mPasswordTextView
  */
 public class LoginActivity extends AppCompatActivity {
 
     private Button login;
-    private TextView username;
-    private TextView password;
+    private TextView mUserNameTextView;
+    private TextView mPasswordTextView;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -46,11 +47,11 @@ public class LoginActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mProgressView = findViewById(R.id.login_user_progress);
-        mLoginFormView = findViewById(R.id.login_user_progress);
+        mLoginFormView = findViewById(R.id.login_form_view);
 
         login = (Button) findViewById(R.id.loginAsUserButton);
-        username = (EditText) findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
+        mUserNameTextView = (EditText) findViewById(R.id.username);
+        mPasswordTextView = (EditText) findViewById(R.id.password);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,66 +64,99 @@ public class LoginActivity extends AppCompatActivity {
      * Attempt to log the user in
      */
     public void login() {
-        password.setError(null);
-        String usernameString = username.getText().toString();
-        String passwordString = password.getText().toString();
+        String usernameString = mUserNameTextView.getText().toString();
+        String passwordString = mPasswordTextView.getText().toString();
 
-        if (!isPasswordValid(passwordString)) {
-            password.setError("Password must have 6 characters or more");
-        }
-        showProgress(true);
-        try {
-            // login
-            ParseUser.logIn(usernameString, passwordString);
-            ParseStaffUser user = (ParseStaffUser) ParseUser.getCurrentUser();
-
-            if (user.isAuthenticated())
-                ParseUtil.getInstance();
-
-            // TODO update manager in case of change
-
-            Intent intent = new Intent(LoginActivity.this, Menu.class);
-            startActivity(intent);
-            finish();
-
-        } catch (ParseException e) {
-            showProgress(false);
-            e.printStackTrace();
-            password.setError(e.getMessage());
+        // Check input is correct
+        String errorMessage = isInputValid();
+        if (errorMessage != null) {
+            displayInputAlert(errorMessage);
             return;
         }
+
+        showProgress(true);
+
+        // login
+        ParseUser.logInInBackground(usernameString, passwordString, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e != null) {
+                    // Error
+                    showProgress(false);
+                    displayInputAlert(e.getMessage());
+                    return;
+                }
+
+                // We good bro
+                if (user.isAuthenticated())
+                    ParseUtil.getInstance();
+
+                Intent intent = new Intent(LoginActivity.this, Menu.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        showProgress(false);
+    }
+
+    /**
+     * @return - null if free of errors. Else it returns the error message
+     */
+    private String isInputValid() {
+        List<String> fields = Arrays.asList(mUserNameTextView.getText().toString(),
+                mPasswordTextView.getText().toString());
+        for (String s : fields) {
+            if (s == null || s.equals("")) {
+                return getString(R.string.invalid_input_message);
+            }
+        }
+        // Check mPasswordTextView
+        return Util.isPasswordValid(mPasswordTextView.getText().toString());
     }
 
 
     /**
-     * Validate the password to ensure its correctly formatted
+     * Alerts the user that the input is invalid.
      *
-     * @param password
-     * @return
+     * @param message - message to display
      */
-    private boolean isPasswordValid(String password) {
-        return password.length() > 6;
+    private void displayInputAlert(String message) {
+        AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();
+        alertDialog.setTitle(getString(R.string.invalid_input_title));
+        alertDialog.setMessage(message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
+
 
     /**
      * Shows the progress UI and hides the login form.
+     * @param show - sets the progress view to be visible or gone
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+//            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+//                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+//                @Override
+//                public void onAnimationEnd(Animator animation) {
+//                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+//                }
+//            });a
 
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(

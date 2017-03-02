@@ -1,10 +1,10 @@
 package com.example.adam.quickroster.login;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.*;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.*;
@@ -13,6 +13,7 @@ import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.misc.CalendarShiftController;
 import com.example.adam.quickroster.misc.ParseUtil;
+import com.example.adam.quickroster.misc.Util;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseUser;
@@ -35,7 +36,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         setSupportActionBar(toolbar);
         ParseUser currentUser = ParseUser.getCurrentUser();
 
-        //new UpdateShifts().execute(this);
+        new Util.UpdateShifts().execute(this);
 
 
         if (!ParseAnonymousUtils.isLinked(currentUser)) {
@@ -45,7 +46,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                 ParseUtil.getInstance();
                 ParseStaffUser parseStaffUser = ParseUtil.getCurrentUser();
                 parseStaffUser.fetchInBackground();
-                parseStaffUser.setManager(parseStaffUser.getBoolean("isManager"));
+                parseStaffUser.setLocalManager(parseStaffUser.getBoolean("isManager"));
             }
 
             Intent intent = new Intent(WelcomeActivity.this, Menu.class);
@@ -78,13 +79,5 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    class UpdateShifts extends AsyncTask<WelcomeActivity, Void, Void> {
 
-        @Override
-        protected Void doInBackground(WelcomeActivity... params) {
-            CalendarShiftController csc = new CalendarShiftController(params[0], getApplicationContext());
-            csc.addNewShiftsToCalendar(getApplicationContext());
-            return null;
-        }
-    }
 }

@@ -73,7 +73,6 @@ public class RemoveShiftActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO
             }
         });
     }
@@ -117,7 +116,6 @@ public class RemoveShiftActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO
             }
         });
     }

@@ -1,5 +1,13 @@
 package com.example.adam.quickroster.misc;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+
+import com.example.adam.quickroster.login.WelcomeActivity;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -15,5 +23,38 @@ public class Util {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         return cal;
+    }
+
+    /**
+     * Checks to see if the password is valid. Checks it is longer than 6 chars and contains one
+     * upper case character.
+     * @param password null = valid password. Else the error message explaining whats wrong with it.
+     * @return
+     */
+    public static String isPasswordValid(String password){
+        if(password.length() < 6)
+            return "Passsword is too short. It must be at least 6 characters.";
+
+        boolean containsUpper = false;
+        for(int i=0; i<password.length(); i++){
+            if(Character.isUpperCase(password.charAt(i)))
+                containsUpper = true;
+        }
+        if(!containsUpper)
+            return "Password must contain at least one upper case letter.";
+
+        // Must be ok
+        return null;
+    }
+
+
+    public static class UpdateShifts extends AsyncTask<Activity, Void, Void> {
+
+        @Override
+        public Void doInBackground(Activity... params) {
+            CalendarShiftController csc = new CalendarShiftController(params[0], params[0].getApplicationContext());
+            csc.addNewShiftsToCalendar(params[0].getApplicationContext());
+            return null;
+        }
     }
 }

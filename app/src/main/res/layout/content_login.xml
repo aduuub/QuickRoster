@@ -22,7 +22,7 @@
         android:visibility="gone" />
 
     <RelativeLayout
-        android:id="@+id/login_user_layout"
+        android:id="@+id/login_form_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

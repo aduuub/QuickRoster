@@ -6,6 +6,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -42,5 +43,11 @@ public class ParseShift extends ParseObject {
             e.printStackTrace();
         }
         return staff;
+    }
+
+    public String getFormattedDate(){
+        Date date = getDate("startTime");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        return formatter.format(date);
     }
 }

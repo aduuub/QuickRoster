@@ -8,16 +8,13 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.misc.ParseUtil;
 import com.example.adam.quickroster.model.ParseShift;
 import com.example.adam.quickroster.model.ParseStaffUser;
-import com.parse.ParseUser;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This is a view adapter for displaying information on the shift
@@ -81,7 +78,13 @@ public class ShiftViewAdapterFragment extends BaseAdapter {
         }
     }
 
-
+    /**
+     * Sets the view for a heading for a list of shifts.
+     * Example: "Today", "Tomorrow", "Upcoming"
+     * @param parent
+     * @param text
+     * @return
+     */
     private View setHeader(ViewGroup parent, String text) {
         View view = inflater.inflate(R.layout.adapter_shift_view_header, parent, false);
         TextView headingTextView = (TextView) view.findViewById(R.id.shift_segment_header_text_view);
@@ -91,46 +94,52 @@ public class ShiftViewAdapterFragment extends BaseAdapter {
 
 
     /**
+     * Sets the shifts view by setting the staff member, start and end dates
      * @param parent
      * @param shift
      * @return
      */
     private View setShift(ViewGroup parent, ParseShift shift) {
         View view = inflater.inflate(R.layout.adapter_shift_view, parent, false);
-
         SimpleDateFormat formattedTime = new SimpleDateFormat("HH:mm");
+        TextView mStaffMember = (TextView) view.findViewById(R.id.staffMember);
+        ParseStaffUser currentUser = ParseUtil.getCurrentUser();
 
-        // Set staff member
-        TextView staffMember = (TextView) view.findViewById(R.id.staffMember);
-        ParseUser currentUser = ParseUser.getCurrentUser();
-
-        if (currentUser.getBoolean("isManager")) {
+        // Set staff
+        if (currentUser.isManager()) {
             // Find and set shifts staff member's name
             ParseStaffUser staff = (ParseStaffUser) shift.getStaff();
 
-            if (staff.getObjectId().equals(currentUser.getObjectId())) { // same user
-                staffMember.setText("Self");
+            if (staff.getObjectId().equals(currentUser.getObjectId())) {
+                // Same user as the manager
+                mStaffMember.setText("You");
             } else {
+                // Another staff member, set there name
                 String staffName = staff.getFullName();
-                staffMember.setText(staffName);
+                mStaffMember.setText(staffName);
             }
 
         } else {
             // Hide
-            staffMember.setVisibility(View.GONE);
+            mStaffMember.setVisibility(View.GONE);
         }
 
         // Set dates
-        TextView startView = (TextView) view.findViewById(R.id.startTime);
+        TextView mStartTimeView = (TextView) view.findViewById(R.id.startTime);
         Date startDate = shift.getStartDate();
-        startView.setText(formattedTime.format(startDate));
+        mStartTimeView.setText(formattedTime.format(startDate));
 
-        TextView endView = (TextView) view.findViewById(R.id.endTime);
+        TextView mEndTimeView = (TextView) view.findViewById(R.id.endTime);
         Date endDate = shift.getEndDate();
-        endView.setText(formattedTime.format(endDate));
+        mEndTimeView.setText(formattedTime.format(endDate));
 
-        TextView dateView = (TextView) view.findViewById(R.id.Details);
-        dateView.setText(String.valueOf(shift.getDetails()));
+        // Set details
+        TextView mDetailsView = (TextView) view.findViewById(R.id.Details);
+        mDetailsView.setText(String.valueOf(shift.getDetails()));
+
+        TextView mShiftDateView = (TextView) view.findViewById(R.id.shift_date);
+        mShiftDateView.setText(String.valueOf(shift.getFormattedDate()));
+
         return view;
     }
 }

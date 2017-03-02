@@ -65,7 +65,8 @@ public class ShiftView extends AppCompatActivity {
         Date startDateMidnight = cal.getTime();
 
         // Set action bar's title for date
-        getSupportActionBar().setTitle(currentDateString);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle(currentDateString);
 
         // Get all shifts on this day and set adapter
         shifts = new ArrayList<>();
