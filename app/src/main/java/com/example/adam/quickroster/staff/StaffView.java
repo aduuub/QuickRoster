@@ -15,7 +15,6 @@ import android.widget.ListView;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
-import com.example.adam.quickroster.misc.ParseUtil;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -51,7 +50,7 @@ public class StaffView extends Fragment {
      */
     public void populateList(){
         // Get all staff of the business
-        final List<ParseUser> allStaff = ParseQueryUtil.getAllUsers(ParseUtil.getCurrentUser());
+        final List<ParseUser> allStaff = ParseQueryUtil.getAllUsers(ParseUser.getCurrentUser());
 
         staffList.setAdapter(new StaffViewAdapter(getActivity(), allStaff));
         staffList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

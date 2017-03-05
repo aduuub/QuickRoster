@@ -8,23 +8,15 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.misc.ParseUtil;
-import com.example.adam.quickroster.misc.Util;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.model.ParseNotice;
-import com.example.adam.quickroster.staff.AddStaffMemberActivity;
+import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class NoticeEdit extends AppCompatActivity {
 
@@ -62,7 +54,6 @@ public class NoticeEdit extends AppCompatActivity {
             notice = ParseNotice.getNoticeFromID(objectId);
             String title = notice.getTitle();
             String message = notice.getMessage();
-
 
             if (title != null)
                 mTitleEditText.setText(title);
@@ -103,7 +94,7 @@ public class NoticeEdit extends AppCompatActivity {
             return;
         }
 
-        ParseBusiness business = ParseUtil.getCurrentUser().getBusiness();
+        ParseBusiness business = ((ParseStaffUser)ParseUser.getCurrentUser()).getBusiness();
         Log.i("businessID", business.getObjectId());
 
         if (addingNotice) {

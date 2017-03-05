@@ -1,9 +1,8 @@
 package com.example.adam.quickroster.shifts;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,17 +17,17 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 
+import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
-import com.example.adam.quickroster.misc.ParseUtil;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -73,7 +72,6 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
         setTimeListeners();
         setDateListeners();
         setSpinner();
-
     }
 
 
@@ -217,7 +215,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
             shift.put("startTime", combineDateTime(startDate, startTime));
             shift.put("endTime", combineDateTime(endDate, endTime));
             shift.put("details", mDetailsTextView.getText().toString());
-            shift.put("business", ParseUtil.getCurrentUser().getBusiness());
+            shift.put("business", ((ParseStaffUser)ParseUser.getCurrentUser()).getBusiness());
             shift.saveInBackground();
 
         } catch (ParseException e) {

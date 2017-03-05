@@ -23,7 +23,6 @@ public class ParseStaffUser extends ParseUser {
 
     // Setters
 
-    public void setLocalBusiness(ParseBusiness business) { this.business = business;}
     public void setLocalManager(boolean manager) {this.manager = manager; }
 
     public void setFirstName(String name) { put("firstName", name);}
@@ -38,13 +37,13 @@ public class ParseStaffUser extends ParseUser {
 
     public void setHourlyWage(String wage) {
         put("wage", wage);
-        saveInBackground();
+        saveEventually();
     }
 
 
     public void setAutoAddToCalendar(boolean autoAdd) {
          put("autoAddToCal", autoAdd);
-        saveInBackground();
+        saveEventually();
     }
 
 
@@ -56,7 +55,7 @@ public class ParseStaffUser extends ParseUser {
     public String getHourlyWage() {
         return getString("wage");
     }
-    public ParseBusiness getBusiness() { return this.business; }
+    public ParseBusiness getBusiness() { return (ParseBusiness) getParseObject("business"); }
     public boolean getAutoAddToCalendar() {
         return getBoolean("autoAddToCal");
     }

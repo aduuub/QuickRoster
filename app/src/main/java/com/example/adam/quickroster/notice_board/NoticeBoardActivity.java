@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.misc.ParseUtil;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.model.ParseNotice;
 import com.example.adam.quickroster.model.ParseStaffUser;
@@ -43,7 +42,7 @@ public class NoticeBoardActivity extends Fragment {
 
         noticesList = (ListView) view.findViewById(R.id.notice_board_list_view);
 
-        ParseStaffUser currentUser = ParseUtil.getCurrentUser();
+        ParseStaffUser currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
         this.editable = currentUser.isManager();
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Notices");
@@ -104,7 +103,7 @@ public class NoticeBoardActivity extends Fragment {
 
 
     public void updateNoticesAndAdapter(){
-        ParseBusiness business = ParseUtil.getCurrentUser().getBusiness();
+        ParseBusiness business = ((ParseStaffUser)ParseUser.getCurrentUser()).getBusiness();
         setAdapter(ParseNotice.getBusinessNotices(business));
     }
 

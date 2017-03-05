@@ -7,6 +7,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,6 +16,9 @@ import java.util.UUID;
  */
 @ParseClassName("Shift")
 public class ParseShift extends ParseObject {
+
+    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("E, dd MMM, yyyy");
+
 
     public ParseShift(){
     }
@@ -47,7 +51,6 @@ public class ParseShift extends ParseObject {
 
     public String getFormattedDate(){
         Date date = getDate("startTime");
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        return formatter.format(date);
+        return DATE_FORMATTER.format(date);
     }
 }

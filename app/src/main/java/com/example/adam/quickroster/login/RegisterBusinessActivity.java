@@ -3,6 +3,8 @@ package com.example.adam.quickroster.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -18,7 +20,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -28,12 +33,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.misc.Util;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.staff.AddStaffMemberActivity;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -58,21 +66,19 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_buisness);
+        setContentView(R.layout.activity_register_business);
+
+        // Set toolbar
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("Register Business");
+        setSupportActionBar(mToolbar);
+
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
         business = (EditText) findViewById(R.id.buisnessName);
         numEmployeesView = (EditText) findViewById(R.id.numOfStaff);
-
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
         mLoginFormView = findViewById(R.id.add_staff_member);
         mProgressView = findViewById(R.id.login_progress);
     }
@@ -135,65 +141,84 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
-        // Reset error.
-        mEmailView.setError(null);
-
+    private void registerBusiness() {
         // Store values at the time of the login attempt.
         String bisName = business.getText().toString();
         String email = mEmailView.getText().toString();
         String numEmployees = numEmployeesView.getText().toString();
-        boolean cancel = false;
-        View focusView = null;
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
+        // Check inputs valid
+        String invalidInputMessage = isInputValid(Arrays.asList(bisName, email, numEmployees));
+        if (invalidInputMessage != null) {
+            displayInputAlert(invalidInputMessage);
+            return;
         }
 
-        if (cancel) {
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
+        // Show a progress spinner, and kick off a background task to
+        // perform the user login attempt.
+        showProgress(true);
 
-            // register business
-            final ParseObject newBusiness = ParseBusiness.create("Business");
-            newBusiness.put("Name", bisName);
-            newBusiness.put("Email", email);
-            newBusiness.put("MaxEmployees", numEmployees);
+        // Register business
+        final ParseObject newBusiness = ParseBusiness.create("Business");
+        newBusiness.put("Name", bisName);
+        newBusiness.put("Email", email);
+        newBusiness.put("MaxEmployees", numEmployees);
 
-            try {
-                newBusiness.save();
-            } catch (ParseException e) {
-                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            String businessObjectID = newBusiness.getObjectId();
-            Intent intent = new Intent(RegisterBusinessActivity.this, AddStaffMemberActivity.class);
-            intent.putExtra("BusinessID", businessObjectID);
-            startActivity(intent);
-            finish();
+        try {
+            // Try save
+            newBusiness.save();
+        } catch (ParseException e) {
+            // Something went wrong -> show alert informing user
+            displayInputAlert(e.getMessage());
+            return;
         }
+
+        // Start new activity -> add first staff member
+        Intent intent = new Intent(RegisterBusinessActivity.this, AddStaffMemberActivity.class);
+        String businessObjectID = newBusiness.getObjectId();
+        intent.putExtra("BusinessID", businessObjectID);
+        intent.putExtra("registeringBusinessAsWell", true);
+        startActivity(intent);
+        finish();
     }
 
     /**
-     * Checks to see if the email is valid, only checks the correct formatting
-     *
-     * @param email
-     * @return
+     * @param strings
+     * @return - null if free of errors. Else it returns the error message
      */
-    private boolean isEmailValid(String email) {
-        return email.contains("@") && email.contains(".");
+    private String isInputValid(List<String> strings) {
+        for (String s : strings) {
+            if (s == null || s.equals("")) {
+                return getString(R.string.invalid_input_message);
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Alerts the user that the input is invalid.
+     *
+     * @param message - message to display
+     */
+    private void displayInputAlert(String message) {
+        AlertDialog alertDialog = new AlertDialog.Builder(RegisterBusinessActivity.this).create();
+        alertDialog.setTitle(getString(R.string.invalid_input_title));
+        alertDialog.setMessage(message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        showProgress(false);
     }
 
 
@@ -284,6 +309,20 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+            getMenuInflater().inflate(R.menu.done_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_icon_done) {
+            registerBusiness();
+        }
+        return true;
     }
 }
 

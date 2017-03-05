@@ -46,7 +46,7 @@ public class CalendarShiftController {
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, startTime);
         values.put(CalendarContract.Events.DTEND, endTime);
-        if(description.equals(""))
+        if(description == null || description.equals(""))
             values.put(CalendarContract.Events.TITLE, "Work");
         else
             values.put(CalendarContract.Events.TITLE, "Work: " + description);

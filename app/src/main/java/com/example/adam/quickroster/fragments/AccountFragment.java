@@ -1,4 +1,4 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -14,8 +13,9 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.adam.quickroster.misc.ParseUtil;
+import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.model.ParseStaffUser;
+import com.parse.ParseUser;
 
 
 public class AccountFragment extends Fragment {
@@ -50,11 +50,11 @@ public class AccountFragment extends Fragment {
      * @param view
      */
     private void setInputs(View view){
-        final ParseStaffUser currentUser = ParseUtil.getCurrentUser();
+        final ParseStaffUser currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
 
         // set the hourly wage box
         mHourlyWageEditText = (TextInputEditText) view.findViewById(R.id.hourly_wage_text_box);
-        mHourlyWageEditText.setText(ParseUtil.getCurrentUser().getHourlyWage());
+        mHourlyWageEditText.setText( ((ParseStaffUser)(ParseUser.getCurrentUser())).getHourlyWage());
         mHourlyWageEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

@@ -49,7 +49,7 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (ParseUser.getCurrentUser().getBoolean("isManager")) {
-            inflater.inflate(R.menu.calendar_menu, menu);
+            inflater.inflate(R.menu.add_menu, menu);
         }
     }
 
@@ -58,9 +58,6 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
         if (item.getItemId() == R.id.menu_icon_add) {
             Intent intentAddStaff = new Intent(getActivity(), AddShiftActivity.class);
             startActivity(intentAddStaff);
-
-        } else if (item.getItemId() == R.id.menu_icon_list) {
-            displayListView();
 
         }else {
             // Menu not found

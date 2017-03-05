@@ -1,12 +1,8 @@
 package com.example.adam.quickroster.shifts;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,12 +14,9 @@ import android.widget.TextView;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
-import com.example.adam.quickroster.misc.ParseUtil;
-import com.example.adam.quickroster.model.ParseShift;
-import com.example.adam.quickroster.staff.StaffView;
+import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseUser;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -75,9 +68,9 @@ public class ShiftViewFragment extends Fragment {
         // Today
         shifts = new ArrayList<>();
         shifts.add("Today");
-        shifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime(ParseUtil.getCurrentUser(), startDateNoon,
+        shifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime((ParseStaffUser) ParseUser.getCurrentUser(), startDateNoon,
                 startDateMidnight));
-        if(shifts.size() == 1)
+        if (shifts.size() == 1)
             shifts.clear();
 
         // Tomorrow
@@ -86,9 +79,9 @@ public class ShiftViewFragment extends Fragment {
         List<Object> newShifts = new ArrayList<>();
         startDateMidnight = cal.getTime();
         newShifts.add("Tomorrow");
-        newShifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime(ParseUtil.getCurrentUser(), startDateNoon,
+        newShifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime((ParseStaffUser) ParseUser.getCurrentUser(), startDateNoon,
                 startDateMidnight));
-        if(newShifts.size() == 1)
+        if (newShifts.size() == 1)
             newShifts.clear();
         else
             shifts.addAll(newShifts);
@@ -96,7 +89,7 @@ public class ShiftViewFragment extends Fragment {
 
         // Upcoming
         shifts.add("Upcoming");
-        shifts.addAll(ParseQueryUtil.getNextShifts(ParseUtil.getCurrentUser(), startDateMidnight, 5));
+        shifts.addAll(ParseQueryUtil.getNextShifts((ParseStaffUser) ParseUser.getCurrentUser(), startDateMidnight, 5));
 
         if (shifts.size() > 0) {
             // display shifts
@@ -110,8 +103,8 @@ public class ShiftViewFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (ParseUtil.getCurrentUser().isManager()) {
-            inflater.inflate(R.menu.calendar_list_menu, menu);
+        if (((ParseStaffUser) ParseUser.getCurrentUser()).isManager()) {
+            inflater.inflate(R.menu.add_menu, menu);
         }
     }
 
@@ -122,10 +115,7 @@ public class ShiftViewFragment extends Fragment {
             Intent intentAddStaff = new Intent(getActivity(), AddShiftActivity.class);
             startActivity(intentAddStaff);
 
-        } else if (item.getItemId() == R.id.menu_icon_calendar) {
-            displayCalView();
-
-        }else {
+        } else {
             // Menu not found
             return false;
         }

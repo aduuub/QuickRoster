@@ -12,14 +12,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.adam.quickroster.AccountFragment;
-import com.example.adam.quickroster.HomeFragment;
-import com.example.adam.quickroster.MessagesFragment;
+import com.example.adam.quickroster.fragments.AccountFragment;
+import com.example.adam.quickroster.fragments.HomeFragment;
+import com.example.adam.quickroster.fragments.MessagesFragment;
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.StatsFragment;
+import com.example.adam.quickroster.fragments.StatsFragment;
 import com.example.adam.quickroster.login.WelcomeActivity;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.example.adam.quickroster.notice_board.NoticeBoardActivity;

@@ -1,5 +1,6 @@
 package com.example.adam.quickroster.misc;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.adam.quickroster.model.ParseShift;
@@ -26,7 +27,7 @@ public class ParseQueryUtil {
     public static List<ParseUser> getAllUsers(ParseUser currentUser) {
         ParseQuery<ParseUser> queryUsers = ParseUser.getQuery();
         try {
-            ParseObject business = ParseUtil.getCurrentUser().getBusiness();
+            ParseObject business = ((ParseStaffUser)currentUser).getBusiness();
             queryUsers.whereEqualTo("Business", business);
             return queryUsers.find();
 
@@ -131,5 +132,17 @@ public class ParseQueryUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    public static int countStaffMembersInBusiness(ParseObject business){
+        ParseQuery<ParseUser> queryUsers = ParseUser.getQuery();
+        queryUsers.whereEqualTo("business", business);
+        try {
+            return queryUsers.count();
+        } catch (ParseException e) {
+            Log.e("Parse error", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

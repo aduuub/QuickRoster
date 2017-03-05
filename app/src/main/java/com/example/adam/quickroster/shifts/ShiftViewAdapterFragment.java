@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.misc.ParseUtil;
 import com.example.adam.quickroster.model.ParseShift;
 import com.example.adam.quickroster.model.ParseStaffUser;
 
@@ -103,7 +102,7 @@ public class ShiftViewAdapterFragment extends BaseAdapter {
         View view = inflater.inflate(R.layout.adapter_shift_view, parent, false);
         SimpleDateFormat formattedTime = new SimpleDateFormat("HH:mm");
         TextView mStaffMember = (TextView) view.findViewById(R.id.staffMember);
-        ParseStaffUser currentUser = ParseUtil.getCurrentUser();
+        ParseStaffUser currentUser = (ParseStaffUser) ParseStaffUser.getCurrentUser();
 
         // Set staff
         if (currentUser.isManager()) {
@@ -137,6 +136,7 @@ public class ShiftViewAdapterFragment extends BaseAdapter {
         TextView mDetailsView = (TextView) view.findViewById(R.id.Details);
         mDetailsView.setText(String.valueOf(shift.getDetails()));
 
+        // Set date
         TextView mShiftDateView = (TextView) view.findViewById(R.id.shift_date);
         mShiftDateView.setText(String.valueOf(shift.getFormattedDate()));
 

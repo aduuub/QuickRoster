@@ -1,4 +1,4 @@
-package com.example.adam.quickroster;
+package com.example.adam.quickroster.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.example.adam.quickroster.misc.ParseUtil;
+import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
@@ -19,12 +19,13 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class StatsFragment extends Fragment implements View.OnClickListener {
 
@@ -35,6 +36,10 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
 
     private String xFormat; // Week, Month, Year
     private String yFormat; // Pay, Hours
+
+
+    private final int ONE_DAY_OFFSET = (24*60*60*1000);
+
 
 
     public StatsFragment() {
@@ -58,21 +63,24 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
 
         mGraph = (GraphView) view.findViewById(R.id.statistics_graph);
         setSpinnersAndListeners(view);
-        setGraph();
         return view;
     }
+
 
     /**
      * Inits the graph with the set values.
      */
-    private void setGraph(){
-        DataPoint[] points = new DataPoint[10];
-        for(int i=0; i < 10; i++){
-            double val = Math.random()*20;
-            points[i] = new DataPoint(i*86400, val);
-        }
+    private void setGraph(List<Integer> data){
+        DataPoint[] points = new DataPoint[data.size()];
+        Date date = new Date();
+        date.setHours(0);
+        date.setMinutes(0);
+        date.setTime(date.getTime()+ONE_DAY_OFFSET);
 
-        // TODO get data from server
+        for(int i=data.size()-1; i >= 0; i--){
+            date.setTime(date.getTime()-ONE_DAY_OFFSET);
+            points[i] = new DataPoint(date.getTime(), data.get(i));
+        }
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
         mGraph.addSeries(series);
@@ -85,8 +93,8 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public String formatLabel(double value, boolean isValueX) {
-                if(isValueX) // dateTimeFormatter.format(new Date((long) value));
-                    return dateTimeFormatter.format(new Date((long) value)); // super.formatLabel(value, isValueX);
+                if(isValueX)
+                    return dateTimeFormatter.format(new Date((long)value)); // super.formatLabel(value, isValueX);
                 else
                     return super.formatLabel(value, isValueX);
             }
@@ -101,6 +109,11 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
         mGraph.getViewport().setXAxisBoundsManual(true);
     }
 
+
+    /**
+     *
+     * @param view
+     */
     private void setSpinnersAndListeners(View view){
         mXSpinner = (Spinner) view.findViewById(R.id.time_view_options_spinner);
         mYSpinner = (Spinner) view.findViewById(R.id.viewing_options_spinner);
@@ -108,7 +121,7 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
         mXSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getData();
+               getData();
             }
 
             @Override
@@ -132,7 +145,7 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
 
     private void getData(){
         Map<String, Object> params = new HashMap<>();
-        ParseStaffUser currentUser = ParseUtil.getCurrentUser();
+        ParseStaffUser currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
 
         params.put("timeViewingOptions", "Week");
         params.put("objectId", currentUser.getObjectId());
@@ -142,10 +155,11 @@ public class StatsFragment extends Fragment implements View.OnClickListener {
             @Override
             public void done(Object object, ParseException e) {
                 if(e == null){
-                    object.toString();
+                    setGraph((List<Integer>) object);
                 }else{
                     Log.e("Parse error", e.getMessage());
                     e.printStackTrace();
+                    throw new RuntimeException("Error " + e.getMessage());
                 }
             }
         });

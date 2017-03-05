@@ -71,7 +71,7 @@
             android:name=".staff.BusinessDetailsActivity"
             android:label="Business Details" />
         <activity
-            android:name=".ContentMain"
+            android:name=".fragments.ContentMain"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".notice_board.NoticeEdit" />

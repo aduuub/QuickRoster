@@ -1,8 +1,6 @@
 package com.example.adam.quickroster.login;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,8 +9,6 @@ import android.widget.*;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.menu.Menu;
-import com.example.adam.quickroster.misc.CalendarShiftController;
-import com.example.adam.quickroster.misc.ParseUtil;
 import com.example.adam.quickroster.misc.Util;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseAnonymousUtils;
@@ -43,8 +39,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
             // Already logged in and not an anon user
             if (ParseUser.getCurrentUser().isAuthenticated()){
                 // Update current user
-                ParseUtil.getInstance();
-                ParseStaffUser parseStaffUser = ParseUtil.getCurrentUser();
+                ParseStaffUser parseStaffUser = (ParseStaffUser) ParseUser.getCurrentUser();
                 parseStaffUser.fetchInBackground();
                 parseStaffUser.setLocalManager(parseStaffUser.getBoolean("isManager"));
             }

@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.misc.ParseUtil;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -152,7 +151,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (ParseUtil.getCurrentUser().isManager()) {
+        if (((ParseStaffUser)ParseUser.getCurrentUser()).isManager()) {
             getMenuInflater().inflate(R.menu.done_menu, menu);
         }
         return true;

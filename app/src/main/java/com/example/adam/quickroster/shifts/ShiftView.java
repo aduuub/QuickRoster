@@ -1,7 +1,6 @@
 package com.example.adam.quickroster.shifts;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,27 +9,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
-import com.example.adam.quickroster.misc.ParseUtil;
-import com.example.adam.quickroster.model.ParseShift;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseUser;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * This is a view that shows all the shifts on the selected day. It retrieves them from Parse
@@ -70,7 +60,7 @@ public class ShiftView extends AppCompatActivity {
 
         // Get all shifts on this day and set adapter
         shifts = new ArrayList<>();
-        shifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime(ParseUtil.getCurrentUser(), startDateNoon,
+        shifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime((ParseStaffUser) ParseUser.getCurrentUser(), startDateNoon,
                 startDateMidnight));
         if (shifts.size() > 0) {
             mListView.setAdapter(new ShiftViewAdapter(this, shifts));

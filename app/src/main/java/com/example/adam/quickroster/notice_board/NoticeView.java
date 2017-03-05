@@ -4,18 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.misc.ParseUtil;
-import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.model.ParseNotice;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
 /**

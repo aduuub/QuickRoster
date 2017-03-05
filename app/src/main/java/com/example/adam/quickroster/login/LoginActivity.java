@@ -22,9 +22,7 @@ import java.util.List;
 
 import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.misc.ParseUtil;
 import com.example.adam.quickroster.misc.Util;
-import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -87,9 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                // We good bro
-                if (user.isAuthenticated())
-                    ParseUtil.getInstance();
+                // TODO Check still ok parse user
 
                 Intent intent = new Intent(LoginActivity.this, Menu.class);
                 startActivity(intent);

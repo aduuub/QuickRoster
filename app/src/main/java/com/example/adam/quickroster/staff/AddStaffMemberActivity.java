@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.misc.Util;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.example.adam.quickroster.notice_board.NoticeEdit;
@@ -41,6 +42,7 @@ public class AddStaffMemberActivity extends AppCompatActivity {
     private boolean isManager;
 
     private String businessId;
+    private boolean registeringBusinessAsWell;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class AddStaffMemberActivity extends AppCompatActivity {
 
         // Get the business ID
         businessId = getIntent().getStringExtra("BusinessID");
+        registeringBusinessAsWell = getIntent().getBooleanExtra("registeringBusinessAsWell", false);
+
         if (businessId == null) {
             // Cant add a user without business id
             Log.e("Error", "Cant find the businessID passed to this intent");
@@ -63,6 +67,20 @@ public class AddStaffMemberActivity extends AppCompatActivity {
      * Creates a new staff member
      */
     public void createStaff() {
+        ParseObject business = ParseObject.createWithoutData("Business", businessId);
+        try {
+            business.fetch();
+        } catch (ParseException e) {
+            Log.e("Error", e.getMessage());
+            return;
+        }
+
+        // Check not exceeding max limit of staff
+        if (exceedingMaxStaffLimit(business)) {
+            displayInputAlert(getString(R.string.exceeding_max_staff_message));
+            return;
+        }
+
         // Get current values from widgets
         userName = (String) ((TextView) findViewById(R.id.staffUserName)).getText().toString();
         password = (String) ((TextView) findViewById(R.id.staffPassword)).getText().toString();
@@ -73,7 +91,7 @@ public class AddStaffMemberActivity extends AppCompatActivity {
 
         // Check valid input
         String errorMessage = inputIsValid();
-        if(errorMessage != null){
+        if (errorMessage != null) {
             displayInputAlert(errorMessage);
             return;
         }
@@ -86,24 +104,38 @@ public class AddStaffMemberActivity extends AppCompatActivity {
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setManager(isManager);
-        ParseObject business = ParseObject.createWithoutData("Business", businessId);
+        user.setAutoAddToCalendar(true);
         user.setBusiness(business); // put the business pointer in the user
+
+        // Check
         try {
             user.signUp();
-            finish();
         } catch (ParseException e) {
             displayInputAlert(e.getMessage());
         }
+
+        if (registeringBusinessAsWell) {
+            Intent intent = new Intent(AddStaffMemberActivity.this, Menu.class);
+            startActivity(intent);
+        }
+        finish();
     }
 
+    private boolean exceedingMaxStaffLimit(ParseObject business) {
+        int currentStaff = ParseQueryUtil.countStaffMembersInBusiness(business);
+        int maxStaff = business.getInt("maxEmployees");
+
+        return currentStaff >= maxStaff;
+    }
+
+
     /**
-     *
      * @return - null if free of errors. Else it returns the error message
      */
     private String inputIsValid() {
         List<String> fields = Arrays.asList(userName, password, firstName, lastName, email);
-        for(String s : fields){
-            if(s == null || s.equals("")){
+        for (String s : fields) {
+            if (s == null || s.equals("")) {
                 return getString(R.string.invalid_input_message);
             }
         }
@@ -114,9 +146,7 @@ public class AddStaffMemberActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {
-        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
-            getMenuInflater().inflate(R.menu.done_menu, menu);
-        }
+        getMenuInflater().inflate(R.menu.done_menu, menu);
         return true;
     }
 
@@ -130,6 +160,7 @@ public class AddStaffMemberActivity extends AppCompatActivity {
 
     /**
      * Alerts the user that the input is invalid.
+     *
      * @param message - message to display
      */
     private void displayInputAlert(String message) {
