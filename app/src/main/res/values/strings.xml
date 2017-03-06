@@ -26,8 +26,8 @@
     </string-array>
 
     <string-array name="stat_viewing_options">
-        <item>Pay</item>
         <item>Hours</item>
+        <item>Pay</item>
         <item>Shifts</item>
     </string-array>
 

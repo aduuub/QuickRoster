@@ -85,8 +85,6 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                // TODO Check still ok parse user
-
                 Intent intent = new Intent(LoginActivity.this, Menu.class);
                 startActivity(intent);
                 finish();

@@ -1,7 +1,9 @@
 package com.example.adam.quickroster.shifts;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +24,7 @@ import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.model.ParseStaffUser;
+import com.example.adam.quickroster.notice_board.NoticeEdit;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -209,11 +212,21 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
             formatText = mEndTimeTextView.getText().toString();
             Date endTime = TIME_FORMATTER.parse(formatText);
 
+            Date start = combineDateTime(startDate, startTime);
+            Date end = combineDateTime(endDate, endTime);
+
+            // Check dates valid
+            String errorMessage = checkValidInputDates(start, end);
+            if(errorMessage != null){
+                displayInputAlert(errorMessage);
+                return;
+            }
+
             // Add the new shift to the currentUser
             ParseObject shift = ParseBusiness.create("Shift");
             shift.put("staff", staffForShift);
-            shift.put("startTime", combineDateTime(startDate, startTime));
-            shift.put("endTime", combineDateTime(endDate, endTime));
+            shift.put("startTime", start);
+            shift.put("endTime", end);
             shift.put("details", mDetailsTextView.getText().toString());
             shift.put("business", ((ParseStaffUser)ParseUser.getCurrentUser()).getBusiness());
             shift.saveInBackground();
@@ -225,6 +238,22 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
         finish();
+    }
+
+
+    /**
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    private String checkValidInputDates(Date start, Date end){
+        if(start.getTime() == end.getTime()){
+            return "Shift has no duration. Please check the start and end times";
+        }else if(start.getTime() > end.getTime()){
+            return "Start time cannot be before end time";
+        }
+        return null;
     }
 
 
@@ -273,9 +302,25 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
      * @param time
      * @return Date of the combined date and time
      */
-    public Date combineDateTime(Date date, Date time) {
+    private Date combineDateTime(Date date, Date time) {
         long millis = date.getTime() + time.getTime();
         return new Date(millis);
+    }
+
+    /**
+     * Alerts the user that the input is invalid.
+     */
+    private void displayInputAlert(String message) {
+        AlertDialog alertDialog = new AlertDialog.Builder(AddShiftActivity.this).create();
+        alertDialog.setTitle(getString(R.string.invalid_input_title));
+        alertDialog.setMessage(message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 
 }
