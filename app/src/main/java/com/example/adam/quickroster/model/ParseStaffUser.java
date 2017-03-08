@@ -92,5 +92,13 @@ public class ParseStaffUser extends ParseUser {
     public String getMobileNumber() {
         return getString("mobileNumber");
     }
+
+    public String getFirstName() {
+        return getString("firstName");
+    }
+
+    public String getLastName() {
+        return getString("lastName");
+    }
 }
 

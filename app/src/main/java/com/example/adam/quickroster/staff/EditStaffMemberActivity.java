@@ -12,6 +12,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
@@ -34,15 +35,17 @@ public class EditStaffMemberActivity extends AppCompatActivity {
     private Switch isManager;
     private TextView password;
 
-    private ParseUser selectedStaffMember;
+    private ParseStaffUser selectedStaffMember;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_staff_member);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Edit Staff Member");
         setSupportActionBar(toolbar);
+
         setFields();
         fillOutTextFields();
     }
@@ -77,6 +80,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         finish();
     }
 
+
     /**
      * Deletes the selected user using cloud code
      */
@@ -93,28 +97,25 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * Called on create, sets the text edits to have the current values of the staff member.
      * This is passed in as an extra to this intent.
      */
     private void fillOutTextFields() {
-        // Get values
-        String usernameText = getIntent().getStringExtra("username");
-        String firstNameText = getIntent().getStringExtra("firstName");
-        String lastNameText = getIntent().getStringExtra("lastName");
-        String emailText = getIntent().getStringExtra("email");
-        String userID = getIntent().getStringExtra("staffID");
-        boolean isManagerText = getIntent().getBooleanExtra("isManager", false);
+        String objectId = getIntent().getStringExtra("objectId");
 
         // Get the Parse User
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("objectId", userID);
-        try {
-            selectedStaffMember = query.getFirst();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Log.e("Error", e.getMessage());
-        }
+        selectedStaffMember = (ParseStaffUser) ParseStaffUser.getUserFromId(objectId);
+
+        // Get values
+        String usernameText = selectedStaffMember.getUsername();
+        String firstNameText = selectedStaffMember.getFirstName();
+        String lastNameText = selectedStaffMember.getLastName();
+        String emailText = selectedStaffMember.getEmail();
+        boolean isManagerText = selectedStaffMember.isManager();
+
+
 
         // Set values
         userName.setText(usernameText == null ? "" : usernameText);

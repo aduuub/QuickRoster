@@ -8,13 +8,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.model.ParseStaffUser;
+import com.example.adam.quickroster.shifts.AddShiftActivity;
 import com.example.adam.quickroster.shifts.ShiftViewFragment;
+import com.parse.ParseUser;
 
 
 /**
@@ -38,7 +43,9 @@ public class ViewStaffMemberActivity extends AppCompatActivity {
 
         // Set toolbar
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle(selectedUser.getFullName());
+        fullName = selectedUser.getFullName();
+        mToolbar.setTitle(fullName);
+        setSupportActionBar(mToolbar);
 
         // Set view
         setTextViewsAndListeners();
@@ -49,7 +56,6 @@ public class ViewStaffMemberActivity extends AppCompatActivity {
         // Get important data
         mobileNumber = selectedUser.getMobileNumber();
         email = selectedUser.getEmail();
-        fullName =  selectedUser.getFullName();
 
         // Set text views
         ((TextView) findViewById(R.id.name_text_view)).setText(fullName);
@@ -85,6 +91,29 @@ public class ViewStaffMemberActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
+            getMenuInflater().inflate(R.menu.edit_menu, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.menu_icon_edit) {
+            Intent intentAddStaff = new Intent(ViewStaffMemberActivity.this, EditStaffMemberActivity.class);
+            intentAddStaff.putExtra("objectId", selectedUser.getObjectId());
+            startActivity(intentAddStaff);
+
+        }else {
+            // Menu not found
+            return false;
+        }
+        return true;
+    }
+
     private void displayShiftFragment() {
         Fragment fragment = new ShiftViewFragment();
 
@@ -106,7 +135,6 @@ public class ViewStaffMemberActivity extends AppCompatActivity {
 
     private void textNumber() {
         Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-       // sendIntent.setData(Uri.parse(mobileNumber));
         sendIntent.setType("vnd.android-dir/mms-sms");
         sendIntent.putExtra("address", mobileNumber);
         startActivity(sendIntent);
