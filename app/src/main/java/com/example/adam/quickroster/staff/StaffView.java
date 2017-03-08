@@ -24,15 +24,10 @@ public class StaffView extends Fragment {
 
     private ListView staffList;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_staff_member_list_view, container, false);
         staffList = (ListView) view.findViewById(R.id.staffListView);
@@ -48,14 +43,14 @@ public class StaffView extends Fragment {
      * Populates the list view with all staff members in the current managers business. Adds managers
      * at the top, and the staff at the bottom
      */
-    public void populateList(){
+    private void populateList() {
         // Get all staff of the business
         final List<ParseUser> allStaff = ParseQueryUtil.getAllUsers(ParseUser.getCurrentUser());
 
         staffList.setAdapter(new StaffViewAdapter(getActivity(), allStaff));
         staffList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+                    int position, long id) {
                 staffMemberSelected(allStaff.get(position));
             }
         });
@@ -65,18 +60,18 @@ public class StaffView extends Fragment {
     @Override
     public void onCreateOptionsMenu(
             Menu menu, MenuInflater inflater) {
-        if(ParseUser.getCurrentUser().getBoolean("isManager")) {
+        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
             inflater.inflate(R.menu.add_menu, menu);
         }
     }
 
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.menu_icon_add){
+        if (item.getItemId() == R.id.menu_icon_add) {
             Intent intentAddStaff = new Intent(getActivity(), AddStaffMemberActivity.class);
             ParseUser user = ParseUser.getCurrentUser();
             ParseObject business = user.getParseObject("Business");
-            String businessID = business.getObjectId().toString();
+            String businessID = business.getObjectId();
             intentAddStaff.putExtra("BusinessID", businessID);
             startActivity(intentAddStaff);
             return true;
@@ -87,17 +82,10 @@ public class StaffView extends Fragment {
 
     /**
      * Called when a staff member has been clicked on, transitions to the edit staff member activity.
-     * @param user
      */
-    public void staffMemberSelected(ParseUser user) {
-        Intent modifyUserIntent = new Intent(getActivity().getApplicationContext(), EditStaffMemberActivity.class);
-        modifyUserIntent.putExtra("username", user.getString("username"));
-        modifyUserIntent.putExtra("firstName", user.getString("firstName"));
-        modifyUserIntent.putExtra("lastName", user.getString("lastName"));
-        modifyUserIntent.putExtra("email", user.getEmail());
-        modifyUserIntent.putExtra("staffID", user.getObjectId());
-        modifyUserIntent.putExtra("isManager", user.getBoolean("isManager"));
+    private void staffMemberSelected(ParseUser user) {
+        Intent modifyUserIntent = new Intent(getActivity().getApplicationContext(), ViewStaffMemberActivity.class);
+        modifyUserIntent.putExtra("objectId", user.getObjectId());
         startActivity(modifyUserIntent);
-        populateList();
     }
 }

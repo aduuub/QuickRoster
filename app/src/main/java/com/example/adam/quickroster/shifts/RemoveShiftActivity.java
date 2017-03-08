@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
@@ -25,11 +24,9 @@ public class RemoveShiftActivity extends AppCompatActivity implements View.OnCli
     // XML
     private Spinner selectStaffSpinner;
     private Spinner selectShiftSpinner;
-    private Button submit;
 
     private ParseUser selectedUser;
     private ParseObject selectedShift;
-    private List<ParseUser> allUsers;
 
 
     @Override
@@ -41,7 +38,7 @@ public class RemoveShiftActivity extends AppCompatActivity implements View.OnCli
 
         selectStaffSpinner = (Spinner) findViewById(R.id.selectStaffToModify);
         selectShiftSpinner = (Spinner) findViewById(R.id.selectShiftToModify);
-        submit = (Button) findViewById(R.id.removeShiftButton);
+        Button submit = (Button) findViewById(R.id.removeShiftButton);
         submit.setOnClickListener(this);
         createShiftSpinner(ParseUser.getCurrentUser());
         createStaffSpinner();
@@ -51,17 +48,17 @@ public class RemoveShiftActivity extends AppCompatActivity implements View.OnCli
      * Creates the spinner to select the staff member. This calls createShiftSpinner() once a user
      * is selected
      */
-    public void createStaffSpinner() {
-        final List<ParseUser> spinnerArray = new ArrayList<ParseUser>();
-        List<String> spinnerArrayNames = new ArrayList<String>();
-        allUsers = ParseQueryUtil.getAllUsers(ParseUser.getCurrentUser());
+    private void createStaffSpinner() {
+        final List<ParseUser> spinnerArray = new ArrayList<>();
+        List<String> spinnerArrayNames = new ArrayList<>();
+        List<ParseUser> allUsers = ParseQueryUtil.getAllUsers(ParseUser.getCurrentUser());
 
         for (ParseUser u : allUsers) {
             spinnerArray.add(u);
             spinnerArrayNames.add(u.getString("firstName") + " " + u.getString("lastName"));
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArrayNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArrayNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectStaffSpinner.setAdapter(adapter);
         selectStaffSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -82,7 +79,7 @@ public class RemoveShiftActivity extends AppCompatActivity implements View.OnCli
      *
      * @param user
      */
-    public void createShiftSpinner(ParseUser user) {
+    private void createShiftSpinner(ParseUser user) {
         this.selectedUser = user;
 
         // Query and get all the users shifts
@@ -98,14 +95,14 @@ public class RemoveShiftActivity extends AppCompatActivity implements View.OnCli
         }
 
         // Add all of the shift details to the spinner array names
-        List<String> spinnerArrayNames = new ArrayList<String>();
+        List<String> spinnerArrayNames = new ArrayList<>();
         for (ParseObject shift : spinnerArray) {
             String details = shift.getString("details");
             spinnerArrayNames.add(details == null ? "Default Shift" : details);
         }
 
         // Set adapters
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArrayNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArrayNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectShiftSpinner.setAdapter(adapter);
         selectShiftSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -132,10 +129,9 @@ public class RemoveShiftActivity extends AppCompatActivity implements View.OnCli
 
         selectedShift.deleteInBackground();
         createShiftSpinner(selectedUser);
-        Toast.makeText(getApplicationContext(), "Successfully Deleted Shift", Toast.LENGTH_SHORT).show();
     }
 
-    public void setSelectedShift(ParseObject shift) {
+    private void setSelectedShift(ParseObject shift) {
         this.selectedShift = shift;
     }
 }

@@ -2,7 +2,6 @@ package com.example.adam.quickroster.misc;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,38 +10,34 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-import java.security.Permission;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import static java.security.AccessController.getContext;
-
 /**
  * Created by Adam on 6/09/16.
  */
-public class CalendarShiftController {
+class CalendarShiftController {
 
     private static final String DEBUG_TAG = "CalendarActivity";
-    private Activity activityObj;
-    private Context context;
-    String eventUriString = "content://com.android.calendar/events";
+    private final Activity activityObj;
+    private final Context context;
+    private final String eventUriString = "content://com.android.calendar/events";
 
     public CalendarShiftController(Activity actObj, Context context) {
         this.activityObj = actObj;
         this.context = context;
     }
 
-    public void makeNewEntry(String title, String description, String location, long startTime, long endTime) {
+    private void makeNewEntry(String description, long startTime, long endTime) {
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, startTime);
         values.put(CalendarContract.Events.DTEND, endTime);
@@ -73,7 +68,7 @@ public class CalendarShiftController {
     /**
      * Adds the new shifts to the users calendar
      */
-    public void addNewShiftsToCalendar(Context ctx) {
+    public void addNewShiftsToCalendar() {
         // remove two days from last updated date and find all the updated shifts
         Date lastUpdated = getCalLastUpdated();
         Calendar cal = Calendar.getInstance();
@@ -96,19 +91,19 @@ public class CalendarShiftController {
             String details = shift.getString("details");
             Date start = shift.getDate("startTime");
             Date end = shift.getDate("endTime");
-            makeNewEntry("Work", details, "Default Location", start.getTime(), end.getTime());
+            makeNewEntry(details, start.getTime(), end.getTime());
         }
     }
 
     /**
      * Sets the field 'calendarLastSync' in the shared preferences to be the current time
      */
-    public void setCalLastUpdatedNow() {
+    private void setCalLastUpdatedNow() {
         String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         SharedPreferences sharedPref = activityObj.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("calendarLastSync", currentDate);
-        editor.commit();
+        editor.apply();
     }
 
 
@@ -116,7 +111,7 @@ public class CalendarShiftController {
      *
      * @return
      */
-    public Date getCalLastUpdated() {
+    private Date getCalLastUpdated() {
         SharedPreferences sharedPref = activityObj.getPreferences(Context.MODE_PRIVATE);
         String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         String dateString = sharedPref.getString(activityObj.getString(R.string.cal_last_synced_at), currentDate);

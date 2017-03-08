@@ -24,14 +24,8 @@ import java.util.List;
 
 public class NoticeBoardActivity extends Fragment {
 
-    ListView noticesList;
-    List<ParseNotice> notices;
-    boolean editable;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private ListView noticesList;
+    private List<ParseNotice> notices;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +37,6 @@ public class NoticeBoardActivity extends Fragment {
         noticesList = (ListView) view.findViewById(R.id.notice_board_list_view);
 
         ParseStaffUser currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
-        this.editable = currentUser.isManager();
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Notices");
         setHasOptionsMenu(true);
@@ -57,7 +50,7 @@ public class NoticeBoardActivity extends Fragment {
     }
 
 
-    public void setAdapter(List<? extends ParseObject> notices) {
+    private void setAdapter(List<ParseNotice> notices) {
         NoticeBoardListAdapter adapter = new NoticeBoardListAdapter(getActivity(),
                 R.layout.content_notice_board_list_adapter, notices);
         noticesList.setAdapter(adapter);
@@ -102,7 +95,7 @@ public class NoticeBoardActivity extends Fragment {
     }
 
 
-    public void updateNoticesAndAdapter(){
+    private void updateNoticesAndAdapter(){
         ParseBusiness business = ((ParseStaffUser)ParseUser.getCurrentUser()).getBusiness();
         setAdapter(ParseNotice.getBusinessNotices(business));
     }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_add_shift">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              app:layout_behavior="@string/appbar_scrolling_view_behavior"
+              tools:showIn="@layout/activity_add_shift">
 
     <!-- Staff member -->
 
@@ -15,8 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="Staff" />
+        android:text="Staff"/>
 
     <Spinner
         android:id="@+id/select_staff_spinner"
@@ -25,7 +26,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
         android:paddingLeft="8dp"
-        android:textSize="30sp" />
+        android:paddingStart="8dp"
+        android:textSize="30sp"/>
 
     <!--From time -->
 
@@ -34,7 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="From" />
+        android:layout_marginStart="10dp"
+        android:text="From"/>
 
 
     <LinearLayout
@@ -50,8 +53,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingLeft="16dp"
+            android:paddingStart="16dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/start_time_chooser"
@@ -61,7 +65,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
     </LinearLayout>
 
@@ -73,7 +77,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="To" />
+        android:layout_marginStart="10dp"
+        android:text="To"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -88,8 +93,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingLeft="16dp"
+            android:paddingStart="16dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/end_time_chooser"
@@ -99,7 +105,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
     </LinearLayout>
 
@@ -111,15 +117,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="Details" />
+        android:layout_marginStart="10dp"
+        android:text="Details"/>
 
     <EditText
         android:id="@+id/details_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="text"
         android:paddingLeft="16dp"
+        android:paddingStart="16dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
 
     <!-- Create button -->
 
@@ -133,7 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:text="Create Shift" />
+            android:text="Create Shift"/>
 
     </RelativeLayout>
 

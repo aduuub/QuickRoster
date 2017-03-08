@@ -36,13 +36,12 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/buisnessName"
+                    android:id="@+id/business_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Buisness Name"
+                    android:hint="Business Name"
                     android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -56,8 +55,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Business Email"
                     android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -71,8 +69,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Number of Staff"
                     android:inputType="number"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 

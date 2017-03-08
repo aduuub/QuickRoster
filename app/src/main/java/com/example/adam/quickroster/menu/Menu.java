@@ -1,6 +1,7 @@
 package com.example.adam.quickroster.menu;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -38,11 +39,6 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, new HomeFragment());
-        ft.commit();
-
         // set tool bar and nav drawer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,7 +68,7 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
     /**
      * Logs out the current Parse User
      */
-    public void logout() {
+    private void logout() {
         ParseUser.logOut();
         Intent intent = new Intent(Menu.this, WelcomeActivity.class);
         startActivity(intent);
@@ -93,10 +89,6 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
 
             case R.id.nav_manage_staff:
                 fragment = new StaffView();
-                break;
-
-            case R.id.nav_messages:
-                fragment = new MessagesFragment();
                 break;
 
             case R.id.nav_stats:
@@ -132,7 +124,7 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         displaySelectedScreen(id);

@@ -6,8 +6,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.UUID;
-
 /**
  * Represents a User object in Parse
  */
@@ -80,5 +78,19 @@ public class ParseStaffUser extends ParseUser {
     }
 
 
+    public static ParseUser getUserFromId(String id){
+        ParseQuery<ParseUser> query = new ParseQuery<>("_User");
+        try {
+            return query.get(id);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException("User not found");
+    }
+
+
+    public String getMobileNumber() {
+        return getString("mobileNumber");
+    }
 }
 

@@ -18,17 +18,16 @@ import java.util.List;
 /**
  * This is a view adapter for displaying information on the shift
  */
-public class ShiftViewAdapterFragment extends BaseAdapter {
-    private Context mContext;
-    private List<? extends Object> mItems;
+class ShiftViewAdapterFragment extends BaseAdapter {
+    private List<Object> mItems;
     private static final int SHIFT = 0;
     private static final int HEADER = 1;
     private LayoutInflater inflater;
 
-    public ShiftViewAdapterFragment(Context ctx, List<? extends Object> items) {
-        mContext = ctx;
+    public ShiftViewAdapterFragment(Context ctx, List<Object> items) {
+        Context context = ctx;
         mItems = items;
-        inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override

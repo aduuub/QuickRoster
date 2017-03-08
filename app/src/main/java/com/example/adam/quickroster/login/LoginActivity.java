@@ -32,7 +32,6 @@ import com.parse.ParseUser;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private Button login;
     private TextView mUserNameTextView;
     private TextView mPasswordTextView;
     private View mProgressView;
@@ -47,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_user_progress);
         mLoginFormView = findViewById(R.id.login_form_view);
 
-        login = (Button) findViewById(R.id.loginAsUserButton);
+        Button login = (Button) findViewById(R.id.loginAsUserButton);
         mUserNameTextView = (EditText) findViewById(R.id.username);
         mPasswordTextView = (EditText) findViewById(R.id.password);
         login.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Attempt to log the user in
      */
-    public void login() {
+    private void login() {
         String usernameString = mUserNameTextView.getText().toString();
         String passwordString = mPasswordTextView.getText().toString();
 

@@ -1,8 +1,6 @@
 package com.example.adam.quickroster.staff;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +15,7 @@ import java.util.List;
 /**
  * An adapter for displaying the staff member details.
  */
-public class StaffViewAdapter extends BaseAdapter {
+class StaffViewAdapter extends BaseAdapter {
 
     private List<ParseUser> users;
     private Context mContext;

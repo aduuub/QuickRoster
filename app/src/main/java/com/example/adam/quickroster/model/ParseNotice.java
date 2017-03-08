@@ -1,6 +1,5 @@
 package com.example.adam.quickroster.model;
 
-import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -19,7 +18,7 @@ public class ParseNotice extends ParseObject{
     }
 
     public static ParseNotice getNoticeFromID(String id){
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Notice");
+        ParseQuery<ParseObject> query = new ParseQuery<>("Notice");
         try {
             return (ParseNotice) query.get(id);
         } catch (ParseException e) {
@@ -29,7 +28,7 @@ public class ParseNotice extends ParseObject{
     }
 
     public static List<ParseNotice> getBusinessNotices(ParseObject business){
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Notice");
+        ParseQuery<ParseObject> query = new ParseQuery<>("Notice");
         query.whereEqualTo("business", business);
         try {
             return (List<ParseNotice>)(Object) query.find();

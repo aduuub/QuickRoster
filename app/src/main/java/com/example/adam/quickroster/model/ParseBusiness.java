@@ -2,9 +2,6 @@ package com.example.adam.quickroster.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
-
-import java.util.List;
 
 /**
  * Represents a Business object in Parse

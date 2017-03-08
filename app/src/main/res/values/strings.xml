@@ -38,5 +38,8 @@
     <string name="invalid_input_message">Please ensure all text fields are filled out before trying to continue
     </string>
     <string name="exceeding_max_staff_message">You have exceeded your maximum staff limit, if you want to add another staff member, you might want to consider upgrading your plan. </string>
+    <string name="pay_rate_reason">This is used to help calculate informative statistics for you</string>
+    <string name="no_shifts_today_message">No shifts today</string>
+    <string name="hourly_rate_not_set_message">You need to set your hourly rate under Account in order to use this feature</string>
 
 </resources>

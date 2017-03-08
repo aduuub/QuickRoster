@@ -2,6 +2,7 @@ package com.example.adam.quickroster.shifts;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -16,8 +17,6 @@ import com.example.adam.quickroster.misc.Util;
 import com.parse.ParseUser;
 
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * This shows a calendar, where the user can select a date, once they have done this it will transition
@@ -25,19 +24,12 @@ import java.util.GregorianCalendar;
  */
 public class CalendarViewActivity extends Fragment implements android.widget.CalendarView.OnDateChangeListener {
 
-    private android.widget.CalendarView cal;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_calendar_view, container, false);
-        cal = (android.widget.CalendarView) view.findViewById(R.id.calendarView);
+        android.widget.CalendarView cal = (android.widget.CalendarView) view.findViewById(R.id.calendarView);
         cal.setOnDateChangeListener(this);
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Calendar");
@@ -67,24 +59,9 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
         return true;
     }
 
-    private void displayListView() {
-        // Get current date
-        Calendar cal = Util.getCurrentDayCalendar();
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        int month = cal.get(Calendar.MONTH);
-        int year = cal.get(Calendar.YEAR);
-
-        Fragment fragment = new ShiftViewFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("Day", day);
-        bundle.putInt("Month", month);
-        bundle.putInt("Year", year);
-        fragment.setArguments(bundle);
-        ((com.example.adam.quickroster.menu.Menu) getActivity()).displayFragment(fragment);
-    }
 
     @Override
-    public void onSelectedDayChange(android.widget.CalendarView view, int year, int month, int dayOfMonth) {
+    public void onSelectedDayChange(@NonNull android.widget.CalendarView view, int year, int month, int dayOfMonth) {
         Intent intent = new Intent(getActivity(), ShiftView.class);
         intent.putExtra("Day", dayOfMonth);
         intent.putExtra("Month", month);

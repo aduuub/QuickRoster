@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class StatsFragment extends Fragment {
 
@@ -40,9 +39,6 @@ public class StatsFragment extends Fragment {
 
     private final long ONE_DAY_OFFSET = (24 * 60 * 60 * 1000);
     private final long ONE_WEEK_OFFSET = ONE_DAY_OFFSET * 7; // 7 Days
-    private final long ONE_MONTH_OFFSET = ONE_WEEK_OFFSET * 4; // 28 Days
-
-    private final int MILLIS_TO_HOURS = (1000 * 60 * 60);
 
 
     public StatsFragment() {
@@ -70,10 +66,11 @@ public class StatsFragment extends Fragment {
         Map<String, Object> params = new HashMap<>();
         ParseStaffUser currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
 
-        params.put("yAxis", viewingOptions); // Hour, Count
+        params.put("yAxis", viewingOptions); // Hour, Count\
+        params.put("xAxis", timeViewingOptions); // Hour, Count
         params.put("objectId", currentUser.getObjectId());
         params.put("businessId", currentUser.getBusiness().getObjectId());
-        ParseCloud.callFunctionInBackground((timeViewingOptions+ "ShiftSummary"), params, new FunctionCallback<List<Integer>>() {
+        ParseCloud.callFunctionInBackground(("ShiftSummary"), params, new FunctionCallback<List<Integer>>() {
             @Override
             public void done(List<Integer> object, ParseException e) {
                 if (e == null) {
@@ -107,23 +104,24 @@ public class StatsFragment extends Fragment {
      * @return
      */
     private List<Double> convertFormatting(List<Double> data) {
+        int MILLIS_TO_HOURS = (1000 * 60 * 60);
         if (viewingOptions.equals("Pay")) {
             // We need to multiply hours worked by the users hourly rate
             String wage = ((ParseStaffUser) ParseUser.getCurrentUser()).getHourlyWage();
 
             // Check errors
             if (wage == null || wage.equals("0")) {
-                displayInputAlert("You need to set your pay in Account to use this feature");
+                displayInputAlert();
             }
             double pay = Double.valueOf(wage);
             for (int i = 0; i < data.size(); i++) {
-                double hours = data.get(i).doubleValue() / MILLIS_TO_HOURS; // convert to hours
+                double hours = data.get(i) / MILLIS_TO_HOURS; // convert to hours
                 hours *= pay; // calculate hourly rate
                 data.set(i, hours);
             }
         } else if (viewingOptions.equals("Hours")) {
             for (int i = 0; i < data.size(); i++) {
-                double hours = data.get(i).doubleValue() / MILLIS_TO_HOURS; // convert to hours
+                double hours = data.get(i) / MILLIS_TO_HOURS; // convert to hours
                 data.set(i, hours);
             }
         }
@@ -137,21 +135,9 @@ public class StatsFragment extends Fragment {
      * @param data list of hours or shifts worked.
      */
     private void setGraph(List<Double> data) {
-        long offset = getTimeOffset();
-
         DataPoint[] points = new DataPoint[data.size()];
-        Date date = new Date();
-        date.setHours(0);
-        date.setMinutes(0);
-        date.setSeconds(0);
-        date.setTime(date.getTime() + offset);
-
-        for (int i = data.size() - 1; i >= 0; i--) {
-            date.setTime(date.getTime() - offset);
-            long time = date.getTime();
-            double value = data.get(i);
-            points[i] = new DataPoint(i, value);
-            double x = points[i].getX();
+        for (int i =0; i< data.size(); i++) {
+            points[i] = new DataPoint(i, data.get(i));
         }
 
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(points);
@@ -159,79 +145,68 @@ public class StatsFragment extends Fragment {
         mGraph.removeAllSeries();
         mGraph.addSeries(series);
 
-        // set date label formatter
-        final SimpleDateFormat dateTimeFormatter = new SimpleDateFormat(getFormatter());
-
-        String[] dates = new String[points.length];
-        for (int i = data.size() - 1; i >= 0; i--) {
-         dates[i] = dateTimeFormatter.format((long)points[i].getX());
-        }
-
         mGraph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
             public String formatLabel(double value, boolean isValueX) {
                 if (isValueX) {
-                    String formattedLabel = dateTimeFormatter.format(new Date((long) value));
-                    if(timeViewingOptions.equals("Month")){
-                        formattedLabel = "Week " + formattedLabel;
+                    switch (timeViewingOptions) {
+                        case "Week":
+                            return getWeekFormatter(value);
+
+                        case "Month":
+                            return getMonthFormatter(value);
+
+                        case "Year":
+                            return getYearFormatter(value);
                     }
-                    return formattedLabel;
+
+                    return super.formatLabel(value, isValueX);
 
                 } else {
-                    return super.formatLabel(value, isValueX);
+                    String yLabel = super.formatLabel(value, isValueX);
+                    if(viewingOptions.equals("Pay")){
+                        yLabel = "$" + yLabel;
+                    }
+                    return yLabel;
                 }
             }
         });
 
-        //mGraph.getGridLabelRenderer().setHumanRounding(true);
-        mGraph.getGridLabelRenderer().setNumHorizontalLabels(points.length);
+        mGraph.getGridLabelRenderer().setNumHorizontalLabels(Math.min(points.length, 6));
         mGraph.getGridLabelRenderer().setTextSize(40);
-       // mGraph.getGridLabelRenderer().setLabelsSpace(20);
-
-        //mGraph.getViewport().setXAxisBoundsManual(true);
     }
 
-    private long getTimeOffset(){
-        switch (timeViewingOptions) {
-            case "Week":
-                return ONE_DAY_OFFSET;
-            case "Month":
-                return ONE_WEEK_OFFSET;
-            case "Year":
-                return ONE_MONTH_OFFSET;
-            default:
-                throw new RuntimeException("Unknown formatter");
-        }
+    private String getWeekFormatter(double xValue){
+        final SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("E");
+        Date date = new Date();
+        int daySubtraction = (int) (6-xValue);
+        return dateTimeFormatter.format(date.getTime()-(ONE_DAY_OFFSET*daySubtraction));
     }
+
+    private String getMonthFormatter(double xValue){
+        final SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("w");
+        Date date = new Date();
+        int daySubtraction = (int) (3-xValue);
+        return "Week " + dateTimeFormatter.format(date.getTime()-(ONE_WEEK_OFFSET*daySubtraction));
+    }
+
+    private String getYearFormatter(double xValue){
+        final SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("MMM");
+        Date date = new Date();
+        int daySubtraction = (int) (12-xValue);
+        long ONE_MONTH_OFFSET = ONE_WEEK_OFFSET * 4;
+        return dateTimeFormatter.format(date.getTime()-(ONE_MONTH_OFFSET *daySubtraction));
+    }
+
 
 
     /**
-     * Returns a formatter for the xAxis. Based on the current timeViewingOptions.
-     *
-     * @return
+     * Alerts the user that they need to set there hourly rate under Account in order to display information on there pay.
      */
-    private String getFormatter() {
-        switch (timeViewingOptions) {
-            case "Week":
-                return "E";
-            case "Month":
-                return "m";
-            case "Year":
-                return "MMM";
-            default:
-                throw new RuntimeException("Unknown formatter");
-        }
-    }
-
-    /**
-     * Alerts the user that the input is invalid.
-     *
-     * @param message
-     */
-    private void displayInputAlert(String message) {
+    private void displayInputAlert() {
         AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle(getString(R.string.invalid_input_title));
-        alertDialog.setMessage(message);
+        alertDialog.setMessage(getString(R.string.hourly_rate_not_set_message));
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

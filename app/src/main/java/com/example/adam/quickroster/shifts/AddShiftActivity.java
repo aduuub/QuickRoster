@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,12 +18,10 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 
-import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.model.ParseStaffUser;
-import com.example.adam.quickroster.notice_board.NoticeEdit;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -50,7 +47,6 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
     private Spinner mSelectStaffSpinner;
     private Button mSubmitButton;
 
-    private ParseUser currentUser;
     private ParseUser staffForShift;
     private List<ParseUser> allUsers;
 
@@ -83,15 +79,15 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
      */
     private void setSpinner(){
         // create the the spinner lists
-        final List<ParseUser> spinnerArray = new ArrayList<ParseUser>();
-        List<String> spinnerArrayNames = new ArrayList<String>();
+        final List<ParseUser> spinnerArray = new ArrayList<>();
+        List<String> spinnerArrayNames = new ArrayList<>();
 
         for (ParseUser u : allUsers) {
             spinnerArray.add(u);
             spinnerArrayNames.add(u.getString("firstName") + " " + u.getString("lastName"));
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArrayNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinnerArrayNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSelectStaffSpinner.setAdapter(adapter);
         mSelectStaffSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -185,7 +181,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    public String getFormattedDateText(int year, int monthOfYear, int dayOfMonth) {
+    private String getFormattedDateText(int year, int monthOfYear, int dayOfMonth) {
         Calendar cal = Calendar.getInstance();
         cal.set(year, monthOfYear, dayOfMonth);
         return DATE_FORMATTER.format(cal.getTime());
@@ -193,10 +189,10 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
 
 
     /**
-     * Calls isInputValid to check the inputs valid, if so it adds the shift to Parse, otherwises
+     * Calls isInputValid to check the inputs valid, if so it adds the shift to Parse, otherwise
      * calls displayInputAlert to prompt the user
      */
-    public void createShift() {
+    private void createShift() {
         try {
             // Convert dates
             String formatText = mStartDateTextView.getText().toString();
@@ -260,7 +256,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
     /**
      * Sets fields to be widgets and sets On Click listeners
      */
-    public void setFieldsAndListeners() {
+    private void setFieldsAndListeners() {
         // Fields
         mStartDateTextView = (TextView) findViewById(R.id.start_date_chooser);
         mStartTimeTextView = (TextView) findViewById(R.id.start_time_chooser);
@@ -269,7 +265,6 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
         mSelectStaffSpinner = (Spinner) findViewById(R.id.select_staff_spinner);
         mSubmitButton = (Button) findViewById(R.id.add_shift_button);
         mDetailsTextView = (TextView) findViewById(R.id.details_edit_text);
-        currentUser = ParseUser.getCurrentUser();
 
         // On click listeners
         mSubmitButton.setOnClickListener(this);
@@ -278,7 +273,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
         mEndTimeTextView.setOnClickListener(this);
         mEndDateTextView.setOnClickListener(this);
 
-        // Date and time formatters
+        // Date and time formatter
         TIME_FORMATTER = new SimpleDateFormat("HH:mm");
         DATE_FORMATTER = new SimpleDateFormat("E, dd MMM, yyyy");
 
@@ -291,7 +286,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
         mStartTimeTextView.setText(TIME_FORMATTER.format(cal.get(Calendar.HOUR)));
         mEndTimeTextView.setText(TIME_FORMATTER.format(cal.get(Calendar.HOUR)));
 
-        allUsers = ParseQueryUtil.getAllUsers(currentUser);
+        allUsers = ParseQueryUtil.getAllUsers(ParseUser.getCurrentUser());
     }
 
 

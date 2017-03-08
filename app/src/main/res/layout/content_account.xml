@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,12 +14,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingLeft="5dp"
+            android:paddingStart="5dp"
+            android:paddingRight="5dp"
             android:paddingTop="0dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="40dp"
+                android:layout_marginEnd="40dp"
                 android:layout_gravity="bottom"
                 android:paddingBottom="10dp"
                 android:text="Hourly wage:"
@@ -40,9 +43,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginLeft="5dp"
-            android:text="This is used to help calculate informative statistics for you"
-            android:textSize="10sp" />
+            android:layout_marginStart="5dp"
+            android:text="@string/pay_rate_reason"
+            android:textSize="12sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,4 +73,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</merge>

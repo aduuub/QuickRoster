@@ -22,10 +22,6 @@ public class ContactEmployerActivity extends AppCompatActivity {
     }
 
 
-    private void setup(){
-
-    }
-
     private void sendEmail() {
         ParseUser currentUser = ParseUser.getCurrentUser();
         ParseObject business = ParseQueryUtil.getParseUsersBusiness(currentUser);
@@ -36,7 +32,7 @@ public class ContactEmployerActivity extends AppCompatActivity {
 
         //  Fill it the with extra data
         emailIntent.setType("plain/text");
-        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"to@email.com"});
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{email});
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject");
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Text");
 

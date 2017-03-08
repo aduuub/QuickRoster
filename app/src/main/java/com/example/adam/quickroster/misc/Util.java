@@ -1,12 +1,7 @@
 package com.example.adam.quickroster.misc;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
-
-import com.example.adam.quickroster.login.WelcomeActivity;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -33,7 +28,7 @@ public class Util {
      */
     public static String isPasswordValid(String password){
         if(password.length() < 6)
-            return "Passsword is too short. It must be at least 6 characters.";
+            return "Password is too short. It must be at least 6 characters.";
 
         boolean containsUpper = false;
         for(int i=0; i<password.length(); i++){
@@ -53,7 +48,7 @@ public class Util {
         @Override
         public Void doInBackground(Activity... params) {
             CalendarShiftController csc = new CalendarShiftController(params[0], params[0].getApplicationContext());
-            csc.addNewShiftsToCalendar(params[0].getApplicationContext());
+            csc.addNewShiftsToCalendar();
             return null;
         }
     }

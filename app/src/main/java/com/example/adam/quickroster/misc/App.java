@@ -6,9 +6,6 @@ import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.model.ParseNotice;
 import com.example.adam.quickroster.model.ParseShift;
 import com.example.adam.quickroster.model.ParseStaffUser;
-import com.parse.Parse;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
 
 import com.parse.*;
 
@@ -19,6 +16,8 @@ public class App extends Application {
 
     public void onCreate() {
         super.onCreate();
+
+        // Register subclasses
         ParseObject.registerSubclass(ParseShift.class);
         ParseUser.registerSubclass(ParseStaffUser.class);
         ParseUser.registerSubclass(ParseBusiness.class);
@@ -31,7 +30,5 @@ public class App extends Application {
                 .clientKey("N84KATdzjuYIln0zKB1k3dDpcrl0Ev0BxRJSDtf1")
                 .server("https://parseapi.back4app.com/").build()
         );
-
-        ParseUser.enableAutomaticUser();
     }
 }

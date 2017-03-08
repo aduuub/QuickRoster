@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="No shifts today"
+        android:text="@string/no_shifts_today_message"
         android:textSize="20sp"
         android:paddingTop="30sp"
         android:visibility="gone" />

@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * This is a view adapter for displaying information on the shift
  */
-public class ShiftViewAdapter extends BaseAdapter {
+class ShiftViewAdapter extends BaseAdapter {
     private Context mContext;
     private List<Object> mItems;
     public ShiftViewAdapter(Context ctx, List<Object> items){

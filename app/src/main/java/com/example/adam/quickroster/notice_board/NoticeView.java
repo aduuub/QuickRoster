@@ -18,11 +18,9 @@ import com.parse.ParseUser;
 
 public class NoticeView extends AppCompatActivity {
 
-    private Toolbar mToolbar;
     private TextView mTitleEditText;
     private TextView mMessageEditText;
 
-    private ParseNotice notice;
     private String objectId;
 
 
@@ -31,13 +29,13 @@ public class NoticeView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_board_view);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mTitleEditText = (TextView) findViewById(R.id.notice_edit_title);
         mMessageEditText = (TextView) findViewById(R.id.notice_edit_message);
 
         fillTextFields();
-        mToolbar.setTitle("Notice");
-        setSupportActionBar(mToolbar);
+        toolbar.setTitle("Notice");
+        setSupportActionBar(toolbar);
     }
 
     private void fillTextFields() {
@@ -45,7 +43,7 @@ public class NoticeView extends AppCompatActivity {
         objectId = intent.getStringExtra("objectId");
         if (objectId != null) {
             // Find the title and message
-            notice = ParseNotice.getNoticeFromID(objectId);
+            ParseNotice notice = ParseNotice.getNoticeFromID(objectId);
             String title = notice.getTitle();
             String message = notice.getMessage();
 

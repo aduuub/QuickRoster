@@ -8,23 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.adam.quickroster.menu.Menu;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.misc.Util;
 import com.example.adam.quickroster.model.ParseStaffUser;
-import com.example.adam.quickroster.notice_board.NoticeEdit;
-import com.example.adam.quickroster.shifts.AddShiftActivity;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +31,6 @@ public class AddStaffMemberActivity extends AppCompatActivity {
     private String firstName;
     private String lastName;
     private String email;
-    private boolean isManager;
 
     private String businessId;
     private boolean registeringBusinessAsWell;
@@ -66,7 +57,7 @@ public class AddStaffMemberActivity extends AppCompatActivity {
     /**
      * Creates a new staff member
      */
-    public void createStaff() {
+    private void createStaff() {
         ParseObject business = ParseObject.createWithoutData("Business", businessId);
         try {
             business.fetch();
@@ -82,12 +73,12 @@ public class AddStaffMemberActivity extends AppCompatActivity {
         }
 
         // Get current values from widgets
-        userName = (String) ((TextView) findViewById(R.id.staffUserName)).getText().toString();
-        password = (String) ((TextView) findViewById(R.id.staffPassword)).getText().toString();
-        firstName = (String) ((TextView) findViewById(R.id.staffFirstName)).getText().toString();
-        lastName = (String) ((TextView) findViewById(R.id.staffLastName)).getText().toString();
-        email = (String) ((TextView) findViewById(R.id.email)).getText().toString();
-        isManager = !((Switch) findViewById(R.id.isManagerSwitch)).isPressed();
+        userName = ((TextView) findViewById(R.id.staffUserName)).getText().toString();
+        password = ((TextView) findViewById(R.id.staffPassword)).getText().toString();
+        firstName = ((TextView) findViewById(R.id.staffFirstName)).getText().toString();
+        lastName = ((TextView) findViewById(R.id.staffLastName)).getText().toString();
+        email = ((TextView) findViewById(R.id.email)).getText().toString();
+        boolean isManager = !(findViewById(R.id.isManagerSwitch)).isPressed();
 
         // Check valid input
         String errorMessage = inputIsValid();

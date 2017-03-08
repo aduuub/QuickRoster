@@ -1,16 +1,13 @@
 package com.example.adam.quickroster.misc;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.adam.quickroster.model.ParseShift;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -46,10 +43,10 @@ public class ParseQueryUtil {
      * @return List of ParseObject, which are ParseShifts
      * @throws ParseException
      */
-    public static List<ParseObject> getAllShifts(ParseObject business, Date start, Date end) throws ParseException {
+    private static List<ParseObject> getAllShifts(ParseObject business, Date start, Date end) throws ParseException {
 
         // Get all shifts from the users
-        ParseQuery<ParseObject> queryShifts = new ParseQuery<ParseObject>("Shift");
+        ParseQuery<ParseObject> queryShifts = new ParseQuery<>("Shift");
         queryShifts.whereEqualTo("business", business);
         queryShifts.whereGreaterThanOrEqualTo("startTime", start);
         queryShifts.whereLessThanOrEqualTo("startTime", end);
@@ -77,16 +74,13 @@ public class ParseQueryUtil {
 
     public static List<ParseObject> getAllStaffsShiftBetweenTime(ParseStaffUser currentUser, Date startDateNoon,
                                                                  Date startDateMidnight) {
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Shift");
+        ParseQuery<ParseObject> query = new ParseQuery<>("Shift");
 
         query.whereEqualTo("staff", currentUser);
         query.whereGreaterThanOrEqualTo("startTime", startDateNoon);
         query.whereLessThanOrEqualTo("startTime", startDateMidnight);
 
-        Set<ParseObject> shiftsOnDay = new HashSet<>();
         try {
-            shiftsOnDay.addAll(query.find()); // get all the users shifts
-
             if (currentUser.getBoolean("isManager")) {
                 // add shifts of everyone in business
                 ParseObject business = currentUser.getBusiness();
@@ -120,7 +114,7 @@ public class ParseQueryUtil {
     }
 
     /**
-     * Probs not correct
+     * Get the current ParseUsers business from the Parse server
      *
      * @param user
      * @return

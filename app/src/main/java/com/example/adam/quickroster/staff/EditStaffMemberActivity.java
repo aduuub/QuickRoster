@@ -10,10 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
@@ -27,9 +25,6 @@ import java.util.Map;
  * A view that provides a way to edit staff member details
  */
 public class EditStaffMemberActivity extends AppCompatActivity {
-
-    private Button saveButton;
-    private Button deleteButton;
 
     // UI
     private TextView userName;
@@ -55,14 +50,13 @@ public class EditStaffMemberActivity extends AppCompatActivity {
     /**
      * Updates the selected staff member
      */
-    public void updateStaffMember() {
+    private void updateStaffMember() {
         // Create new user and set values
         if (selectedStaffMember == null) {
-            Toast.makeText(getApplicationContext(), "Error: Can't find user to update", Toast.LENGTH_LONG).show();
             return;
         }
 
-        // Add params to hashmap so we can parse to cloud code
+        // Add params to hash map so we can parse to cloud code
         Map<String, Object> params = new HashMap<>();
         params.put("ObjectId", selectedStaffMember.getObjectId());
         params.put("isManager", !isManager.isPressed());
@@ -86,14 +80,15 @@ public class EditStaffMemberActivity extends AppCompatActivity {
     /**
      * Deletes the selected user using cloud code
      */
-    public void deleteUser() {
+    private void deleteUser() {
         Map<String, String> params = new HashMap<>();
         params.put("ObjectId", selectedStaffMember.getObjectId());
         ParseCloud.callFunctionInBackground("deleteUser", params, new FunctionCallback<Object>() {
             @Override
             public void done(Object object, ParseException e) {
-                Toast.makeText(getApplicationContext(), object.toString(), Toast.LENGTH_LONG);
-                finishActivity(0);
+                if(e != null){
+
+                }
             }
         });
     }
@@ -102,7 +97,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
      * Called on create, sets the text edits to have the current values of the staff member.
      * This is passed in as an extra to this intent.
      */
-    public void fillOutTextFields() {
+    private void fillOutTextFields() {
         // Get values
         String usernameText = getIntent().getStringExtra("username");
         String firstNameText = getIntent().getStringExtra("firstName");
@@ -118,7 +113,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
             selectedStaffMember = query.getFirst();
         } catch (ParseException e) {
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("Error", e.getMessage());
         }
 
         // Set values
@@ -133,14 +128,14 @@ public class EditStaffMemberActivity extends AppCompatActivity {
     /**
      * Sets the fields
      */
-    public void setFields() {
+    private void setFields() {
         userName = (TextView) findViewById(R.id.staffUserName);
         firstName = (TextView) findViewById(R.id.staffFirstName);
         lastName = (TextView) findViewById(R.id.staffLastName);
         email = (TextView) findViewById(R.id.email);
         isManager = (Switch) findViewById(R.id.isManagerSwitch);
         password = (TextView) findViewById(R.id.editStaffPassword);
-        deleteButton = (Button) findViewById(R.id.delete_staff_member_button);
+        Button deleteButton = (Button) findViewById(R.id.delete_staff_member_button);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,9 +146,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (((ParseStaffUser)ParseUser.getCurrentUser()).isManager()) {
-            getMenuInflater().inflate(R.menu.done_menu, menu);
-        }
+        getMenuInflater().inflate(R.menu.done_menu, menu);
         return true;
     }
 

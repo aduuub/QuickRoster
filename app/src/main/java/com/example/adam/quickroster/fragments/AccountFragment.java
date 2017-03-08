@@ -20,18 +20,10 @@ import com.parse.ParseUser;
 
 public class AccountFragment extends Fragment {
 
-    private TextInputEditText mHourlyWageEditText;
-    private Switch mAutoAddToCalSwitch;
-
     public AccountFragment() {
         // Required empty public constructor
     }
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,9 +45,9 @@ public class AccountFragment extends Fragment {
         final ParseStaffUser currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
 
         // set the hourly wage box
-        mHourlyWageEditText = (TextInputEditText) view.findViewById(R.id.hourly_wage_text_box);
-        mHourlyWageEditText.setText( ((ParseStaffUser)(ParseUser.getCurrentUser())).getHourlyWage());
-        mHourlyWageEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        TextInputEditText hourlyWageEditText = (TextInputEditText) view.findViewById(R.id.hourly_wage_text_box);
+        hourlyWageEditText.setText( ((ParseStaffUser)(ParseUser.getCurrentUser())).getHourlyWage());
+        hourlyWageEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -68,10 +60,10 @@ public class AccountFragment extends Fragment {
         });
 
         // set the auto add to calendar switch
-        mAutoAddToCalSwitch = (Switch) view.findViewById(R.id.auto_add_to_cal_switch);
+        Switch autoAddToCalSwitch = (Switch) view.findViewById(R.id.auto_add_to_cal_switch);
         boolean autoAdd = currentUser.getAutoAddToCalendar();
-        mAutoAddToCalSwitch.setChecked(autoAdd);
-        mAutoAddToCalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        autoAddToCalSwitch.setChecked(autoAdd);
+        autoAddToCalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 currentUser.setAutoAddToCalendar(isChecked);
             }

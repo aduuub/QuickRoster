@@ -20,9 +20,6 @@ import com.parse.ParseUser;
  */
 public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button mRegisterBusinessButton;
-    private Button mLoginAsUserButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,29 +29,29 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         setSupportActionBar(toolbar);
         ParseUser currentUser = ParseUser.getCurrentUser();
 
-        new Util.UpdateShifts().execute(this);
+        if (currentUser != null && !ParseAnonymousUtils.isLinked(currentUser)) {
 
-
-        if (!ParseAnonymousUtils.isLinked(currentUser)) {
             // Already logged in and not an anon user
-            if (ParseUser.getCurrentUser().isAuthenticated()){
+            if (ParseUser.getCurrentUser().isAuthenticated()) {
+                new Util.UpdateShifts().execute(this);
+
                 // Update current user
                 ParseStaffUser parseStaffUser = (ParseStaffUser) ParseUser.getCurrentUser();
                 parseStaffUser.fetchInBackground();
                 parseStaffUser.setLocalManager(parseStaffUser.getBoolean("isManager"));
+
+
+                Intent intent = new Intent(WelcomeActivity.this, Menu.class);
+                startActivity(intent);
+                finish();
             }
-
-            Intent intent = new Intent(WelcomeActivity.this, Menu.class);
-            startActivity(intent);
-            finish();
-
         }
 
         // Buttons
-        mRegisterBusinessButton = (Button) findViewById(R.id.registerBusinessButton);
-        mLoginAsUserButton = (Button) findViewById(R.id.loginAsUserButton);
-        mRegisterBusinessButton.setOnClickListener(this);
-        mLoginAsUserButton.setOnClickListener(this);
+        Button registerBusinessButton = (Button) findViewById(R.id.registerBusinessButton);
+        Button loginAsUserButton = (Button) findViewById(R.id.loginAsUserButton);
+        registerBusinessButton.setOnClickListener(this);
+        loginAsUserButton.setOnClickListener(this);
     }
 
 
@@ -73,6 +70,4 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
-
-
 }

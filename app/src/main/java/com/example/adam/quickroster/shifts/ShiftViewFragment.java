@@ -15,6 +15,9 @@ import android.widget.TextView;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.model.ParseStaffUser;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -28,20 +31,20 @@ import java.util.List;
  */
 public class ShiftViewFragment extends Fragment {
 
-    private List<Object> shifts;
     private ListView mListView;
     private TextView mTextView;
+    private ParseStaffUser user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.activity_shift_view_frag, container, false);
         setHasOptionsMenu(true);
 
         mListView = (ListView) view.findViewById(R.id.listView);
         mTextView = (TextView) view.findViewById(R.id.no_shifts_text_view);
-
+        user = null;
         Calendar cal = getExtras();
         getShiftsAndSetAdapter(cal);
         return view;
@@ -49,10 +52,23 @@ public class ShiftViewFragment extends Fragment {
 
     private Calendar getExtras() {
         Calendar cal = GregorianCalendar.getInstance();
-        //cal.set(year, month, day);
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
+
+        String userObjectId = null;
+        if (getArguments() != null) {
+            userObjectId = getArguments().getString("objectId", null);
+        }
+
+        if (userObjectId != null) {
+            user = (ParseStaffUser) ParseStaffUser.getUserFromId(userObjectId);
+        }
+
+        if (user == null) {
+            // Must be current user
+            user = (ParseStaffUser) ParseUser.getCurrentUser();
+        }
         return cal;
     }
 
@@ -66,12 +82,13 @@ public class ShiftViewFragment extends Fragment {
         // Get all shifts on this day and set adapter
 
         // Today
-        shifts = new ArrayList<>();
+        List<Object> shifts = new ArrayList<>();
         shifts.add("Today");
-        shifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime((ParseStaffUser) ParseUser.getCurrentUser(), startDateNoon,
+        shifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime(user, startDateNoon,
                 startDateMidnight));
-        if (shifts.size() == 1)
+        if (shifts.size() == 1) {
             shifts.clear();
+        }
 
         // Tomorrow
         startDateNoon = cal.getTime();
@@ -79,17 +96,20 @@ public class ShiftViewFragment extends Fragment {
         List<Object> newShifts = new ArrayList<>();
         startDateMidnight = cal.getTime();
         newShifts.add("Tomorrow");
-        newShifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime((ParseStaffUser) ParseUser.getCurrentUser(), startDateNoon,
+        newShifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime(user, startDateNoon,
                 startDateMidnight));
-        if (newShifts.size() == 1)
-            newShifts.clear();
-        else
+        if (newShifts.size() != 1) {
             shifts.addAll(newShifts);
+        }
 
 
         // Upcoming
-        shifts.add("Upcoming");
-        shifts.addAll(ParseQueryUtil.getNextShifts((ParseStaffUser) ParseUser.getCurrentUser(), startDateMidnight, 5));
+        newShifts.clear();
+        newShifts.add("Upcoming");
+        newShifts.addAll(ParseQueryUtil.getNextShifts(user, startDateMidnight, 5));
+        if (newShifts.size() != 1) {
+            shifts.addAll(newShifts);
+        }
 
         if (shifts.size() > 0) {
             // display shifts
@@ -121,11 +141,5 @@ public class ShiftViewFragment extends Fragment {
         }
 
         return true;
-    }
-
-
-    private void displayCalView() {
-        Fragment fragment = new CalendarViewActivity();
-        ((com.example.adam.quickroster.menu.Menu) getActivity()).displayFragment(fragment);
     }
 }

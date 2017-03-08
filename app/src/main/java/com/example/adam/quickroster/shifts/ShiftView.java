@@ -27,17 +27,14 @@ import java.util.List;
  */
 public class ShiftView extends AppCompatActivity {
 
-    private List<Object> shifts;
-    private ListView mListView;
-    private TextView mTextView;
     private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shift_view);
-        mListView = (ListView) findViewById(R.id.listView);
-        mTextView = (TextView) findViewById(R.id.no_shifts_text_view);
+        ListView listView = (ListView) findViewById(R.id.listView);
+        TextView textView = (TextView) findViewById(R.id.no_shifts_text_view);
 
 
         // create date from day, month, year
@@ -59,14 +56,14 @@ public class ShiftView extends AppCompatActivity {
         mToolbar.setTitle(currentDateString);
 
         // Get all shifts on this day and set adapter
-        shifts = new ArrayList<>();
+        List<Object> shifts = new ArrayList<>();
         shifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime((ParseStaffUser) ParseUser.getCurrentUser(), startDateNoon,
                 startDateMidnight));
         if (shifts.size() > 0) {
-            mListView.setAdapter(new ShiftViewAdapter(this, shifts));
+            listView.setAdapter(new ShiftViewAdapter(this, shifts));
         } else {
-            mListView.setVisibility(View.INVISIBLE);
-            mTextView.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.INVISIBLE);
+            textView.setVisibility(View.VISIBLE);
         }
     }
 

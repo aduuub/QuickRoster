@@ -21,24 +21,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.misc.Util;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.staff.AddStaffMemberActivity;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,7 +71,7 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-        business = (EditText) findViewById(R.id.buisnessName);
+        business = (EditText) findViewById(R.id.business_name);
         numEmployeesView = (EditText) findViewById(R.id.numOfStaff);
         mLoginFormView = findViewById(R.id.add_staff_member);
         mProgressView = findViewById(R.id.login_progress);
