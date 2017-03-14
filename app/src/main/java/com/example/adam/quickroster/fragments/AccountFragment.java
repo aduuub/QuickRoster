@@ -17,7 +17,13 @@ import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseUser;
 
-
+/**
+ * This is a fragment that displays information of the users account, and lets them make changes to it
+ *
+ * Currently it displays the employees hourly wage, and a switch for enabling automatically add shifts into the devices calendar.
+ *
+ * @author Adam Wareing
+ */
 public class AccountFragment extends Fragment {
 
     public AccountFragment() {

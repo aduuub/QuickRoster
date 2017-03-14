@@ -41,7 +41,9 @@ import java.util.List;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
- * Register a new business with the application
+ * Activity to register a new business. On completion the business is uploaded to Parse, and the user is directed to <code>AddStaffMemberActivity</code>
+ *
+ * @author Adam Wareing
  */
 public class RegisterBusinessActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -50,10 +52,9 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    // UI references
     private AutoCompleteTextView mEmailView;
-    private EditText business;
-    private EditText numEmployeesView;
+    private EditText mBusinessEditText;
+    private EditText mMaxEmployeesEditText;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -71,15 +72,15 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-        business = (EditText) findViewById(R.id.business_name);
-        numEmployeesView = (EditText) findViewById(R.id.numOfStaff);
+        mBusinessEditText = (EditText) findViewById(R.id.business_name);
+        mMaxEmployeesEditText = (EditText) findViewById(R.id.numOfStaff);
         mLoginFormView = findViewById(R.id.add_staff_member);
         mProgressView = findViewById(R.id.login_progress);
     }
 
 
     /**
-     * Autocomplete
+     * Autocomplete, if we can access the contacts it initialises a loader.
      */
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -92,7 +93,7 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
     /**
      * Can we request the clients contacts?
      *
-     * @return
+     * @return - true if we can, false if not.
      */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -116,6 +117,7 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
         return false;
     }
 
+
     /**
      * Callback received when a permissions request has been completed.
      */
@@ -137,9 +139,9 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
      */
     private void registerBusiness() {
         // Store values at the time of the login attempt.
-        String bisName = business.getText().toString();
+        String bisName = mBusinessEditText.getText().toString();
         String email = mEmailView.getText().toString();
-        String numEmployees = numEmployeesView.getText().toString();
+        String numEmployees = mMaxEmployeesEditText.getText().toString();
 
         // Check inputs valid
         String invalidInputMessage = isInputValid(Arrays.asList(bisName, email, numEmployees));
@@ -148,8 +150,7 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
             return;
         }
 
-        // Show a progress spinner, and kick off a background task to
-        // perform the user login attempt.
+        // Show a progress spinner, and kick off a background task to perform the user login attempt.
         showProgress(true);
 
         // Register business
@@ -159,7 +160,6 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
         newBusiness.put("MaxEmployees", numEmployees);
 
         try {
-            // Try save
             newBusiness.save();
         } catch (ParseException e) {
             // Something went wrong -> show alert informing user
@@ -177,7 +177,9 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
     }
 
     /**
-     * @param strings
+     * Checks the list of string to ensure that they aren't null or blank.
+     *
+     * @param strings - not null. Strings to check
      * @return - null if free of errors. Else it returns the error message
      */
     private String isInputValid(List<String> strings) {
@@ -245,8 +247,7 @@ public class RegisterBusinessActivity extends AppCompatActivity implements Loade
                 }
             });
         } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
+            // The ViewPropertyAnimator APIs are not available, so simply show and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }

@@ -1,4 +1,4 @@
-package com.example.adam.quickroster.notice_board;
+package com.example.adam.quickroster.fragments;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -17,12 +17,14 @@ import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.model.ParseBusiness;
 import com.example.adam.quickroster.model.ParseNotice;
 import com.example.adam.quickroster.model.ParseStaffUser;
-import com.parse.ParseObject;
+import com.example.adam.quickroster.notice_board.AddEditNoticeActivity;
+import com.example.adam.quickroster.notice_board.NoticeAdapter;
+import com.example.adam.quickroster.notice_board.NoticeViewActivity;
 import com.parse.ParseUser;
 
 import java.util.List;
 
-public class NoticeBoardActivity extends Fragment {
+public class NoticeViewFragment extends Fragment {
 
     private ListView noticesList;
     private List<ParseNotice> notices;
@@ -51,7 +53,7 @@ public class NoticeBoardActivity extends Fragment {
 
 
     private void setAdapter(List<ParseNotice> notices) {
-        NoticeBoardListAdapter adapter = new NoticeBoardListAdapter(getActivity(),
+        NoticeAdapter adapter = new NoticeAdapter(getActivity(),
                 R.layout.content_notice_board_list_adapter, notices);
         noticesList.setAdapter(adapter);
 
@@ -69,7 +71,7 @@ public class NoticeBoardActivity extends Fragment {
     private void editNotice(int pos) {
         ParseNotice notice = notices.get(pos);
         if (notice != null) {
-            Intent intent = new Intent(getActivity(), NoticeView.class);
+            Intent intent = new Intent(getActivity(), NoticeViewActivity.class);
             intent.putExtra("objectId", notice.getObjectId());
             startActivity(intent);
             updateNoticesAndAdapter();
@@ -87,7 +89,7 @@ public class NoticeBoardActivity extends Fragment {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.menu_icon_add){
-            Intent intent = new Intent(getContext(), NoticeEdit.class);
+            Intent intent = new Intent(getContext(), AddEditNoticeActivity.class);
             startActivity(intent);
             return true;
         }

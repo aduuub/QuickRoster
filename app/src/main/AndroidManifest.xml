@@ -39,15 +39,12 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".shifts.ShiftView" />
+            android:name=".shifts.ShiftViewActivity" />
         <activity
-            android:name=".menu.Menu" />
+            android:name=".menu.MenuActivity" />
         <activity
             android:name=".shifts.AddShiftActivity"
             android:label="Add Shift" />
-        <activity
-            android:name=".shifts.RemoveShiftActivity"
-            android:label="Remove Shift" />
         <activity
             android:name=".login.RegisterBusinessActivity"
             android:label="@string/title_activity_login" />
@@ -61,17 +58,11 @@
             android:name=".staff.EditStaffMemberActivity"
             android:label="Edit Staff Member" />
         <activity
-            android:name=".staff_options.ContactEmployerActivity"
-            android:label="Contact Employer" />
+            android:name=".notice_board.AddEditNoticeActivity" />
         <activity
-            android:name=".fragments.ContentMain"
-            android:windowSoftInputMode="adjustPan" />
+            android:name=".notice_board.NoticeViewActivity" />
         <activity
-            android:name=".notice_board.NoticeEdit" />
-        <activity
-            android:name=".notice_board.NoticeView" />
-        <activity
-            android:name=".staff.ViewStaffMemberActivity" />
+            android:name=".staff.StaffViewActivity" />
 
     </application>
 

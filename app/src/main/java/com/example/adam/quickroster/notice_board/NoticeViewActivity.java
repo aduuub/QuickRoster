@@ -12,17 +12,24 @@ import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.model.ParseNotice;
 import com.parse.ParseUser;
 
-/**
- * Created by Adam on 22/02/17.
- */
 
-public class NoticeView extends AppCompatActivity {
+/**
+ * Displays the ParseNotice Title and Message.
+ * Option to click on the MenuItem to edit the Notice in AddEditNoticeActivity.
+ *
+ * @NonNull StringExtra - objectId - The objectId of the ParseNotice to display
+ * @see ParseNotice
+ * @author Adam Wareing
+ */
+public class NoticeViewActivity extends AppCompatActivity {
 
     private TextView mTitleEditText;
     private TextView mMessageEditText;
 
+    /**
+     * ParseNotices objectId
+     */
     private String objectId;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +45,15 @@ public class NoticeView extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
+    /**
+     * Get the objectId of the notice, fetch from Parse and set the title and message in the EditTexts.
+     */
     private void fillTextFields() {
         Intent intent = getIntent();
         objectId = intent.getStringExtra("objectId");
         if (objectId != null) {
             // Find the title and message
-            ParseNotice notice = ParseNotice.getNoticeFromID(objectId);
+            ParseNotice notice = ParseNotice.getNoticeFromId(objectId);
             String title = notice.getTitle();
             String message = notice.getMessage();
 
@@ -71,8 +81,11 @@ public class NoticeView extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Start the new Activity to edit the notice.
+     */
     private void editNotice() {
-        Intent intent = new Intent(this, NoticeEdit.class);
+        Intent intent = new Intent(this, AddEditNoticeActivity.class);
         intent.putExtra("objectId", objectId);
         startActivity(intent);
     }

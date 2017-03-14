@@ -7,7 +7,7 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.adam.quickroster.notice_board.NoticeBoardActivity">
+    tools:context="com.example.adam.quickroster.fragments.NoticeViewFragment">
 
     <ListView
         android:id="@+id/notice_board_list_view"

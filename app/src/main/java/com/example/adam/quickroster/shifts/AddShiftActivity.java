@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,7 +36,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
- * This has options for the user to create a new shift. It also puts the shift into Parse.
+ * Lets the user create a new shift and push it to Parse.
+ *
+ * @author Adam Wareing
  */
 public class AddShiftActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -57,7 +61,6 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
 
     private SimpleDateFormat DATE_FORMATTER;
     private SimpleDateFormat TIME_FORMATTER;
-
 
 
     @Override
@@ -156,12 +159,13 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
                 TimePickerDialog timePicker2 = new TimePickerDialog(this, endTimeListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true);
                 timePicker2.show();
                 break;
-
-            case R.id.add_shift_button:
-                createShift();
         }
     }
 
+
+    /**
+     * Sets the OnDateSetListeners for the the start and end dates. This populates the text view with the selected date.
+     */
     private void setDateListeners(){
         startDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -238,10 +242,10 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
 
 
     /**
-     *
+     * Checks the start date is before the end date
      * @param start
      * @param end
-     * @return
+     * @return - null if error free. Otherwise the error messages explaining whats wrong.
      */
     private String checkValidInputDates(Date start, Date end){
         if(start.getTime() == end.getTime()){
@@ -254,7 +258,7 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
 
 
     /**
-     * Sets fields to be widgets and sets On Click listeners
+     * Sets fields, OnClickListeners and populates the start and end date/time text views with the current date/time
      */
     private void setFieldsAndListeners() {
         // Fields
@@ -263,11 +267,9 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
         mEndDateTextView = (TextView) findViewById(R.id.end_date_chooser);
         mEndTimeTextView = (TextView) findViewById(R.id.end_time_chooser);
         mSelectStaffSpinner = (Spinner) findViewById(R.id.select_staff_spinner);
-        mSubmitButton = (Button) findViewById(R.id.add_shift_button);
         mDetailsTextView = (TextView) findViewById(R.id.details_edit_text);
 
         // On click listeners
-        mSubmitButton.setOnClickListener(this);
         mStartDateTextView.setOnClickListener(this);
         mStartTimeTextView.setOnClickListener(this);
         mEndTimeTextView.setOnClickListener(this);
@@ -316,6 +318,21 @@ public class AddShiftActivity extends AppCompatActivity implements View.OnClickL
                     }
                 });
         alertDialog.show();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.done_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_icon_done) {
+            createShift();
+        }
+        return true;
     }
 
 }

@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/staffUserName"
+                    android:id="@+id/staff_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="User Name"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/staffFirstName"
+                    android:id="@+id/staff_first_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="First Name"
@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/staffLastName"
+                    android:id="@+id/staff_last_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Last Name"
@@ -95,7 +95,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <Switch
-                android:id="@+id/isManagerSwitch"
+                android:id="@+id/is_manager_switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/staffPassword"
+                    android:id="@+id/staff_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"

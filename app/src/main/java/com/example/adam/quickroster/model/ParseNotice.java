@@ -8,25 +8,44 @@ import com.parse.ParseQuery;
 import java.util.List;
 
 /**
- * Created by Adam on 6/02/17.
+ * Represents a 'Notice' object in the Parse.com database
+ *
+ * @author Adam Wareing
  */
-
 @ParseClassName("Notice")
 public class ParseNotice extends ParseObject{
-    public ParseNotice(){
 
+    /**
+     * Create a new ParseNotice
+     */
+    public ParseNotice(){
+        // Requires empty constructor
     }
 
-    public static ParseNotice getNoticeFromID(String id){
+
+    /**
+     * Gets the ParseNotice from its objectId
+     *
+     * @param objectId
+     * @return
+     */
+    public static ParseNotice getNoticeFromId(String objectId){
         ParseQuery<ParseObject> query = new ParseQuery<>("Notice");
         try {
-            return (ParseNotice) query.get(id);
+            return (ParseNotice) query.get(objectId);
         } catch (ParseException e) {
             e.printStackTrace();
+            throw new RuntimeException("Notice not found");
         }
-        throw new RuntimeException("Notice not found");
     }
 
+
+    /**
+     * Gets all the ParseNotices belonging to the business
+     *
+     * @param business
+     * @return
+     */
     public static List<ParseNotice> getBusinessNotices(ParseObject business){
         ParseQuery<ParseObject> query = new ParseQuery<>("Notice");
         query.whereEqualTo("business", business);
@@ -34,8 +53,8 @@ public class ParseNotice extends ParseObject{
             return (List<ParseNotice>)(Object) query.find();
         } catch (ParseException e) {
             e.printStackTrace();
+            throw new RuntimeException("Notices not found");
         }
-        throw new RuntimeException("Notices not found");
     }
 
 
@@ -58,5 +77,4 @@ public class ParseNotice extends ParseObject{
     public void setMessage(String message){
         put("message", message);
     }
-
 }

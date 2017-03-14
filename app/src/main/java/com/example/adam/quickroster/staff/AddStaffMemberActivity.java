@@ -8,9 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.adam.quickroster.menu.Menu;
+import com.example.adam.quickroster.menu.MenuActivity;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
 import com.example.adam.quickroster.misc.Util;
@@ -23,16 +24,24 @@ import java.util.List;
 
 /**
  * This is used for adding a new staff member to a business in Parse.
+ *
+ * @author Adam Wareing
  */
 public class AddStaffMemberActivity extends AppCompatActivity {
 
-    private String userName;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String email;
+    private TextView mUserNameTextView;
+    private TextView mPasswordTextView;
+    private TextView mFirstNameTextView;
+    private TextView mLastNameTextView;
+    private TextView mEmailTextView;
+    private Switch mIsManagerSwitch;
+
 
     private String businessId;
+
+    /**
+     * Passed in as a string extra if coming from RegisterBusinessActivity. Takes the user to the home page instead going back to the last activity.
+     */
     private boolean registeringBusinessAsWell;
 
     @Override
@@ -42,16 +51,27 @@ public class AddStaffMemberActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Add Staff Member");
         setSupportActionBar(toolbar);
+        setFieldsAndGetExtras();
+    }
+
+
+    private void setFieldsAndGetExtras(){
+        registeringBusinessAsWell = getIntent().getBooleanExtra("registeringBusinessAsWell", false);
 
         // Get the business ID
         businessId = getIntent().getStringExtra("BusinessID");
-        registeringBusinessAsWell = getIntent().getBooleanExtra("registeringBusinessAsWell", false);
-
         if (businessId == null) {
             // Cant add a user without business id
-            Log.e("Error", "Cant find the businessID passed to this intent");
             throw new RuntimeException("Cant find the businessID passed to this intent");
         }
+
+        // Set fields
+        mUserNameTextView = (TextView) findViewById(R.id.staff_user_name);
+        mPasswordTextView = (TextView) findViewById(R.id.staff_password);
+        mFirstNameTextView = (TextView) findViewById(R.id.staff_first_name);
+        mLastNameTextView = (TextView) findViewById(R.id.staff_last_name);
+        mEmailTextView = (TextView) findViewById(R.id.email);
+        mIsManagerSwitch = (Switch) findViewById(R.id.is_manager_switch);
     }
 
     /**
@@ -72,14 +92,6 @@ public class AddStaffMemberActivity extends AppCompatActivity {
             return;
         }
 
-        // Get current values from widgets
-        userName = ((TextView) findViewById(R.id.staffUserName)).getText().toString();
-        password = ((TextView) findViewById(R.id.staffPassword)).getText().toString();
-        firstName = ((TextView) findViewById(R.id.staffFirstName)).getText().toString();
-        lastName = ((TextView) findViewById(R.id.staffLastName)).getText().toString();
-        email = ((TextView) findViewById(R.id.email)).getText().toString();
-        boolean isManager = !(findViewById(R.id.isManagerSwitch)).isPressed();
-
         // Check valid input
         String errorMessage = inputIsValid();
         if (errorMessage != null) {
@@ -89,16 +101,15 @@ public class AddStaffMemberActivity extends AppCompatActivity {
 
         // Create new user and set values
         final ParseStaffUser user = new ParseStaffUser();
-        user.setUsername(userName);
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setManager(isManager);
+        user.setUsername(mUserNameTextView.getText().toString());
+        user.setEmail(mEmailTextView.getText().toString());
+        user.setPassword(mPasswordTextView.getText().toString());
+        user.setFirstName(mFirstNameTextView.getText().toString());
+        user.setLastName(mLastNameTextView.getText().toString());
+        user.setManager(mIsManagerSwitch.isSelected());
         user.setAutoAddToCalendar(true);
         user.setBusiness(business); // put the business pointer in the user
 
-        // Check
         try {
             user.signUp();
         } catch (ParseException e) {
@@ -106,12 +117,18 @@ public class AddStaffMemberActivity extends AppCompatActivity {
         }
 
         if (registeringBusinessAsWell) {
-            Intent intent = new Intent(AddStaffMemberActivity.this, Menu.class);
+            Intent intent = new Intent(AddStaffMemberActivity.this, MenuActivity.class);
             startActivity(intent);
         }
         finish();
     }
 
+
+    /**
+     * Checks to see if adding a staff member will exceed the maximum staff allowed for the business
+     * @param business
+     * @return - true if they will exceed the limit
+     */
     private boolean exceedingMaxStaffLimit(ParseObject business) {
         int currentStaff = ParseQueryUtil.countStaffMembersInBusiness(business);
         int maxStaff = business.getInt("maxEmployees");
@@ -121,17 +138,18 @@ public class AddStaffMemberActivity extends AppCompatActivity {
 
 
     /**
+     * Checks the username, password, first and last names and email has been filled out
      * @return - null if free of errors. Else it returns the error message
      */
     private String inputIsValid() {
-        List<String> fields = Arrays.asList(userName, password, firstName, lastName, email);
-        for (String s : fields) {
-            if (s == null || s.equals("")) {
+        List<TextView> fields = Arrays.asList(mUserNameTextView, mPasswordTextView, mFirstNameTextView, mLastNameTextView, mEmailTextView);
+        for (TextView s : fields) {
+            if (s == null || s.getText().toString() == null) {
                 return getString(R.string.invalid_input_message);
             }
         }
         // Check password
-        return Util.isPasswordValid(password);
+        return Util.isPasswordValid(mPasswordTextView.getText().toString());
     }
 
 
@@ -151,7 +169,6 @@ public class AddStaffMemberActivity extends AppCompatActivity {
 
     /**
      * Alerts the user that the input is invalid.
-     *
      * @param message - message to display
      */
     private void displayInputAlert(String message) {

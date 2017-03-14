@@ -16,15 +16,28 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * This is a view adapter for displaying information on the shift
+ * This is an adapter for displaying shifts in ShiftViewActivity or ShiftViewFragment.
+ * It displays headings (Strings) and detailed shift views (ParseShifts).
+ *
+ * @author Adam Wareing
  */
-class ShiftViewAdapterFragment extends BaseAdapter {
+public class ShiftAdapter extends BaseAdapter {
+
     private List<Object> mItems;
-    private static final int SHIFT = 0;
-    private static final int HEADER = 1;
     private LayoutInflater inflater;
 
-    public ShiftViewAdapterFragment(Context ctx, List<Object> items) {
+    private static final int SHIFT = 0;
+    private static final int HEADER = 1;
+
+
+    /**
+     * Create a new adapter to display shifts.
+     * @param ctx
+     * @param items - objects must be:
+     *                  - String : made into a header
+     *                  - ParseShift : made into a shift view
+     */
+    public ShiftAdapter(Context ctx, List<Object> items) {
         Context context = ctx;
         mItems = items;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -78,9 +91,9 @@ class ShiftViewAdapterFragment extends BaseAdapter {
 
     /**
      * Sets the view for a heading for a list of shifts.
-     * Example: "Today", "Tomorrow", "Upcoming"
+     * Example: "Sat  25 Mar"
      * @param parent
-     * @param text
+     * @param text - text to set as a heading
      * @return
      */
     private View setHeader(ViewGroup parent, String text) {
@@ -92,7 +105,7 @@ class ShiftViewAdapterFragment extends BaseAdapter {
 
 
     /**
-     * Sets the shifts view by setting the staff member, start and end dates
+     * Sets the shifts view by setting the staff member working the shift, start/end dates, and extra details.
      * @param parent
      * @param shift
      * @return
@@ -134,10 +147,6 @@ class ShiftViewAdapterFragment extends BaseAdapter {
         // Set details
         TextView mDetailsView = (TextView) view.findViewById(R.id.Details);
         mDetailsView.setText(String.valueOf(shift.getDetails()));
-
-        // Set date
-        TextView mShiftDateView = (TextView) view.findViewById(R.id.shift_date);
-        mShiftDateView.setText(String.valueOf(shift.getFormattedDate()));
 
         return view;
     }

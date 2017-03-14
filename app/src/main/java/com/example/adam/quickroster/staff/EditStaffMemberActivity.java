@@ -16,26 +16,27 @@ import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A view that provides a way to edit staff member details
+ * Edit a staff members details or delete the staff member. This calls functions in Cloud Code to perform theses actions as they require the master key
+ * in order to perform the actions, as the current staff member isn't logged in.
+ *
+ * @author Adam Wareing
  */
 public class EditStaffMemberActivity extends AppCompatActivity {
 
-    // UI
-    private TextView userName;
-    private TextView firstName;
-    private TextView lastName;
-    private TextView email;
-    private Switch isManager;
-    private TextView password;
+    private TextView mUserNameTextView;
+    private TextView mFirstNameTextView;
+    private TextView mLastNameTextView;
+    private TextView mEmailTextView;
+    private TextView mPasswordTextView;
+    private Switch mIsManagerSwitch;
 
     private ParseStaffUser selectedStaffMember;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,8 @@ public class EditStaffMemberActivity extends AppCompatActivity {
     }
 
     /**
-     * Updates the selected staff member
+     * Updates the selected staff member. It puts the staff member details as a parameter for the "updateUser" Parse Cloud function, which updates
+     * the user using the master key. Once it updates the staff member it finishes the activity.
      */
     private void updateStaffMember() {
         // Create new user and set values
@@ -62,13 +64,13 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         // Add params to hash map so we can parse to cloud code
         Map<String, Object> params = new HashMap<>();
         params.put("ObjectId", selectedStaffMember.getObjectId());
-        params.put("isManager", !isManager.isPressed());
-        params.put("userName", userName.getText().toString());
-        params.put("email", email.getText().toString());
-        params.put("firstName", firstName.getText().toString());
-        params.put("lastName", lastName.getText().toString());
-        String passwordText = password.getText().toString();
-        params.put("password", passwordText);
+        params.put("mIsManagerSwitch", !mIsManagerSwitch.isPressed());
+        params.put("mUserNameTextView", mUserNameTextView.getText().toString());
+        params.put("mEmailTextView", mEmailTextView.getText().toString());
+        params.put("mFirstNameTextView", mFirstNameTextView.getText().toString());
+        params.put("mLastNameTextView", mLastNameTextView.getText().toString());
+        String passwordText = mPasswordTextView.getText().toString();
+        params.put("mPasswordTextView", passwordText);
 
         ParseCloud.callFunctionInBackground("updateUser", params, new FunctionCallback<String>() {
             @Override
@@ -115,39 +117,30 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         String emailText = selectedStaffMember.getEmail();
         boolean isManagerText = selectedStaffMember.isManager();
 
-
-
         // Set values
-        userName.setText(usernameText == null ? "" : usernameText);
-        firstName.setText(firstNameText == null ? "" : firstNameText);
-        lastName.setText(lastNameText == null ? "" : lastNameText);
-        email.setText(emailText == null ? "" : emailText);
-        isManager.setChecked(isManagerText);
-        password.setText("******");
+        mUserNameTextView.setText(usernameText == null ? "" : usernameText);
+        mFirstNameTextView.setText(firstNameText == null ? "" : firstNameText);
+        mLastNameTextView.setText(lastNameText == null ? "" : lastNameText);
+        mEmailTextView.setText(emailText == null ? "" : emailText);
+        mIsManagerSwitch.setChecked(isManagerText);
+        mPasswordTextView.setText("******");
     }
 
     /**
-     * Sets the fields
+     * Sets the fields for the components and sets an on click listener for the delete button.
      */
     private void setFields() {
-        userName = (TextView) findViewById(R.id.staffUserName);
-        firstName = (TextView) findViewById(R.id.staffFirstName);
-        lastName = (TextView) findViewById(R.id.staffLastName);
-        email = (TextView) findViewById(R.id.email);
-        isManager = (Switch) findViewById(R.id.isManagerSwitch);
-        password = (TextView) findViewById(R.id.editStaffPassword);
-        Button deleteButton = (Button) findViewById(R.id.delete_staff_member_button);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteUser();
-            }
-        });
+        mUserNameTextView = (TextView) findViewById(R.id.staff_user_name);
+        mFirstNameTextView = (TextView) findViewById(R.id.staff_first_name);
+        mLastNameTextView = (TextView) findViewById(R.id.staff_last_name);
+        mEmailTextView = (TextView) findViewById(R.id.email);
+        mIsManagerSwitch = (Switch) findViewById(R.id.is_manager_switch);
+        mPasswordTextView = (TextView) findViewById(R.id.editStaffPassword);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.done_menu, menu);
+        getMenuInflater().inflate(R.menu.done_delete_menu, menu);
         return true;
     }
 
@@ -155,6 +148,10 @@ public class EditStaffMemberActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_icon_done) {
             updateStaffMember();
+        }else if(item.getItemId() == R.id.menu_icon_done){
+            deleteUser();
+        }else{
+            return false; // Error
         }
         return true;
     }

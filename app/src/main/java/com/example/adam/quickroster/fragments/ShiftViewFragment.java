@@ -1,4 +1,4 @@
-package com.example.adam.quickroster.shifts;
+package com.example.adam.quickroster.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,10 +14,11 @@ import android.widget.TextView;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
+import com.example.adam.quickroster.misc.Util;
+import com.example.adam.quickroster.model.ParseShift;
 import com.example.adam.quickroster.model.ParseStaffUser;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.example.adam.quickroster.shifts.AddShiftActivity;
+import com.example.adam.quickroster.shifts.ShiftAdapter;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class ShiftViewFragment extends Fragment {
     private ListView mListView;
     private TextView mTextView;
     private ParseStaffUser user;
+    private boolean displayOnlyUsersShifts;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,82 +46,71 @@ public class ShiftViewFragment extends Fragment {
 
         mListView = (ListView) view.findViewById(R.id.listView);
         mTextView = (TextView) view.findViewById(R.id.no_shifts_text_view);
-        user = null;
-        Calendar cal = getExtras();
+        setUser();
+        Calendar cal = getCalendar();
         getShiftsAndSetAdapter(cal);
         return view;
     }
 
-    private Calendar getExtras() {
-        Calendar cal = GregorianCalendar.getInstance();
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-
+    public void setUser() {
         String userObjectId = null;
         if (getArguments() != null) {
             userObjectId = getArguments().getString("objectId", null);
+            displayOnlyUsersShifts = true;
         }
-
         if (userObjectId != null) {
             user = (ParseStaffUser) ParseStaffUser.getUserFromId(userObjectId);
-        }
-
-        if (user == null) {
-            // Must be current user
+        }else{
             user = (ParseStaffUser) ParseUser.getCurrentUser();
+            displayOnlyUsersShifts = false;
         }
-        return cal;
+    }
+
+    private Calendar getCalendar() {
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar;
     }
 
 
     private void getShiftsAndSetAdapter(Calendar cal) {
-        // get selected date and next day's date
-        Date startDateNoon = cal.getTime();
-        cal.add(Calendar.DATE, 1);
-        Date startDateMidnight = cal.getTime();
+        // Get upcoming shifts
+        Date currentDateTime = cal.getTime();
+        List<ParseShift> upcomingShifts = ParseQueryUtil.getNextShifts(user, currentDateTime, 20, displayOnlyUsersShifts);
+        List<Object> adapterItems = new ArrayList<>();
 
-        // Get all shifts on this day and set adapter
+        for (int i = 0; i < upcomingShifts.size(); /* see body */) {
+            ParseShift shift = upcomingShifts.get(i);
+            // Add header and shift
+            long millis = shift.getStartDate().getTime();
+            String formattedTime = Util.DATE_FORMATTER.format(millis);
+            adapterItems.add(formattedTime);
 
-        // Today
-        List<Object> shifts = new ArrayList<>();
-        shifts.add("Today");
-        shifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime(user, startDateNoon,
-                startDateMidnight));
-        if (shifts.size() == 1) {
-            shifts.clear();
+            // Add all remaining shifts on the day
+            while (Util.DATE_FORMATTER.format(shift.getStartDate().getTime()).equals(formattedTime)) {
+                adapterItems.add(shift);
+                i++;
+
+                // Check within index
+                if (i == upcomingShifts.size()) {
+                    break;
+                }
+                shift = upcomingShifts.get(i);
+            }
         }
 
-        // Tomorrow
-        startDateNoon = cal.getTime();
-        cal.add(Calendar.DATE, 1);
-        List<Object> newShifts = new ArrayList<>();
-        startDateMidnight = cal.getTime();
-        newShifts.add("Tomorrow");
-        newShifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime(user, startDateNoon,
-                startDateMidnight));
-        if (newShifts.size() != 1) {
-            shifts.addAll(newShifts);
-        }
-
-
-        // Upcoming
-        newShifts.clear();
-        newShifts.add("Upcoming");
-        newShifts.addAll(ParseQueryUtil.getNextShifts(user, startDateMidnight, 5));
-        if (newShifts.size() != 1) {
-            shifts.addAll(newShifts);
-        }
-
-        if (shifts.size() > 0) {
-            // display shifts
-            mListView.setAdapter(new ShiftViewAdapterFragment(getActivity().getApplicationContext(), shifts));
+        if (adapterItems.size() > 0) {
+            // Display shifts
+            mListView.setAdapter(new ShiftAdapter(getActivity().getApplicationContext(), adapterItems));
         } else {
             // No shifts to display, so display text
             mListView.setVisibility(View.INVISIBLE);
             mTextView.setVisibility(View.VISIBLE);
         }
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -136,10 +127,12 @@ public class ShiftViewFragment extends Fragment {
             startActivity(intentAddStaff);
 
         } else {
-            // Menu not found
+            // MenuActivity not found
             return false;
         }
 
         return true;
     }
+
+
 }

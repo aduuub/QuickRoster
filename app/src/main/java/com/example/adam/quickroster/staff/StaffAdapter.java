@@ -13,14 +13,16 @@ import com.parse.ParseUser;
 import java.util.List;
 
 /**
- * An adapter for displaying the staff member details.
+ * An adapter for displaying the staff member details. The view simply contains the staff members first + last name.
+ *
+ * @author Adam Wareing
  */
-class StaffViewAdapter extends BaseAdapter {
+public class StaffAdapter extends BaseAdapter {
 
     private List<ParseUser> users;
     private Context mContext;
 
-    public StaffViewAdapter(Context ctx, List<ParseUser> users) {
+    public StaffAdapter(Context ctx, List<ParseUser> users) {
         this.users = users;
         this.mContext = ctx;
     }

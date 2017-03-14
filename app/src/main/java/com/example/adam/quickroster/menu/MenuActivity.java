@@ -16,67 +16,83 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.adam.quickroster.fragments.AccountFragment;
-import com.example.adam.quickroster.fragments.HomeFragment;
-import com.example.adam.quickroster.fragments.MessagesFragment;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.fragments.StatsFragment;
 import com.example.adam.quickroster.login.WelcomeActivity;
 import com.example.adam.quickroster.model.ParseStaffUser;
-import com.example.adam.quickroster.notice_board.NoticeBoardActivity;
+import com.example.adam.quickroster.fragments.NoticeViewFragment;
 import com.example.adam.quickroster.shifts.CalendarViewActivity;
-import com.example.adam.quickroster.shifts.ShiftViewFragment;
-import com.example.adam.quickroster.staff.StaffView;
+import com.example.adam.quickroster.fragments.ShiftViewFragment;
+import com.example.adam.quickroster.fragments.StaffViewFragment;
 import com.parse.ParseUser;
 
 /**
- * This is the managers home view. Its where they are taken once they have been logged in,
- * and also provides buttons to the various tasks they can perform
+ * This is the Home view. Its where the user is taken once they have logged in, or on application launch and they are already authorised with a valid
+ * session token. It contains the login for the <code>Navigation Drawer</code> and controls the fragments that are displayed on screen. Fragments are
+ * changed by the user selecting options in the drawer.
+ *
+ * @author Adam Wareing
  */
-public class Menu extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // set tool bar and nav drawer
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        // Set name and business
-        View header = navigationView.getHeaderView(0);
-        TextView nameTextField = (TextView) header.findViewById(R.id.nav_header_name);
-        TextView businessTextField = (TextView) header.findViewById(R.id.nav_header_business);
-
-        ParseStaffUser currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
-        nameTextField.setText(currentUser.getFullName());
-        businessTextField.setText(currentUser.getBusinessName());
-
-        displaySelectedScreen(R.id.nav_home);
+        setToolbarAndNavDrawer();
+        displaySelectedFragment(R.id.nav_home);
     }
 
 
     /**
-     * Logs out the current Parse User
+     * Sets the toolbar up (including adding the toggle for the menu) and inits the navigation view as well as setting the users name and business in
+     * the navigation views header.
+     */
+    private void setToolbarAndNavDrawer(){
+        // Set Toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Set the drawer layout, toggle and listener
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // Set the navigation view listener
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        // Get name and business text views
+        View header = navigationView.getHeaderView(0);
+        TextView nameTextField = (TextView) header.findViewById(R.id.nav_header_name);
+        TextView businessTextField = (TextView) header.findViewById(R.id.nav_header_business);
+
+        // Set name and business in the header
+        ParseStaffUser currentUser = (ParseStaffUser) ParseUser.getCurrentUser();
+        nameTextField.setText(currentUser.getFullName());
+        businessTextField.setText(currentUser.getBusinessName());
+    }
+
+
+    /**
+     * Log out the current Parse User
      */
     private void logout() {
         ParseUser.logOut();
-        Intent intent = new Intent(Menu.this, WelcomeActivity.class);
+        Intent intent = new Intent(MenuActivity.this, WelcomeActivity.class);
         startActivity(intent);
         finish();
     }
 
-
-    private void displaySelectedScreen(int id){
+    /**
+     * Creates a fragment corresponding to the menu items id. Calls <code> displayFragment(Fragment) </code> to display
+     *
+     * @param id - menu items id
+     */
+    private void displaySelectedFragment(int id){
         Fragment fragment = null;
         switch(id){
             case R.id.nav_home:
@@ -88,7 +104,7 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
 
             case R.id.nav_manage_staff:
-                fragment = new StaffView();
+                fragment = new StaffViewFragment();
                 break;
 
             case R.id.nav_stats:
@@ -96,7 +112,7 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
 
             case R.id.nav_notices:
-                fragment = new NoticeBoardActivity();
+                fragment = new NoticeViewFragment();
                 break;
 
             case R.id.nav_account:
@@ -111,6 +127,13 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
 
+    /**
+     * Displays the fragment on the screen in the <code>content_frame</code>
+     *
+     * It doesn't add it to the back stack, as the user shouldn't be able to navigate back through the fragments.
+     *
+     * @param fragment
+     */
     public void displayFragment(Fragment fragment){
         if(fragment != null){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -125,9 +148,8 @@ public class Menu extends AppCompatActivity implements NavigationView.OnNavigati
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-        displaySelectedScreen(id);
+        displaySelectedFragment(id);
         return true;
     }
 }

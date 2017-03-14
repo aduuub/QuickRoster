@@ -30,6 +30,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This fragment displays statistics for the employee.
+ *
+ * @author Adam Wareing
+ */
 public class StatsFragment extends Fragment {
 
     private GraphView mGraph;
@@ -37,6 +42,7 @@ public class StatsFragment extends Fragment {
     private String timeViewingOptions = "Week"; // Week, Month, Year
     private String viewingOptions = "Pay"; // Count, Hours, Pay
 
+    private final int MILLIS_TO_HOURS = (1000 * 60 * 60);
     private final long ONE_DAY_OFFSET = (24 * 60 * 60 * 1000);
     private final long ONE_WEEK_OFFSET = ONE_DAY_OFFSET * 7; // 7 Days
 
@@ -47,7 +53,7 @@ public class StatsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Statistics");
         View view = inflater.inflate(R.layout.activity_stats, container, false);
@@ -79,7 +85,8 @@ public class StatsFragment extends Fragment {
                     for (Integer i : object) {
                         data.add(i.doubleValue());
                     }
-                    updateGraph(data);
+                    data = convertFormatting(data);
+                    setGraph(data);
                 } else {
                     Log.e("Parse error", e.getMessage());
                     e.printStackTrace();
@@ -89,22 +96,13 @@ public class StatsFragment extends Fragment {
         });
     }
 
-    private void updateGraph(List<Double> data) {
-        data = convertFormatting(data);
-        setGraph(data);
-    }
-
 
     /**
-     * Converts the formatting for the yAxis. If the current viewingOptions is pay we need to convert
-     * it my multiplying by the staffs hourly rate. If the current viewingOptions is hours we need
+     * Converts the formatting for the y values of the data. If the current <code> viewingOptions </code> is 'Pay' it converts
+     * it by multiplying it by the staffs hourly rate. If the current viewOptions is hours we need
      * to convert it to hours from millis, otherwise we don't need to do anything to it.
-     *
-     * @param data
-     * @return
      */
     private List<Double> convertFormatting(List<Double> data) {
-        int MILLIS_TO_HOURS = (1000 * 60 * 60);
         if (viewingOptions.equals("Pay")) {
             // We need to multiply hours worked by the users hourly rate
             String wage = ((ParseStaffUser) ParseUser.getCurrentUser()).getHourlyWage();
@@ -119,7 +117,9 @@ public class StatsFragment extends Fragment {
                 hours *= pay; // calculate hourly rate
                 data.set(i, hours);
             }
+
         } else if (viewingOptions.equals("Hours")) {
+            // Need to convert it to hours
             for (int i = 0; i < data.size(); i++) {
                 double hours = data.get(i) / MILLIS_TO_HOURS; // convert to hours
                 data.set(i, hours);
@@ -130,13 +130,19 @@ public class StatsFragment extends Fragment {
 
 
     /**
-     * Displays the graph with the set values.
+     * Displays the graph with the provided values.
      *
-     * @param data list of hours or shifts worked.
+     * Coverts the data to DataPoints, removes the old series and displays the new one. It also formats the x-axis appropriately.
+     * Week - 7 data points (each day)
+     * Month - 4 data points (each week- 28 day month)
+     * Year - 12 data points (each month - 28 day month)
+     *
+     * @param data - Data for 'Hours', 'Shift', or 'Pay'. This is displayed along the y-axis. The x-axis data is calculate automatically based on
+     *             <code> timeViewingOptions </code>
      */
     private void setGraph(List<Double> data) {
         DataPoint[] points = new DataPoint[data.size()];
-        for (int i =0; i< data.size(); i++) {
+        for (int i = 0; i < data.size(); i++) {
             points[i] = new DataPoint(i, data.get(i));
         }
 
@@ -164,7 +170,7 @@ public class StatsFragment extends Fragment {
 
                 } else {
                     String yLabel = super.formatLabel(value, isValueX);
-                    if(viewingOptions.equals("Pay")){
+                    if (viewingOptions.equals("Pay")) {
                         yLabel = "$" + yLabel;
                     }
                     return yLabel;
@@ -176,28 +182,44 @@ public class StatsFragment extends Fragment {
         mGraph.getGridLabelRenderer().setTextSize(40);
     }
 
-    private String getWeekFormatter(double xValue){
+
+    /***
+     * Get the formatter for the week. 0..6 (0 being today, 6 being 7 days ago)
+     * @param xValue
+     * @return - the day formatted e.g. "Mon"
+     */
+    private String getWeekFormatter(double xValue) {
         final SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("E");
         Date date = new Date();
-        int daySubtraction = (int) (6-xValue);
-        return dateTimeFormatter.format(date.getTime()-(ONE_DAY_OFFSET*daySubtraction));
+        int daySubtraction = (int) (6 - xValue);
+        return dateTimeFormatter.format(date.getTime() - (ONE_DAY_OFFSET * daySubtraction));
     }
 
-    private String getMonthFormatter(double xValue){
+
+    /***
+     * Get the formatter for the month. 0..3 (0 being this week, 3 being 4 weeks ago)
+     * @param xValue
+     * @return - the day formatted e.g. "Week 12"
+     */
+    private String getMonthFormatter(double xValue) {
         final SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("w");
         Date date = new Date();
-        int daySubtraction = (int) (3-xValue);
-        return "Week " + dateTimeFormatter.format(date.getTime()-(ONE_WEEK_OFFSET*daySubtraction));
+        int daySubtraction = (int) (3 - xValue);
+        return "Week " + dateTimeFormatter.format(date.getTime() - (ONE_WEEK_OFFSET * daySubtraction));
     }
 
-    private String getYearFormatter(double xValue){
+    /***
+     * Get the formatter for the year. 0..11 (0 being this month, 11 being 12 months ago)
+     * @param xValue
+     * @return - the day formatted e.g. "Jan"
+     */
+    private String getYearFormatter(double xValue) {
         final SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("MMM");
         Date date = new Date();
-        int daySubtraction = (int) (12-xValue);
+        int daySubtraction = (int) (12 - xValue);
         long ONE_MONTH_OFFSET = ONE_WEEK_OFFSET * 4;
-        return dateTimeFormatter.format(date.getTime()-(ONE_MONTH_OFFSET *daySubtraction));
+        return dateTimeFormatter.format(date.getTime() - (ONE_MONTH_OFFSET * daySubtraction));
     }
-
 
 
     /**
@@ -219,8 +241,6 @@ public class StatsFragment extends Fragment {
     /**
      * Sets the spinners for the time viewing options and viewing options. Also handles listening
      * for a click to happen
-     *
-     * @param view
      */
     private void setSpinnersAndListeners(View view) {
         Spinner mTimeViewingOptionsSpinner = (Spinner) view.findViewById(R.id.time_view_options_spinner);

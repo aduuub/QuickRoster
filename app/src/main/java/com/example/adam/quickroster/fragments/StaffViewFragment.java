@@ -1,4 +1,4 @@
-package com.example.adam.quickroster.staff;
+package com.example.adam.quickroster.fragments;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -15,12 +15,15 @@ import android.widget.ListView;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.ParseQueryUtil;
+import com.example.adam.quickroster.staff.AddStaffMemberActivity;
+import com.example.adam.quickroster.staff.StaffAdapter;
+import com.example.adam.quickroster.staff.StaffViewActivity;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.List;
 
-public class StaffView extends Fragment {
+public class StaffViewFragment extends Fragment {
 
     private ListView staffList;
 
@@ -47,7 +50,7 @@ public class StaffView extends Fragment {
         // Get all staff of the business
         final List<ParseUser> allStaff = ParseQueryUtil.getAllUsers(ParseUser.getCurrentUser());
 
-        staffList.setAdapter(new StaffViewAdapter(getActivity(), allStaff));
+        staffList.setAdapter(new StaffAdapter(getActivity(), allStaff));
         staffList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
@@ -84,7 +87,7 @@ public class StaffView extends Fragment {
      * Called when a staff member has been clicked on, transitions to the edit staff member activity.
      */
     private void staffMemberSelected(ParseUser user) {
-        Intent modifyUserIntent = new Intent(getActivity().getApplicationContext(), ViewStaffMemberActivity.class);
+        Intent modifyUserIntent = new Intent(getActivity().getApplicationContext(), StaffViewActivity.class);
         modifyUserIntent.putExtra("objectId", user.getObjectId());
         startActivity(modifyUserIntent);
     }

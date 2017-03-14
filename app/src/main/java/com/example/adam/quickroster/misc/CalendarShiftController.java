@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.example.adam.quickroster.R;
+import com.example.adam.quickroster.model.ParseShift;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -23,30 +24,70 @@ import java.util.List;
 import java.util.TimeZone;
 
 /**
- * Created by Adam on 6/09/16.
+ * This adds the latest shifts to the users device. It stores when the shifts were last updated in a string in shared preferences. When new shifts are
+ * added it updates the time, and adds the new shifts to the users calendar.\
+ *
+ * @author Adam Wareing
  */
 class CalendarShiftController {
 
-    private static final String DEBUG_TAG = "CalendarActivity";
     private final Activity activityObj;
     private final Context context;
-    private final String eventUriString = "content://com.android.calendar/events";
 
+    private static final String DEBUG_TAG = "CalendarActivity";
+    private final String EVENT_URI_STRING = "content://com.android.calendar/events";
+
+    /**
+     * Creates a new instance
+     * @param actObj
+     * @param context
+     */
     public CalendarShiftController(Activity actObj, Context context) {
         this.activityObj = actObj;
         this.context = context;
     }
 
-    private void makeNewEntry(String description, long startTime, long endTime) {
-        ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, startTime);
-        values.put(CalendarContract.Events.DTEND, endTime);
-        if(description == null || description.equals(""))
-            values.put(CalendarContract.Events.TITLE, "Work");
-        else
-            values.put(CalendarContract.Events.TITLE, "Work: " + description);
 
-        //values.put(CalendarContract.Events.DESCRIPTION, description);
+    /**
+     * Adds the new shifts to the users calendar
+     */
+    public void addAllNewShifts() {
+        // Remove two days from last updated date and find all the updated shifts
+        Date lastUpdated = getDateCalendarLastUpdated();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(lastUpdated);
+        cal.add(Calendar.DATE, -2);
+        lastUpdated = cal.getTime();
+        List<ParseObject> usersShifts;
+        try {
+            ParseUser.getCurrentUser().save();
+            usersShifts = ParseQueryUtil.getShiftsModifiedAfter(ParseUser.getCurrentUser(), lastUpdated);
+        } catch (ParseException e) {
+            Log.e("Parse Error", e.getMessage());
+            return;
+        }
+
+        // Put updated edit time
+        setCalendarUpdatedNow();
+
+        // Update new shifts
+        for (ParseObject shift : usersShifts) {
+            addNewShiftToCalendar((ParseShift)shift);
+        }
+    }
+
+
+    /**
+     * Adds a parse shift to the users local calendar.
+     *
+     * Sets the start and end date as well as ther details.
+     * @param shift
+     */
+    private void addNewShiftToCalendar(ParseShift shift) {
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Events.DTSTART, shift.getStartDate().getTime());
+        values.put(CalendarContract.Events.DTEND, shift.getEndDate().getTime());
+        values.put(CalendarContract.Events.TITLE, "Work: " + shift.getDetails());
         values.put(CalendarContract.Events.CALENDAR_ID, 1);
 
         // Get current timezone
@@ -57,48 +98,19 @@ class CalendarShiftController {
         int permissionCheck = ContextCompat.checkSelfPermission(this.context,
                 Manifest.permission.WRITE_CALENDAR);
 
+        // Add event to calendar
         if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
             activityObj.getApplicationContext()
                     .getContentResolver()
-                    .insert(Uri.parse(eventUriString), values);
+                    .insert(Uri.parse(EVENT_URI_STRING), values);
         }
     }
 
 
     /**
-     * Adds the new shifts to the users calendar
+     * Sets <code>calendarLastSync</code> in the shared preferences to be the current time.
      */
-    public void addNewShiftsToCalendar() {
-        // remove two days from last updated date and find all the updated shifts
-        Date lastUpdated = getCalLastUpdated();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(lastUpdated);
-        cal.add(Calendar.DATE, -2);
-        lastUpdated = cal.getTime();
-        List<ParseObject> usersShifts;
-        try {
-            ParseUser.getCurrentUser().save();
-            usersShifts = ParseQueryUtil.getAllUsersShiftsAfterDate(ParseUser.getCurrentUser(), lastUpdated);
-        } catch (ParseException e) {
-            Log.e("Parse Error", e.getMessage());
-            return;
-        }
-
-        // Put updated edit time
-        setCalLastUpdatedNow();
-
-        for (ParseObject shift : usersShifts) {
-            String details = shift.getString("details");
-            Date start = shift.getDate("startTime");
-            Date end = shift.getDate("endTime");
-            makeNewEntry(details, start.getTime(), end.getTime());
-        }
-    }
-
-    /**
-     * Sets the field 'calendarLastSync' in the shared preferences to be the current time
-     */
-    private void setCalLastUpdatedNow() {
+    private void setCalendarUpdatedNow() {
         String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         SharedPreferences sharedPref = activityObj.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -108,10 +120,11 @@ class CalendarShiftController {
 
 
     /**
+     * Gets the time that the calendar was last updated. Retrieves from shared preferences.
      *
-     * @return
+     * @return - Date/time the calendar was last updated
      */
-    private Date getCalLastUpdated() {
+    private Date getDateCalendarLastUpdated() {
         SharedPreferences sharedPref = activityObj.getPreferences(Context.MODE_PRIVATE);
         String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         String dateString = sharedPref.getString(activityObj.getString(R.string.cal_last_synced_at), currentDate);
@@ -123,7 +136,5 @@ class CalendarShiftController {
         }
         return null;
     }
-
-
 }
 

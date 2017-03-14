@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -17,15 +16,18 @@ import android.widget.TextView;
 
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.model.ParseStaffUser;
-import com.example.adam.quickroster.shifts.AddShiftActivity;
-import com.example.adam.quickroster.shifts.ShiftViewFragment;
+import com.example.adam.quickroster.fragments.ShiftViewFragment;
 import com.parse.ParseUser;
 
 
 /**
- * Created by Adam on 8/03/17.
+ * View showing the staff members of a business
+ *
+ * @StringExtra - objectId (NonNull) - Object Id of the staff member to populate the view with.
+ *
+ * @author Adam Wareing
  */
-public class ViewStaffMemberActivity extends AppCompatActivity {
+public class StaffViewActivity extends AppCompatActivity {
 
     private ParseStaffUser selectedUser;
     private String email;
@@ -52,6 +54,10 @@ public class ViewStaffMemberActivity extends AppCompatActivity {
         displayShiftFragment();
     }
 
+
+    /**
+     * Fetches information on the staff member and sets the text views with it.
+     */
     private void setTextViewsAndListeners() {
         // Get important data
         mobileNumber = selectedUser.getMobileNumber();
@@ -66,6 +72,7 @@ public class ViewStaffMemberActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.mobile_number_text_view_2)).setText(mobileNumber);
         ((TextView) findViewById(R.id.email_text_view)).setText(email);
 
+        // Call
         LinearLayout callLinearLayout = (LinearLayout) findViewById(R.id.call_linear_layout);
         callLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +81,7 @@ public class ViewStaffMemberActivity extends AppCompatActivity {
             }
         });
 
+        // Email
         LinearLayout emailLinearLayout = (LinearLayout) findViewById(R.id.email_linear_layout);
         emailLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +90,7 @@ public class ViewStaffMemberActivity extends AppCompatActivity {
             }
         });
 
+        // Text
         LinearLayout textLinearLayout = (LinearLayout) findViewById(R.id.text_linear_layout);
         textLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,29 +100,10 @@ public class ViewStaffMemberActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
-            getMenuInflater().inflate(R.menu.edit_menu, menu);
-        }
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (item.getItemId() == R.id.menu_icon_edit) {
-            Intent intentAddStaff = new Intent(ViewStaffMemberActivity.this, EditStaffMemberActivity.class);
-            intentAddStaff.putExtra("objectId", selectedUser.getObjectId());
-            startActivity(intentAddStaff);
-
-        }else {
-            // Menu not found
-            return false;
-        }
-        return true;
-    }
-
+    /**
+     * Displays the 'ShiftViewFragment' containing the upcoming shifts of the user. Called on creation of the activity.
+     */
     private void displayShiftFragment() {
         Fragment fragment = new ShiftViewFragment();
 
@@ -127,12 +117,21 @@ public class ViewStaffMemberActivity extends AppCompatActivity {
         ft.commit();
     }
 
+
+    /**
+     * Opens the dialler and has the number of the staff member already loaded ready to dial.
+     */
     private void callNumber() {
         Intent sendIntent = new Intent(Intent.ACTION_DIAL);
-        sendIntent.setData(Uri.parse("tel:0123456789"));
+        String uriString = "tel:" + mobileNumber;
+        sendIntent.setData(Uri.parse(uriString));
         startActivity(sendIntent);
     }
 
+
+    /**
+     * Opens text messages and has the number of the staff member already loaded ready to text.
+     */
     private void textNumber() {
         Intent sendIntent = new Intent(Intent.ACTION_VIEW);
         sendIntent.setType("vnd.android-dir/mms-sms");
@@ -140,10 +139,40 @@ public class ViewStaffMemberActivity extends AppCompatActivity {
         startActivity(sendIntent);
     }
 
+
+    /**
+     * Brings up a selection to choose an email client and which when selected will launch and be ready to compose a new email with the staff members
+     * email address already in the recipient address.
+     */
     private void sendEmail() {
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.setType("message/rfc822");
         sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
         startActivity(Intent.createChooser(sendIntent, "Send mail to " + fullName));
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
+            getMenuInflater().inflate(R.menu.edit_menu, menu);
+        }
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_icon_edit) {
+            // Edit the staff member
+            Intent intentAddStaff = new Intent(StaffViewActivity.this, EditStaffMemberActivity.class);
+            intentAddStaff.putExtra("objectId", selectedUser.getObjectId());
+            startActivity(intentAddStaff);
+
+        }else {
+            return false; // Menu item not found
+        }
+        return true;
+    }
+
 }

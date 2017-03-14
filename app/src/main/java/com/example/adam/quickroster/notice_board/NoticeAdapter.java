@@ -14,12 +14,18 @@ import com.example.adam.quickroster.model.ParseNotice;
 
 import java.util.List;
 
-class NoticeBoardListAdapter extends ArrayAdapter {
+/**
+ * An adapter to display ParseNotice's in a list view. Shows the Title and Message of the notice.
+ *
+ * @see NoticeViewActivity
+ * @author Adam Wareing
+ */
+public class NoticeAdapter extends ArrayAdapter {
 
     private List<ParseNotice> notices;
     private Context context;
 
-    public NoticeBoardListAdapter(Context context, int resource, List<ParseNotice> objects) {
+    public NoticeAdapter(Context context, int resource, List<ParseNotice> objects) {
         super(context, resource, objects);
         this.notices = objects;
         this.context = context;
@@ -47,12 +53,12 @@ class NoticeBoardListAdapter extends ArrayAdapter {
         View view = inflater.inflate(R.layout.content_notice_board_list_adapter, parent, false);
         ParseNotice notice = notices.get(position);
 
-        // set title
+        // Set title
         String title = notice.getTitle();
         TextView titleBox = (TextView) view.findViewById(R.id.notice_title);
         titleBox.setText(title);
 
-        // set message
+        // Set message
         String message = notice.getMessage();
         TextView messageBox = (TextView) view.findViewById(R.id.notice_message);
         if(message.length() > 100){

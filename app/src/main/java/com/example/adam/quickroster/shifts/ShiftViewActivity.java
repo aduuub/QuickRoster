@@ -24,8 +24,10 @@ import java.util.List;
 
 /**
  * This is a view that shows all the shifts on the selected day. It retrieves them from Parse
+ *
+ * @author Adam Wareing
  */
-public class ShiftView extends AppCompatActivity {
+public class ShiftViewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +60,7 @@ public class ShiftView extends AppCompatActivity {
         shifts.addAll(ParseQueryUtil.getAllStaffsShiftBetweenTime((ParseStaffUser) ParseUser.getCurrentUser(), startDateNoon,
                 startDateMidnight));
         if (shifts.size() > 0) {
-            listView.setAdapter(new ShiftViewAdapter(this, shifts));
+            listView.setAdapter(new ShiftAdapter(this, shifts));
         } else {
             listView.setVisibility(View.INVISIBLE);
             textView.setVisibility(View.VISIBLE);

@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.*;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.menu.Menu;
+import com.example.adam.quickroster.menu.MenuActivity;
 import com.example.adam.quickroster.misc.Util;
 import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseAnonymousUtils;
@@ -16,7 +16,7 @@ import com.parse.ParseUser;
 
 /**
  * This welcomes the user when they first come to the application. It allows them to transition to
- * login as a user, or register a new business.
+ * login, or register a new business.
  */
 public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,28 +30,33 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         ParseUser currentUser = ParseUser.getCurrentUser();
 
         if (currentUser != null && !ParseAnonymousUtils.isLinked(currentUser)) {
-
             // Already logged in and not an anon user
             if (ParseUser.getCurrentUser().isAuthenticated()) {
                 new Util.UpdateShifts().execute(this);
 
-                // Update current user
+                // Fetch current user
                 ParseStaffUser parseStaffUser = (ParseStaffUser) ParseUser.getCurrentUser();
                 parseStaffUser.fetchInBackground();
-                parseStaffUser.setLocalManager(parseStaffUser.getBoolean("isManager"));
 
-
-                Intent intent = new Intent(WelcomeActivity.this, Menu.class);
+                Intent intent = new Intent(WelcomeActivity.this, MenuActivity.class);
                 startActivity(intent);
                 finish();
             }
         }
 
-        // Buttons
-        Button registerBusinessButton = (Button) findViewById(R.id.registerBusinessButton);
-        Button loginAsUserButton = (Button) findViewById(R.id.loginAsUserButton);
-        registerBusinessButton.setOnClickListener(this);
-        loginAsUserButton.setOnClickListener(this);
+        setButtonListeners();
+    }
+
+
+    /**
+     * Sets the listeners as this for login and register business
+     */
+    private void setButtonListeners(){
+        Button mRegisterBusinessButton = (Button) findViewById(R.id.registerBusinessButton);
+        Button mLoginAsUserButton = (Button) findViewById(R.id.loginAsUserButton);
+
+        mRegisterBusinessButton.setOnClickListener(this);
+        mLoginAsUserButton.setOnClickListener(this);
     }
 
 

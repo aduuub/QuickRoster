@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-import com.example.adam.quickroster.menu.Menu;
+import com.example.adam.quickroster.menu.MenuActivity;
 import com.example.adam.quickroster.R;
 import com.example.adam.quickroster.misc.Util;
 import com.parse.LogInCallback;
@@ -28,7 +28,10 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 
 /**
- * This is where the staff member logs into the application using there user name and mPasswordTextView
+ * This is the Activity where the staff member logs into the application using there user name and password.
+ *
+ * @author Adam Wareing
+ * @Version 1.0
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -58,7 +61,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Attempt to log the user in
+     * Attempt to log the user in. If it is unsuccessful the login will be aborted, and an alert will be shown. On successful login the user will
+     * be taken to the home screen.
      */
     private void login() {
         String usernameString = mUserNameTextView.getText().toString();
@@ -84,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                Intent intent = new Intent(LoginActivity.this, Menu.class);
+                Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -98,7 +102,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * @return - null if free of errors. Else it returns the error message
+     * Checks the inputs valid
+     *
+     * @return - null if free of errors. Otherwise it returns the error message
      */
     private String isInputValid() {
         List<String> fields = Arrays.asList(mUserNameTextView.getText().toString(),
@@ -134,7 +140,8 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Shows the progress UI and hides the login form.
-     * @param show - sets the progress view to be visible or gone
+     *
+     * @param show - true : show the progress view, hide login view. False : hide the progress view, show the login view.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -143,13 +150,6 @@ public class LoginActivity extends AppCompatActivity {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-//                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-//                }
-//            });a
 
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
@@ -160,8 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
+            // The ViewPropertyAnimator APIs are not available, so simply show and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }

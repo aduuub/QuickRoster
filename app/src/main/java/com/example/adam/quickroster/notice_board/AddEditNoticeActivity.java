@@ -18,14 +18,25 @@ import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-public class NoticeEdit extends AppCompatActivity {
+/**
+ * Lets the user edit or add a notice.
+ *
+ * StringExtra - objectId - The objectId of the ParseNotice to edit. If null, it will go into adding a new notice, rather than editing.
+ *
+ * @author Adam Wareing
+ */
+public class AddEditNoticeActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private EditText mTitleEditText;
     private EditText mMessageEditText;
 
-    private ParseNotice notice;
-    private boolean addingNotice;
+    private ParseNotice notice; // notice we are editing
+
+    /**
+     * Are we editing or adding a notice?
+     */
+    private MODIFYING_OPTIONS state;
 
 
     @Override
@@ -41,17 +52,22 @@ public class NoticeEdit extends AppCompatActivity {
         setSupportActionBar(mToolbar);
     }
 
+    /**
+     * Sets the fields for the existing ParseNotice sets whether we are adding or editing the notice.
+     *
+     * If editing, set the old title/message into the EditTexts.
+     */
     private void fillTextFields() {
         Intent intent = getIntent();
         String objectId = intent.getStringExtra("objectId");
 
         if (objectId != null) {
             // We must be editing a notice
-            addingNotice = false;
+            state = MODIFYING_OPTIONS.EDITING;
             mToolbar.setTitle("Edit Notice");
 
             // Find the title and message
-            notice = ParseNotice.getNoticeFromID(objectId);
+            notice = ParseNotice.getNoticeFromId(objectId);
             String title = notice.getTitle();
             String message = notice.getMessage();
 
@@ -63,28 +79,16 @@ public class NoticeEdit extends AppCompatActivity {
 
         } else {
             // Adding notice
-            addingNotice = true;
+            state = MODIFYING_OPTIONS.ADDING;
             mToolbar.setTitle("Add Notice");
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
-            getMenuInflater().inflate(R.menu.done_menu, menu);
-        }
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_icon_done) {
-            saveNotice();
-        }
-        return true;
-    }
-
-
+    /**
+     * Save the notice to Parse.
+     * Saves the notice to the current users business.
+     */
     private void saveNotice() {
         String title = mTitleEditText.getText().toString();
         String message = mMessageEditText.getText().toString();
@@ -97,7 +101,7 @@ public class NoticeEdit extends AppCompatActivity {
         ParseBusiness business = ((ParseStaffUser)ParseUser.getCurrentUser()).getBusiness();
         Log.i("businessID", business.getObjectId());
 
-        if (addingNotice) {
+        if (state == MODIFYING_OPTIONS.ADDING) {
             notice = new ParseNotice();
             notice.put("business", business);
         }
@@ -115,7 +119,7 @@ public class NoticeEdit extends AppCompatActivity {
      * Alerts the user that the input is invalid.
      */
     private void displayInputAlert() {
-        AlertDialog alertDialog = new AlertDialog.Builder(NoticeEdit.this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(AddEditNoticeActivity.this).create();
         alertDialog.setTitle(getString(R.string.invalid_input_title));
         alertDialog.setMessage(getString(R.string.invalid_input_message));
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
@@ -125,5 +129,30 @@ public class NoticeEdit extends AppCompatActivity {
                     }
                 });
         alertDialog.show();
+    }
+
+    /**
+     * State the activity can be in.
+     */
+    private enum MODIFYING_OPTIONS {
+        EDITING, ADDING
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (ParseUser.getCurrentUser().getBoolean("isManager")) {
+            getMenuInflater().inflate(R.menu.done_menu, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_icon_done) {
+            saveNotice();
+        }
+        return true;
     }
 }

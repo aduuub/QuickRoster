@@ -4,7 +4,9 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
 /**
- * Represents a Business object in Parse
+ * Represents a 'Business' object in the Parse.com database
+ *
+ * @author Adam Wareing
  */
 @ParseClassName("Business")
 public class ParseBusiness extends ParseObject {

@@ -7,21 +7,21 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 /**
- * Represents a User object in Parse
+ * Represents a 'User' object in the Parse.com database
+ *
+ * @author Adam Wareing
  */
 @ParseClassName("_User")
 public class ParseStaffUser extends ParseUser {
 
-    private ParseBusiness business;
-    private boolean manager;
-
+    /**
+     * Create a new ParseStaffUser
+     */
     public ParseStaffUser() {
         // Requires empty constructor
     }
 
     // Setters
-
-    public void setLocalManager(boolean manager) {this.manager = manager; }
 
     public void setFirstName(String name) { put("firstName", name);}
     public void setLastName(String name) { put("lastName", name);}
@@ -30,7 +30,7 @@ public class ParseStaffUser extends ParseUser {
 
     public void setPassword(String password) {
         put("password", password);
-        saveInBackground();
+        saveEventually();
     }
 
     public void setHourlyWage(String wage) {
@@ -48,7 +48,7 @@ public class ParseStaffUser extends ParseUser {
     // Getters
 
     public boolean isManager() {
-        return manager;
+        return getBoolean("isManager");
     }
     public String getHourlyWage() {
         return getString("wage");
@@ -57,7 +57,6 @@ public class ParseStaffUser extends ParseUser {
     public boolean getAutoAddToCalendar() {
         return getBoolean("autoAddToCal");
     }
-
 
     public String getBusinessName() {
         try {

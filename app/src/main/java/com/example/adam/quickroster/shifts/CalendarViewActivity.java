@@ -13,14 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.adam.quickroster.R;
-import com.example.adam.quickroster.misc.Util;
 import com.parse.ParseUser;
-
-import java.util.Calendar;
 
 /**
  * This shows a calendar, where the user can select a date, once they have done this it will transition
- * them to ShiftView activity.
+ * them to ShiftViewActivity activity.
  */
 public class CalendarViewActivity extends Fragment implements android.widget.CalendarView.OnDateChangeListener {
 
@@ -38,12 +35,14 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
         return view;
     }
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (ParseUser.getCurrentUser().getBoolean("isManager")) {
             inflater.inflate(R.menu.add_menu, menu);
         }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -52,7 +51,7 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
             startActivity(intentAddStaff);
 
         }else {
-            // Menu not found
+            // MenuActivity not found
             return false;
         }
 
@@ -62,11 +61,10 @@ public class CalendarViewActivity extends Fragment implements android.widget.Cal
 
     @Override
     public void onSelectedDayChange(@NonNull android.widget.CalendarView view, int year, int month, int dayOfMonth) {
-        Intent intent = new Intent(getActivity(), ShiftView.class);
+        Intent intent = new Intent(getActivity(), ShiftViewActivity.class);
         intent.putExtra("Day", dayOfMonth);
         intent.putExtra("Month", month);
         intent.putExtra("Year", year);
         startActivity(intent);
     }
-
 }

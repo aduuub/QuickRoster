@@ -10,7 +10,10 @@ import com.example.adam.quickroster.model.ParseStaffUser;
 import com.parse.*;
 
 /**
- * This is the entry point of the application. It initialises the Parse database.
+ * This is the entry point of the application.
+ * It initialises the Parse database, registers subclasses and enables the local data store.
+ *
+ * @author Adam Wareing
  */
 public class App extends Application {
 

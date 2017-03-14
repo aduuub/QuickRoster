@@ -1,23 +1,17 @@
 <resources>
     <string name="app_name">Quick Roster</string>
 
+    <!-- Nav drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="title_activity_login">Sign in</string>
-
     <!-- Strings related to login -->
+    <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions." </string>
 
-    <string name="cal_last_synced_at">BusinessDetailsActivity</string>
-    <string name="welcome_message">"Welcome to QuickRoster, you can either login if you know your credentials or you can register a new business."</string>
-
+    <!-- Statistics display options -->
 
     <string-array name="stat_time_view_options">
         <item>Week</item>
@@ -32,14 +26,16 @@
     </string-array>
 
 
-    <!-- Error message -->
-
+    <!-- Error messages -->
     <string name="invalid_input_title">Invalid Input</string>
-    <string name="invalid_input_message">Please ensure all text fields are filled out before trying to continue
-    </string>
+    <string name="invalid_input_message">Please ensure all text fields are filled out before trying to continue</string>
     <string name="exceeding_max_staff_message">You have exceeded your maximum staff limit, if you want to add another staff member, you might want to consider upgrading your plan. </string>
-    <string name="pay_rate_reason">This is used to help calculate informative statistics for you</string>
-    <string name="no_shifts_today_message">No shifts upcoming</string>
     <string name="hourly_rate_not_set_message">You need to set your hourly rate under Account in order to use this feature</string>
+
+    <!-- General -->
+    <string name="cal_last_synced_at">CalendarLastSyncedAt</string>
+    <string name="welcome_message">"Welcome to QuickRoster, you can either login if you know your credentials or you can register a new business."</string>
+    <string name="no_shifts_today_message">No upcoming shifts</string>
+    <string name="pay_rate_reason">This is used to help calculate informative statistics for you</string>
 
 </resources>

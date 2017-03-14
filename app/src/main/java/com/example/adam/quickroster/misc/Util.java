@@ -3,27 +3,32 @@ package com.example.adam.quickroster.misc;
 import android.app.Activity;
 import android.os.AsyncTask;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * Created by Adam on 22/02/17.
+ * Miscellaneous static methods. This class should not be initialised.
+ * Currently it checks that the password is valid, and has a class that updates the users shifts in the background
+ *
+ * @author Adam Wareing
  */
-
 public class Util {
 
-    public static Calendar getCurrentDayCalendar(){
-        Calendar cal = GregorianCalendar.getInstance();
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        return cal;
-    }
+    public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("E  dd MMM");
 
     /**
-     * Checks to see if the password is valid. Checks it is longer than 6 chars and contains one
-     * upper case character.
-     * @param password null = valid password. Else the error message explaining whats wrong with it.
+     * Cant create an instance of this class.
+     */
+    private Util() {
+        // Can't be initialised
+    }
+
+
+    /**
+     * Checks to see if the password is valid. Checks that it is longer than 6 characters and contains one upper case character.
+     *
+     * @param password - null if valid password. Otherwise it will be an error message explaining whats wrong with it.
      * @return
      */
     public static String isPasswordValid(String password){
@@ -43,13 +48,17 @@ public class Util {
     }
 
 
+    /**
+     * A class used to update the users shifts in the background.
+     *
+     */
     public static class UpdateShifts extends AsyncTask<Activity, Void, Void> {
-
         @Override
         public Void doInBackground(Activity... params) {
             CalendarShiftController csc = new CalendarShiftController(params[0], params[0].getApplicationContext());
-            csc.addNewShiftsToCalendar();
+            csc.addAllNewShifts();
             return null;
         }
     }
+
 }
