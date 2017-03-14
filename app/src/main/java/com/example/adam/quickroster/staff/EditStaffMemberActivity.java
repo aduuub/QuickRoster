@@ -32,6 +32,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
     private TextView mFirstNameTextView;
     private TextView mLastNameTextView;
     private TextView mEmailTextView;
+    private TextView mPhoneTextView;
     private TextView mPasswordTextView;
     private Switch mIsManagerSwitch;
 
@@ -63,14 +64,14 @@ public class EditStaffMemberActivity extends AppCompatActivity {
 
         // Add params to hash map so we can parse to cloud code
         Map<String, Object> params = new HashMap<>();
-        params.put("ObjectId", selectedStaffMember.getObjectId());
-        params.put("mIsManagerSwitch", !mIsManagerSwitch.isPressed());
-        params.put("mUserNameTextView", mUserNameTextView.getText().toString());
-        params.put("mEmailTextView", mEmailTextView.getText().toString());
-        params.put("mFirstNameTextView", mFirstNameTextView.getText().toString());
-        params.put("mLastNameTextView", mLastNameTextView.getText().toString());
-        String passwordText = mPasswordTextView.getText().toString();
-        params.put("mPasswordTextView", passwordText);
+        params.put("objectId", selectedStaffMember.getObjectId());
+        params.put("isManager", !mIsManagerSwitch.isPressed());
+        params.put("username", mUserNameTextView.getText().toString());
+        params.put("email", mEmailTextView.getText().toString());
+        params.put("firstName", mFirstNameTextView.getText().toString());
+        params.put("lastName", mLastNameTextView.getText().toString());
+        params.put("mobileNumber", mPhoneTextView.getText().toString());
+        params.put("password", mPasswordTextView.getText().toString());
 
         ParseCloud.callFunctionInBackground("updateUser", params, new FunctionCallback<String>() {
             @Override
@@ -88,12 +89,12 @@ public class EditStaffMemberActivity extends AppCompatActivity {
      */
     private void deleteUser() {
         Map<String, String> params = new HashMap<>();
-        params.put("ObjectId", selectedStaffMember.getObjectId());
+        params.put("objectId", selectedStaffMember.getObjectId());
         ParseCloud.callFunctionInBackground("deleteUser", params, new FunctionCallback<Object>() {
             @Override
             public void done(Object object, ParseException e) {
                 if(e != null){
-
+                    Log.e("Parse error", e.getMessage());
                 }
             }
         });
@@ -115,6 +116,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         String firstNameText = selectedStaffMember.getFirstName();
         String lastNameText = selectedStaffMember.getLastName();
         String emailText = selectedStaffMember.getEmail();
+        String phoneText = selectedStaffMember.getMobileNumber();
         boolean isManagerText = selectedStaffMember.isManager();
 
         // Set values
@@ -122,6 +124,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         mFirstNameTextView.setText(firstNameText == null ? "" : firstNameText);
         mLastNameTextView.setText(lastNameText == null ? "" : lastNameText);
         mEmailTextView.setText(emailText == null ? "" : emailText);
+        mPhoneTextView.setText(phoneText == null ? "" : phoneText);
         mIsManagerSwitch.setChecked(isManagerText);
         mPasswordTextView.setText("******");
     }
@@ -134,6 +137,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
         mFirstNameTextView = (TextView) findViewById(R.id.staff_first_name);
         mLastNameTextView = (TextView) findViewById(R.id.staff_last_name);
         mEmailTextView = (TextView) findViewById(R.id.email);
+        mPhoneTextView = (TextView) findViewById(R.id.phone);
         mIsManagerSwitch = (Switch) findViewById(R.id.is_manager_switch);
         mPasswordTextView = (TextView) findViewById(R.id.editStaffPassword);
     }
@@ -150,6 +154,7 @@ public class EditStaffMemberActivity extends AppCompatActivity {
             updateStaffMember();
         }else if(item.getItemId() == R.id.menu_icon_done){
             deleteUser();
+            finish();
         }else{
             return false; // Error
         }

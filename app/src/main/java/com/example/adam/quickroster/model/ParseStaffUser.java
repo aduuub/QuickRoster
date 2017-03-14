@@ -60,7 +60,7 @@ public class ParseStaffUser extends ParseUser {
 
     public String getBusinessName() {
         try {
-            return getParseObject("Business").fetchIfNeeded().getString("Name");
+            return getParseObject("business").fetchIfNeeded().getString("Name");
         } catch (ParseException e) {
             e.printStackTrace();
             return "";

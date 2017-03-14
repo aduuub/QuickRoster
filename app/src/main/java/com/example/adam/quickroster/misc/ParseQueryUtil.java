@@ -34,7 +34,7 @@ public class ParseQueryUtil {
         ParseQuery<ParseUser> queryUsers = ParseUser.getQuery();
         try {
             ParseObject business = ((ParseStaffUser) user).getBusiness();
-            queryUsers.whereEqualTo("Business", business);
+            queryUsers.whereEqualTo("business", business);
             return queryUsers.find();
 
         } catch (com.parse.ParseException e) {

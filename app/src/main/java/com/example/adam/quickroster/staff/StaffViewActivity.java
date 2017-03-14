@@ -168,6 +168,7 @@ public class StaffViewActivity extends AppCompatActivity {
             Intent intentAddStaff = new Intent(StaffViewActivity.this, EditStaffMemberActivity.class);
             intentAddStaff.putExtra("objectId", selectedUser.getObjectId());
             startActivity(intentAddStaff);
+            setTextViewsAndListeners();
 
         }else {
             return false; // Menu item not found

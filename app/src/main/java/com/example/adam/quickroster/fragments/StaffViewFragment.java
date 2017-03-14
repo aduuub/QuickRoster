@@ -73,7 +73,7 @@ public class StaffViewFragment extends Fragment {
         if (item.getItemId() == R.id.menu_icon_add) {
             Intent intentAddStaff = new Intent(getActivity(), AddStaffMemberActivity.class);
             ParseUser user = ParseUser.getCurrentUser();
-            ParseObject business = user.getParseObject("Business");
+            ParseObject business = user.getParseObject("business");
             String businessID = business.getObjectId();
             intentAddStaff.putExtra("BusinessID", businessID);
             startActivity(intentAddStaff);
